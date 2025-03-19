@@ -1,7 +1,7 @@
 [gd_scene load_steps=16 format=3 uid="uid://37l1d2igoh02"]
 
 [ext_resource type="AudioStream" uid="uid://bcgwptont7oii" path="res://asset/Sound/Sound_SFX/New game sound effect.ogg" id="1_bt713"]
-[ext_resource type="Script" path="res://scenes/main_menu.gd" id="1_crvw1"]
+[ext_resource type="Script" uid="uid://cq0gxkwh1pxm4" path="res://scenes/main_menu.gd" id="1_crvw1"]
 [ext_resource type="Texture2D" uid="uid://basqecjp42yoy" path="res://asset/Visuals_Backgrounds/big_01_space_g.png" id="1_u5set"]
 [ext_resource type="Texture2D" uid="uid://bejp4jyinrp00" path="res://asset/SystVisuals_Config&UI/Pic_TitleScreen/quit.png" id="2_84tfd"]
 [ext_resource type="PackedScene" uid="uid://d03rfxvcf4oua" path="res://scenes/snl_scene/snl_scene.tscn" id="2_bhq7e"]
