@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://b8tu85ok5o5v8"
+path="res://.godot/imported/Water Wave.ogg-43b3e7fef9f64cbe89ed4dd75ba0b508.oggvorbisstr"
+
+[deps]
+
+source_file="res://asset/Sound/Sound_SFX/Water Wave.ogg"
+dest_files=["res://.godot/imported/Water Wave.ogg-43b3e7fef9f64cbe89ed4dd75ba0b508.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

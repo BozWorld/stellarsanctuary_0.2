@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://b5xetfklwegrw"
+path="res://.godot/imported/elevator up.ogg-0db64dd845ffee213f8366620426c510.oggvorbisstr"
+
+[deps]
+
+source_file="res://asset/Sound/Sound_SFX/elevator up.ogg"
+dest_files=["res://.godot/imported/elevator up.ogg-0db64dd845ffee213f8366620426c510.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

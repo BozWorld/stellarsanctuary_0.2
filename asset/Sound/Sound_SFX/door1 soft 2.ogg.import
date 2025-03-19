@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://hn1sudooexvk"
+path="res://.godot/imported/door1 soft 2.ogg-fbf1e99fde57aaf30cb0bf152d97be32.oggvorbisstr"
+
+[deps]
+
+source_file="res://asset/Sound/Sound_SFX/door1 soft 2.ogg"
+dest_files=["res://.godot/imported/door1 soft 2.ogg-fbf1e99fde57aaf30cb0bf152d97be32.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

@@ -1,0 +1,211 @@
+[gd_scene load_steps=22 format=3 uid="uid://d03rfxvcf4oua"]
+
+[ext_resource type="Script" path="res://scripts/Ink_Manager.gd" id="1_avcx3"]
+[ext_resource type="Texture2D" uid="uid://basqecjp42yoy" path="res://asset/Visuals_Backgrounds/big_01_space_g.png" id="2_fgcok"]
+[ext_resource type="Texture2D" uid="uid://c8tkn7atej4ik" path="res://asset/transparent.png" id="3_31a81"]
+[ext_resource type="FontFile" uid="uid://clmilxgrpwpwu" path="res://asset/Syst_Fonts/TitilliumWeb-Regular.ttf" id="5_84sbn"]
+[ext_resource type="FontFile" uid="uid://bnpktkmxwysjs" path="res://asset/Syst_Fonts/TitilliumWeb-SemiBold.ttf" id="5_uhbb2"]
+[ext_resource type="Texture2D" uid="uid://cmo3pojewc4yk" path="res://asset/SystVisuals_Config&UI/nextpage.png" id="6_3ckdb"]
+[ext_resource type="Texture2D" uid="uid://du41ugrvglgdj" path="res://asset/SystVisuals_Config&UI/SystButtons/menu.png" id="8_x8eff"]
+[ext_resource type="Texture2D" uid="uid://cqma4xv8iumxa" path="res://asset/SystVisuals_Config&UI/SystButtons/backlog.png" id="9_ngl3i"]
+[ext_resource type="Texture2D" uid="uid://bvscfh7aleq8i" path="res://asset/SystVisuals_Config&UI/SystButtons/auto.png" id="10_4epo8"]
+[ext_resource type="Texture2D" uid="uid://dle0dkuk0p05v" path="res://asset/SystVisuals_Config&UI/SystButtons/hide.png" id="11_s77h1"]
+[ext_resource type="Texture2D" uid="uid://ctii5thwcs31p" path="res://asset/SystVisuals_Config&UI/SystButtons/fullscreen.png" id="12_ee4dm"]
+[ext_resource type="Texture2D" uid="uid://d1wrofxugvbh7" path="res://asset/SystVisuals_Config&UI/SystButtons/save.png" id="13_6f7qm"]
+[ext_resource type="Texture2D" uid="uid://dl6gos6q7t578" path="res://asset/SystVisuals_Config&UI/SystButtons/load.png" id="14_lp4hp"]
+[ext_resource type="Texture2D" uid="uid://bllqyuafmid85" path="res://asset/SystVisuals_Config&UI/SystButtons/title.png" id="15_qicu6"]
+[ext_resource type="Texture2D" uid="uid://di1oxokqhlpl4" path="res://asset/SystVisuals_Config&UI/SystButtons/config.png" id="16_vh5ar"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hs07c"]
+bg_color = Color(0.270588, 0.270588, 0.270588, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ffo7s"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_r56if"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_0oit4"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_orrgr"]
+
+[sub_resource type="Theme" id="Theme_hmtrj"]
+/icons/decrement = ExtResource("3_31a81")
+/icons/decrement_highlight = ExtResource("3_31a81")
+/styles/grabber = SubResource("StyleBoxFlat_hs07c")
+/styles/grabber_highlight = SubResource("StyleBoxFlat_ffo7s")
+/styles/grabber_pressed = SubResource("StyleBoxFlat_r56if")
+/styles/scroll = SubResource("StyleBoxEmpty_0oit4")
+/styles/scroll_focus = SubResource("StyleBoxEmpty_orrgr")
+
+[node name="SnlScene" type="Control" node_paths=PackedStringArray("text_label", "continue_button", "close_button")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_avcx3")
+text_label = NodePath("TextLabel")
+continue_button = NodePath("BtContinue")
+close_button = NodePath("Close")
+textSpeed = 0.001
+
+[node name="BG" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -384.0
+offset_top = -1676.0
+offset_right = 384.0
+offset_bottom = 1676.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_fgcok")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 0
+offset_right = 1152.0
+offset_bottom = 648.0
+theme_override_constants/margin_left = 250
+theme_override_constants/margin_top = 40
+theme_override_constants/margin_right = 250
+theme_override_constants/margin_bottom = 40
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer"]
+layout_mode = 2
+theme = SubResource("Theme_hmtrj")
+horizontal_scroll_mode = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="RichTextLabel" type="RichTextLabel" parent="MarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/normal_font = ExtResource("5_84sbn")
+
+[node name="TextLabel" type="RichTextLabel" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -493.0
+offset_top = -284.0
+offset_right = 525.0
+offset_bottom = 292.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/normal_font = ExtResource("5_84sbn")
+theme_override_font_sizes/normal_font_size = 20
+text_direction = 1
+
+[node name="ChoiceContainer" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -61.0
+grow_horizontal = 2
+grow_vertical = 0
+alignment = 1
+
+[node name="Close" type="Button" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -32.5
+offset_top = -61.0
+offset_right = 32.5
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("5_uhbb2")
+text = "[End]"
+flat = true
+
+[node name="BtContinue" type="Button" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.434896
+anchor_top = 0.950617
+anchor_right = 0.457465
+anchor_bottom = 0.998457
+grow_horizontal = 2
+grow_vertical = 0
+icon = ExtResource("6_3ckdb")
+flat = true
+metadata/_edit_use_anchors_ = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -76.2
+offset_right = 75.8
+offset_bottom = 620.0
+grow_horizontal = 0
+scale = Vector2(0.3, 0.3)
+
+[node name="BTMenu" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+icon = ExtResource("8_x8eff")
+
+[node name="BTMenu2" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+icon = ExtResource("9_ngl3i")
+
+[node name="BTMenu3" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+icon = ExtResource("10_4epo8")
+
+[node name="BTMenu4" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+icon = ExtResource("11_s77h1")
+
+[node name="BTMenu5" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+icon = ExtResource("12_ee4dm")
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -76.2
+offset_top = -218.0
+offset_right = 75.8
+offset_bottom = 402.0
+grow_horizontal = 0
+grow_vertical = 0
+scale = Vector2(0.3, 0.3)
+alignment = 2
+
+[node name="Button" type="Button" parent="VBoxContainer2"]
+layout_mode = 2
+icon = ExtResource("13_6f7qm")
+
+[node name="Button2" type="Button" parent="VBoxContainer2"]
+layout_mode = 2
+icon = ExtResource("14_lp4hp")
+
+[node name="Button3" type="Button" parent="VBoxContainer2"]
+layout_mode = 2
+icon = ExtResource("15_qicu6")
+
+[node name="Button4" type="Button" parent="VBoxContainer2"]
+layout_mode = 2
+icon = ExtResource("16_vh5ar")
+
+[connection signal="pressed" from="BtContinue" to="." method="_on_bt_continue_pressed"]

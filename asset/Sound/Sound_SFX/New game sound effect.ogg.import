@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://bcgwptont7oii"
+path="res://.godot/imported/New game sound effect.ogg-f2abfc8c9a1289ea4b087db9a1da1822.oggvorbisstr"
+
+[deps]
+
+source_file="res://asset/Sound/Sound_SFX/New game sound effect.ogg"
+dest_files=["res://.godot/imported/New game sound effect.ogg-f2abfc8c9a1289ea4b087db9a1da1822.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

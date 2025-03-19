@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://de84yre07h6dd"
+path="res://.godot/imported/Steel Hit.ogg-d42ae0f16e50777a5e633d604ce91e56.oggvorbisstr"
+
+[deps]
+
+source_file="res://asset/Sound/Sound_SFX/Steel Hit.ogg"
+dest_files=["res://.godot/imported/Steel Hit.ogg-d42ae0f16e50777a5e633d604ce91e56.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
