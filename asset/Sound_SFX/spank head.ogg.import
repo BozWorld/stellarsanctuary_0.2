@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://cv2it3yv3yqdr"
+path="res://.godot/imported/spank head.ogg-31b9ebbf771d2bf1f65b145bf94d8d8b.oggvorbisstr"
+
+[deps]
+
+source_file="res://asset/Sound_SFX/spank head.ogg"
+dest_files=["res://.godot/imported/spank head.ogg-31b9ebbf771d2bf1f65b145bf94d8d8b.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

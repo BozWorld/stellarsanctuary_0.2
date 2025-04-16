@@ -5,10 +5,5 @@ var full_text: String = ""
 func _ready() -> void:
 	pass # Replace with function body.
 
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
-
-func _add_full_text(text: String) -> void:
-	full_text = text
+func _add_full_text(new_text: String) -> void:
+	full_text = new_text

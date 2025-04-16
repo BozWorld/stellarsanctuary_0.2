@@ -1,6 +1,6 @@
 [gd_scene load_steps=22 format=3 uid="uid://d03rfxvcf4oua"]
 
-[ext_resource type="Script" path="res://scripts/Ink_Manager.gd" id="1_avcx3"]
+[ext_resource type="Script" uid="uid://v5ub1dhi4oqq" path="res://scripts/Ink_Manager.gd" id="1_avcx3"]
 [ext_resource type="Texture2D" uid="uid://basqecjp42yoy" path="res://asset/Visuals_Backgrounds/big_01_space_g.png" id="2_fgcok"]
 [ext_resource type="Texture2D" uid="uid://c8tkn7atej4ik" path="res://asset/transparent.png" id="3_31a81"]
 [ext_resource type="FontFile" uid="uid://clmilxgrpwpwu" path="res://asset/Syst_Fonts/TitilliumWeb-Regular.ttf" id="5_84sbn"]
@@ -47,7 +47,6 @@ script = ExtResource("1_avcx3")
 text_label = NodePath("TextLabel")
 continue_button = NodePath("BtContinue")
 close_button = NodePath("Close")
-textSpeed = 0.001
 
 [node name="BG" type="TextureRect" parent="."]
 layout_mode = 1

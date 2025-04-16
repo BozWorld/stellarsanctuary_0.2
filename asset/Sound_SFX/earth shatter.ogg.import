@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://d03js3ix5ikin"
+path="res://.godot/imported/earth shatter.ogg-4bdbdd68003b53a19aeb701cec6f5118.oggvorbisstr"
+
+[deps]
+
+source_file="res://asset/Sound_SFX/earth shatter.ogg"
+dest_files=["res://.godot/imported/earth shatter.ogg-4bdbdd68003b53a19aeb701cec6f5118.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

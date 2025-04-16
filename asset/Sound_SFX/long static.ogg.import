@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://bjlfw3cpv3inq"
+path="res://.godot/imported/long static.ogg-5d042505c5f875543f6c9daaa5ea5fbe.oggvorbisstr"
+
+[deps]
+
+source_file="res://asset/Sound_SFX/long static.ogg"
+dest_files=["res://.godot/imported/long static.ogg-5d042505c5f875543f6c9daaa5ea5fbe.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

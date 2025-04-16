@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://dern3jgf5wpnt"
+path="res://.godot/imported/bonk bottle.ogg-de7397c505af4532c2c4738596035ec8.oggvorbisstr"
+
+[deps]
+
+source_file="res://asset/Sound_SFX/bonk bottle.ogg"
+dest_files=["res://.godot/imported/bonk bottle.ogg-de7397c505af4532c2c4738596035ec8.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
