@@ -1,0 +1,14 @@
+[remap]
+
+importer="inkgd.ink.json"
+type="Resource"
+uid="uid://ccctirireyy8w"
+valid=false
+
+[deps]
+
+source_file="res://DialogueSystem/data/scene1.json"
+
+[params]
+
+compress=true

@@ -1,3 +1,6 @@
-[gd_scene format=3 uid="uid://c7svoe7f7728p"]
+[gd_scene load_steps=2 format=3 uid="uid://c7svoe7f7728p"]
+
+[ext_resource type="Script" uid="uid://cwk4wfye5i4gj" path="res://scenes/DialogueManager.gd" id="1_256bo"]
 
 [node name="MainTesting" type="Node2D"]
+script = ExtResource("1_256bo")

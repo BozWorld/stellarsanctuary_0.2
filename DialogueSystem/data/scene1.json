@@ -1,0 +1,86 @@
+{
+  "chapter": "SS-04",
+  "title": "Chapter 1 - Beginning",
+  "music": {
+    "bgm": "Music/AIKATYPE_00.ogg",
+    "fade_in": true
+  },
+  "characters": {
+    "euphie": {
+      "name": "Euphie",
+      "color": "#f2f2f2",
+      "has_portraits": true
+    },
+    "computer": {
+      "name": "Computer",
+      "color": "#94b8b8",
+      "has_portraits": false
+    }
+  },
+  "dialogue": [
+    {
+      "type": "chapter_title",
+      "text": "SS-04",
+      "duration": 2500
+    },
+    {
+      "type": "snl_monologue",
+      "style": "SNL",
+      "text": "Space is a mysterious thing.|A vast sea of stars that doesn't ever seem to end, filled with suns, planets, and things we've yet to even discover.|No one knows just how dense our universe is, and humans will be long gone before they even know if there's someplace else where life blooms like it does on our earth."
+    },
+    {
+      "type": "background",
+      "image": "Backgrounds/big_01_space_g0.png",
+      "transition": "crossfade",
+      "duration": 2000
+    },
+    {
+      "type": "snl_monologue",
+      "style": "SNL",
+      "text": "For now, all we can do is watch the stars lighting up our skies and attempt to uncover the wonders we've been blessed with, feeding our curiosity with theories, ideas and fantasies.|A brightly lit sky is an inspiring sight, and why we've always had such a fanciful idea of the stars.|But in the end, they're nothing but burning suns.|Most have died thousands of years ago, yet we can still see the living corpse of what they used to be.|It's even one of the closest things to time travel: Time shapes space, just as space shapes time."
+    },
+    {
+      "type": "background",
+      "image": "Backgrounds/big_01_space_g1.png",
+      "transition": "crossfade",
+      "duration": 2000
+    },
+    {
+      "type": "cg",
+      "image": "default/CG/cg01_spaceship.png",
+      "transition": "crossfade",
+      "duration": 1000
+    },
+    {
+      "type": "background",
+      "image": "Backgrounds/bg00_shuttle.jpg"
+    },
+    {
+      "type": "snl_monologue",
+      "style": "SNL",
+      "text": "And a researcher lives according to their facts.|This is why I'm standing here right now.|Nervously talking to myself, trying to get rid of the anxiety slowly eating at me.|My name is Euphémia.|But everyone calls me Euphie.|I'm 28, and I aced my astrophysics exams."
+    },
+    {
+      "type": "sound_effect",
+      "audio": "SoundEffects_Action/beep1.ogg"
+    },
+    {
+      "type": "adv_dialogue",
+      "style": "ADV",
+      "character": "computer",
+      "text": "Arrival in five minutes.|Please sit tight and make sure your belts are fastened as we approach Orbital Station SS-04."
+    },
+    {
+      "type": "music",
+      "bgm": "Music/03_-*Space_Confessional*-_juneji.ogg",
+      "fade_in": true
+    },
+    {
+      "type": "adv_dialogue",
+      "style": "ADV",
+      "character": "euphie",
+      "portrait": "neutral",
+      "text": "Sounds like we're nearly there.|I've been to space before during my training, but it's the first time I'll be staying so long outside of the surface of the earth.|Kinda crazy to believe one can live so long outside of their own planet.|I'll have to get used to it for the next few months."
+    }
+  ]
+}
