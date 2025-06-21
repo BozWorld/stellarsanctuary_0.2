@@ -1,10 +1,10 @@
-class_name DialgueData
+class_name DialogueData
 extends Resource
 
 enum DisplayStyle {
     ADV,
     SNL,
-    Dynamic_SNL
+    DYNAMIC_SNL,
 }
 
 @export var type: String

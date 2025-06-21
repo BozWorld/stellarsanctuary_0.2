@@ -17,11 +17,11 @@ config/icon="res://icon.svg"
 
 [autoload]
 
-__InkRuntime="*res://addons/inkgd/ink_runtime.gd"
+DialogueManager="*res://DialogueSystem/autoload/DialogueManager.gd"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/inkgd/plugin.cfg")
+enabled=PackedStringArray()
 
 [inkgd]
 
