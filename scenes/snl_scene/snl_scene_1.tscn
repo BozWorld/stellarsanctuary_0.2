@@ -1,0 +1,126 @@
+[gd_scene load_steps=17 format=3 uid="uid://bol26hah7max"]
+
+[ext_resource type="Script" uid="uid://buktnfaj8utl8" path="res://scripts/DisplayStyleManager.gd" id="1_2ea14"]
+[ext_resource type="Texture2D" uid="uid://basqecjp42yoy" path="res://asset/Visuals_Backgrounds/big_01_space_g.png" id="1_exumd"]
+[ext_resource type="Script" uid="uid://d0vi1v0by1yoc" path="res://scripts/InkStoryLoader.gd" id="2_0nq83"]
+[ext_resource type="Script" uid="uid://b0faxb5pdm0ui" path="res://scripts/TextParser.gd" id="3_7sfpw"]
+[ext_resource type="Script" uid="uid://ddlutjnt3msa3" path="res://scripts/SNLDisplay.gd" id="4_ebrfb"]
+[ext_resource type="Texture2D" uid="uid://cmo3pojewc4yk" path="res://asset/SystVisuals_Config&UI/nextpage.png" id="5_7sfpw"]
+[ext_resource type="Texture2D" uid="uid://c8tkn7atej4ik" path="res://asset/transparent.png" id="5_ebrfb"]
+[ext_resource type="Script" uid="uid://wxsuj4ltp86w" path="res://scripts/ADVDisplay.gd" id="5_w55wh"]
+[ext_resource type="FontFile" uid="uid://clmilxgrpwpwu" path="res://asset/Syst_Fonts/TitilliumWeb-Regular.ttf" id="6_ebrfb"]
+[ext_resource type="Script" uid="uid://do6a1545hae36" path="res://scripts/TransitionManager.gd" id="6_exumd"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hs07c"]
+bg_color = Color(0.270588, 0.270588, 0.270588, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ffo7s"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_r56if"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_0oit4"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_orrgr"]
+
+[sub_resource type="Theme" id="Theme_w55wh"]
+/icons/decrement = ExtResource("5_ebrfb")
+/icons/decrement_highlight = ExtResource("5_ebrfb")
+/styles/grabber = SubResource("StyleBoxFlat_hs07c")
+/styles/grabber_highlight = SubResource("StyleBoxFlat_ffo7s")
+/styles/grabber_pressed = SubResource("StyleBoxFlat_r56if")
+/styles/scroll = SubResource("StyleBoxEmpty_0oit4")
+/styles/scroll_focus = SubResource("StyleBoxEmpty_orrgr")
+
+[node name="SNLScene1" type="CanvasLayer"]
+
+[node name="BG" type="TextureRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -384.0
+offset_top = -1676.0
+offset_right = 384.0
+offset_bottom = 1676.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_exumd")
+
+[node name="DisplayStyleManager" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_2ea14")
+
+[node name="InkStoryLoader" type="Node" parent="DisplayStyleManager"]
+script = ExtResource("2_0nq83")
+
+[node name="TextParser" type="Node" parent="DisplayStyleManager"]
+script = ExtResource("3_7sfpw")
+
+[node name="SNLDisplay" type="Control" parent="DisplayStyleManager" node_paths=PackedStringArray("continue_button")]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 250.0
+offset_top = 70.0
+offset_right = -230.0
+offset_bottom = -100.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("4_ebrfb")
+continue_button = NodePath("BtContinue")
+
+[node name="BtContinue" type="Button" parent="DisplayStyleManager/SNLDisplay"]
+visible = false
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.434896
+anchor_top = 0.950617
+anchor_right = 0.457465
+anchor_bottom = 0.998457
+offset_left = -3.97241
+offset_top = -4.68799
+offset_right = 3.97241
+grow_horizontal = 2
+grow_vertical = 0
+icon = ExtResource("5_7sfpw")
+flat = true
+metadata/_edit_use_anchors_ = true
+
+[node name="MarginContainer" type="MarginContainer" parent="DisplayStyleManager/SNLDisplay"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 25
+theme_override_constants/margin_top = 35
+theme_override_constants/margin_right = 25
+
+[node name="ScrollContainer" type="ScrollContainer" parent="DisplayStyleManager/SNLDisplay/MarginContainer"]
+layout_mode = 2
+theme = SubResource("Theme_w55wh")
+horizontal_scroll_mode = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="DisplayStyleManager/SNLDisplay/MarginContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="RichTextLabel" type="RichTextLabel" parent="DisplayStyleManager/SNLDisplay/MarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/normal_font = ExtResource("6_ebrfb")
+
+[node name="ADVDisplay" type="Control" parent="DisplayStyleManager"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("5_w55wh")
+
+[node name="TransitionManager" type="Node" parent="DisplayStyleManager"]
+script = ExtResource("6_exumd")

@@ -1,5 +1,5 @@
 # Ink_Manager.gd
-class_name InkManager
+class_name SnlScene
 extends Control
 
 # Signals
@@ -64,6 +64,10 @@ func _on_story_loaded(success: bool) -> void:
 		print("Failed to load the story")
 
 func _continue_story() -> void:
+	print("player has choice to continue" + str(ink_player.has_choices))
+	print("player can continue" + str(ink_player.can_continue))
+	if ink_player.has_choices:
+		ink_player.choose_choice_index(0)
 	if ink_player.can_continue:
 		var current_txt = ink_player.continue_story()
 		_handle_ink_tags(current_txt)
@@ -73,12 +77,15 @@ func _continue_story() -> void:
 
 func _handle_ink_tags(text: String) -> void:
 	print("Handling ink tags")
-	if "[ADV]" in text:
+	var tags = ink_player.get_current_tags()
+	print("Current tags: ", tags)
+	if "ADV" in tags:
 		current_display_style = DisplayStyle.ADV
 		emit_signal("transition_requested", "ADV")
-	elif "[SNL]" in text:
+	elif "SNL" in tags:
+		print("Switching to SNL display style")
 		current_display_style = DisplayStyle.SNL
-		emit_signal("transition_requested", "SNL")
+		# emit_signal("transition_requested", "SNL")
 
 func _display_text(text: String) -> void:
 

@@ -1,7 +1,7 @@
 -> start
 
 === start ===
-Space is a mysterious thing.
+Space is a mysterious thing. #SNL #P #bgm:space_ambiant
 A vast sea of stars that doesn’t ever seem to end, filled with suns, planets, and things we’ve yet to even discover.
 No one knows just how dense our universe is, and humans will be long gone before they even know if there’s someplace else where life blooms like it does on our earth. 
 
@@ -19,7 +19,7 @@ After all, as a woman of science, I cannot believe in the afterlife.
 I need to prove myself, and make myself shine before I die. Like I said, ultimate truth will never be attainable : It’s a holy grail, far from humanity’s reach.
 Many tried to play with their lives like they’re some sort of god, but none of them lived long enough to come up with scientific facts.
 
-* [ continue ] -> start2
+* [ continue ] -> start3
 
 == start3
 And a researcher lives according to their facts. This is why I’m standing here right now. Nervously talking to myself, trying to get rid of the anxiety slowly eating at me. My name is Euphémia.

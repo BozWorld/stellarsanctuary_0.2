@@ -1,6 +1,6 @@
 [gd_scene load_steps=22 format=3 uid="uid://d03rfxvcf4oua"]
 
-[ext_resource type="Script" uid="uid://v5ub1dhi4oqq" path="res://scripts/Ink_Manager.gd" id="1_avcx3"]
+[ext_resource type="Script" uid="uid://bxnm1l7hcap4q" path="res://scripts/SnlScene.gd" id="1_1a0kp"]
 [ext_resource type="Texture2D" uid="uid://basqecjp42yoy" path="res://asset/Visuals_Backgrounds/big_01_space_g.png" id="2_fgcok"]
 [ext_resource type="Texture2D" uid="uid://c8tkn7atej4ik" path="res://asset/transparent.png" id="3_31a81"]
 [ext_resource type="FontFile" uid="uid://clmilxgrpwpwu" path="res://asset/Syst_Fonts/TitilliumWeb-Regular.ttf" id="5_84sbn"]
@@ -16,25 +16,25 @@
 [ext_resource type="Texture2D" uid="uid://bllqyuafmid85" path="res://asset/SystVisuals_Config&UI/SystButtons/title.png" id="15_qicu6"]
 [ext_resource type="Texture2D" uid="uid://di1oxokqhlpl4" path="res://asset/SystVisuals_Config&UI/SystButtons/config.png" id="16_vh5ar"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hs07c"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_umis4"]
 bg_color = Color(0.270588, 0.270588, 0.270588, 1)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ffo7s"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bsjqn"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_r56if"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dd6rr"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_0oit4"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vn6kk"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_orrgr"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_pocsf"]
 
 [sub_resource type="Theme" id="Theme_hmtrj"]
 /icons/decrement = ExtResource("3_31a81")
 /icons/decrement_highlight = ExtResource("3_31a81")
-/styles/grabber = SubResource("StyleBoxFlat_hs07c")
-/styles/grabber_highlight = SubResource("StyleBoxFlat_ffo7s")
-/styles/grabber_pressed = SubResource("StyleBoxFlat_r56if")
-/styles/scroll = SubResource("StyleBoxEmpty_0oit4")
-/styles/scroll_focus = SubResource("StyleBoxEmpty_orrgr")
+/styles/grabber = SubResource("StyleBoxFlat_umis4")
+/styles/grabber_highlight = SubResource("StyleBoxFlat_bsjqn")
+/styles/grabber_pressed = SubResource("StyleBoxFlat_dd6rr")
+/styles/scroll = SubResource("StyleBoxEmpty_vn6kk")
+/styles/scroll_focus = SubResource("StyleBoxEmpty_pocsf")
 
 [node name="SnlScene" type="Control" node_paths=PackedStringArray("text_label", "continue_button", "close_button")]
 layout_mode = 3
@@ -43,10 +43,11 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_avcx3")
+script = ExtResource("1_1a0kp")
 text_label = NodePath("TextLabel")
 continue_button = NodePath("BtContinue")
 close_button = NodePath("Close")
+metadata/_edit_use_anchors_ = true
 
 [node name="BG" type="TextureRect" parent="."]
 layout_mode = 1
@@ -62,13 +63,15 @@ grow_vertical = 2
 texture = ExtResource("2_fgcok")
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
-layout_mode = 0
-offset_right = 1152.0
-offset_bottom = 648.0
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 theme_override_constants/margin_left = 250
 theme_override_constants/margin_top = 40
-theme_override_constants/margin_right = 250
-theme_override_constants/margin_bottom = 40
+theme_override_constants/margin_right = 270
 
 [node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer"]
 layout_mode = 2
@@ -82,6 +85,7 @@ size_flags_horizontal = 3
 [node name="RichTextLabel" type="RichTextLabel" parent="MarginContainer/ScrollContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_fonts/normal_font = ExtResource("5_84sbn")
+theme_override_font_sizes/normal_font_size = 60
 
 [node name="TextLabel" type="RichTextLabel" parent="."]
 layout_mode = 1
@@ -97,7 +101,7 @@ offset_bottom = 292.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_fonts/normal_font = ExtResource("5_84sbn")
-theme_override_font_sizes/normal_font_size = 20
+theme_override_font_sizes/normal_font_size = 28
 text_direction = 1
 
 [node name="ChoiceContainer" type="HBoxContainer" parent="."]
