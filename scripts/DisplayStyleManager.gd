@@ -15,6 +15,7 @@ enum DisplayStyle { SNL, DYNAMIC_SNL, ADV }
 @onready var snl_display = $SNLDisplay
 @onready var adv_display = $ADVDisplay
 @onready var transition_manager = $TransitionManager
+@onready var text_segment_manager = $TextSegmentManager
 
 # Variables d'état
 var current_display_style: DisplayStyle = DisplayStyle.SNL
@@ -38,13 +39,19 @@ func _connect_signals() -> void:
 	ink_story_loader.story_loaded.connect(_on_story_loaded)
 	ink_story_loader.story_continued.connect(_on_story_continued)
 	ink_story_loader.can_continue_section.connect(_on_can_continue_section)
+	
 	# Connecte les signaux du parser
 	text_parser.display_style_changed.connect(_on_display_style_changed)
 	text_parser.text_processed.connect(_on_text_processed)
 	
+	# Connecte les signaux du TextSegmentManager
+	text_segment_manager.segment_ready.connect(_on_segment_ready)
+	text_segment_manager.page_break_requested.connect(_on_page_break_requested)
+	text_segment_manager.all_segments_completed.connect(_on_all_segments_completed)
+	
 	# Connecte les signaux des displays
-	snl_display.continue_requested.connect(_continue_story)
-	adv_display.continue_requested.connect(_continue_story)
+	snl_display.continue_requested.connect(_on_continue_requested)
+	adv_display.continue_requested.connect(_on_continue_requested)
 
 func _on_story_loaded(success: bool) -> void:
 	emit_signal("story_loaded", success)
@@ -52,10 +59,13 @@ func _on_story_loaded(success: bool) -> void:
 		_continue_story()
 
 func _on_story_continued(text: String) -> void:
-	# Envoie le texte brut au parser
+	# Envoie le texte brut au TextSegmentManager avec les tags
 	print("Continuing story with text: ", text)
-	print("current tags display" + str(ink_story_loader._give_tag()))
-	text_parser.process_text(text)
+	var tags = ink_story_loader._give_tag()
+	print("Current tags: ", tags)
+	
+	# Utilise le TextSegmentManager pour traiter le texte avec les tags
+	text_segment_manager.process_text_with_tags(text, tags)
 
 func _on_display_style_changed(new_style: DisplayStyle) -> void:
 	if new_style != current_display_style:
@@ -108,3 +118,46 @@ func _switch_to_display(style: DisplayStyle) -> void:
 
 func _continue_story() -> void:
 	ink_story_loader.continue_story()
+
+# Nouvelles fonctions de callback pour TextSegmentManager
+func _on_segment_ready(segment_text: String, segment_type: int) -> void:
+	print("Segment ready: ", segment_text.substr(0, 50), "... (Type: ", segment_type, ")")
+	
+	# Détermine le style d'affichage selon les tags
+	var tags = ink_story_loader._give_tag()
+	var display_style = current_display_style
+	
+	if "layout:ADV" in tags:
+		display_style = DisplayStyle.ADV
+		_switch_to_display(DisplayStyle.ADV)
+	elif "layout:SNL" in tags:
+		display_style = DisplayStyle.SNL
+		_switch_to_display(DisplayStyle.SNL)
+	
+	# Affiche le segment selon le style
+	match display_style:
+		DisplayStyle.ADV:
+			adv_display.display_text(segment_text)
+		DisplayStyle.SNL, DisplayStyle.DYNAMIC_SNL:
+			snl_display.display_text(segment_text, display_style)
+
+func _on_page_break_requested() -> void:
+	print("Page break requested - clearing display")
+	# Efface l'affichage pour un nouveau page
+	snl_display.clear_display()
+	adv_display.clear_display()
+
+func _on_all_segments_completed() -> void:
+	print("All segments completed - ready for next story section")
+	# Tous les segments sont terminés, on peut continuer l'histoire
+	_continue_story()
+
+func _on_continue_requested() -> void:
+	print("Continue requested from display")
+	# Vérifie s'il y a encore des segments à afficher
+	if text_segment_manager.has_more_segments():
+		print("Advancing to next segment")
+		text_segment_manager.advance_to_next_segment()
+	else:
+		print("No more segments, continuing story")
+		_continue_story()

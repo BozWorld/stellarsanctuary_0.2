@@ -1,0 +1,133 @@
+Id,Name,Shape Library,Page ID,Contained By,Group,Line Source,Line Destination,Source Arrow,Destination Arrow,Status,Text Area 1,Text Area 2,Text Area 3,Comments,SpreadsheetColumnParentKey,SpreadsheetRowParentKey
+1,Document,,,,,,,,,Draft,StellarSanctuarySystem,,,,,
+2,Page,,,,,,,,,,Page 1,,,,,
+3,Rectangle Container,Flowchart Shapes/Containers,2,,,,,,,,BASE,,,,,
+4,Class,UML,2,3,,,,,,,"Character
+ressource","​+ name: String
++ color: String
++ has_portrait: bool  = false
++ var portrait_path: String = """"
+",,,COLUMN,ROW
+5,Class,UML,2,3,,,,,,,"DialogueData
+Ressources","​+ display_style: Enum { ADV, SNL, DYNAMICSNL }
++ type: String
++ text: String
++ character: String
++ portrait: String = """"
++ image: String = """"
++ audio: String = """"
++ transition: String
++ duration: int = 1000
++ properties: Dictionary = {}
+",,,COLUMN,ROW
+6,Rectangle Container,Flowchart Shapes/Containers,2,,,,,,,,AUTOLOAD,,,,,
+7,Class,UML,2,6,,,,,,,"DialogueManager.gd
+node","~ dialogue_started
+~ dialogue_ended
+<<signal>> line_changed(current_line: DialogueData) 
++ current_chapter: Array[DialogueData = []
++ current_index: int = 0
++ is_playing: bool = false
+characters: Dictionnary = {}
+","​+ load_chapter(file_path: String)
++ start_dialogue()
++ next_line()
++ previous_line()
++ get_current_line()
++ _process_current_line()
++ print_chapter_info()
+
+",,COLUMN,ROW
+8,Rectangle Container,Flowchart Shapes/Containers,2,,,,,,,,application,,,,,
+9,Class,UML,2,8,,,,,,,"testing.gd
+Node2D","​+ SNLDisplay: SNLDisplay
+","​+ _ready()
++  on_line_changed()
++ get_current_line()
++ _process()",,COLUMN,ROW
+10,Rectangle Container,Flowchart Shapes/Containers,2,,,,,,,,BASE,,,,,
+11,Class,UML,2,10,,,,,,,"ChapterData
+<<data structure>>","​- chapter: String
+- title: String
+- music: Music
+- characters: Disctionary<String, Character>
+- dialogue: Array<DialogueEntry>
+",,,COLUMN,ROW
+12,Class,UML,2,10,,,,,,,"music
+<<data structure>>","​- bgm: String
+- fade_in: bool
+",,,COLUMN,ROW
+13,Class,UML,2,10,,,,,,,"DialogueEntry
+<<data structure>>","​- type String
+- text: String
+- style: String
+- character: String
+- portrait: String
+- image: String
+- audio: String
+- transition: String
+- duration: int
+",,,COLUMN,ROW
+14,Rectangle Container,Flowchart Shapes/Containers,2,,,,,,,,affichage,,,,,
+15,Class,UML,2,14,,,,,,,"SNLDisplay
+Control","​+ text_label: RichTextLabel 
++dark_overlay: ColorRect
+<<signal>> type_finished
+
++ typewrite_speed: float = 0.03
++ is_typing: bool = false
++ full_text: String = """"
++ segments: Array[String]  = []
++ current_segment_index: int = 0
++ all_segments_finished: bool = false ","​+ready()
++ display_line(line:dialogueData)
++ show_text(text:String)
++ display_next_segment()
++ type_segment(segment_text: String)
++ skip_typing()
++ type_text(text: String)
+",,COLUMN,ROW
+16,Class,UML,2,14,,,,,,,"ADVDisplay
+Control","​+ textbox: RichTextLabel
++ name_label: Label
++ name_box: Panel
++ portrait_react: TextureRect 
++ current_character: Character
++ typewriter_speed: float = 0.05
++ is_typing: bool = false","​+ displyal_line(line: DialogueData)
++ setup_character_display()
++ show_text(text: String)
++ type_text(text: String
++ show_portrait(portrait_name: String)
+
+",,COLUMN,ROW
+17,Class,UML,2,14,,,,,,,"DisplayStyleManager
+node","~ style_changed(new_style:dialogueData.DisplayStyle
++ current_style: DialogueData.DisplayStyle = DialogueData.DisplayStyle.ADV
+= adv_container: Control
+= snl_container: Control
+= dynamic_snl_container: Control
+","​+ setup_containers(adv: Control, dynamic_snl: Control)
++ switch_to_style(style: DialogueData.DisplayStyle)
++hide_allContainers()
++ get_current_container() -> Control
+
+",,COLUMN,ROW
+18,Rectangle Container,Flowchart Shapes/Containers,2,,,,,,,,PARSING,,,,,
+19,Class,UML,2,18,,,,,,,"DialogueParser
+RefCounted",,"​+ loade_chapter(file_path: String) -> Array[DialogueData]
+
+",,COLUMN,ROW
+20,Line,,2,,,7,5,None,Arrow,,1,0..*,manage,,,
+21,Line,,2,,,16,5,None,Arrow,,1,0..*,DISPLAY,,,
+22,Line,,2,,,18,3,None,Arrow,,1,0..*,Create,,,
+23,Line,,2,,,19,4,None,Arrow,,USE,,,,,
+24,Line,,2,,,7,18,None,Arrow,,uses,1,1,,,
+25,Line,,2,,,15,5,None,Arrow,,1,0..*,DISPLAY,,,
+26,Line,,2,,,10,4,None,Composition,,agrégation,,,,,
+27,Line,,2,,,11,12,None,Aggregation,,composition,,,,,
+28,Line,,2,,,11,13,Composition,None,,Agrégation,,,,,
+29,Line,,2,,,17,15,None,Arrow,,CONTROLS,1,1,,,
+30,Line,,2,,,17,16,None,Arrow,,CONTROLS,1,1,,,
+31,Line,,2,,,8,6,None,Arrow,,USE,,,,,
+32,Line,,2,,,16,4,None,Arrow,,DISPLAYS,,,,,

@@ -1,6 +1,6 @@
 [gd_scene load_steps=22 format=3 uid="uid://djx3efa31s2a8"]
 
-[ext_resource type="Script" uid="uid://v5ub1dhi4oqq" path="res://scripts/Ink_Manager.gd" id="1_862hh"]
+[ext_resource type="Script" uid="uid://d0vi1v0by1yoc" path="res://scripts/InkStoryLoader.gd" id="1_862hh"]
 [ext_resource type="Texture2D" uid="uid://basqecjp42yoy" path="res://asset/Visuals_Backgrounds/big_01_space_g.png" id="2_337he"]
 [ext_resource type="Texture2D" uid="uid://c8tkn7atej4ik" path="res://asset/transparent.png" id="3_0agq0"]
 [ext_resource type="FontFile" uid="uid://clmilxgrpwpwu" path="res://asset/Syst_Fonts/TitilliumWeb-Regular.ttf" id="4_64qml"]

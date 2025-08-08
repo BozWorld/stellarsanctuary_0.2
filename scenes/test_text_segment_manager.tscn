@@ -1,0 +1,53 @@
+[gd_scene load_steps=3 format=3 uid="uid://bk5lo8ntdpdv"]
+
+[ext_resource type="Script" uid="uid://nrq7uhyt7a3w" path="res://scripts/TestTextSegmentManager.gd" id="1_m8r5j"]
+[ext_resource type="Script" uid="uid://duomxy5kq65mi" path="res://scripts/TextSegmentManager.gd" id="2_k7p9q"]
+
+[node name="TestTextSegmentManager" type="Node"]
+script = ExtResource("1_m8r5j")
+
+[node name="TextSegmentManager" type="Node" parent="."]
+script = ExtResource("2_k7p9q")
+
+[node name="UI" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 50.0
+offset_top = 50.0
+offset_right = -50.0
+offset_bottom = -50.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Title" type="Label" parent="UI/VBoxContainer"]
+layout_mode = 2
+text = "TextSegmentManager Test Scene"
+horizontal_alignment = 1
+
+[node name="Instructions" type="Label" parent="UI/VBoxContainer"]
+layout_mode = 2
+text = "Press SPACE to manually advance segments
+Press D to debug segment info
+Check console for test results"
+autowrap_mode = 2
+
+[node name="HSeparator" type="HSeparator" parent="UI/VBoxContainer"]
+layout_mode = 2
+
+[node name="CurrentSegmentLabel" type="Label" parent="UI/VBoxContainer"]
+layout_mode = 2
+text = "Current Segment: None"
+
+[node name="ProgressLabel" type="Label" parent="UI/VBoxContainer"]
+layout_mode = 2
+text = "Progress: 0/0"
