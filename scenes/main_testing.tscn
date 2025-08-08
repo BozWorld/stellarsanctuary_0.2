@@ -1,15 +1,16 @@
-[gd_scene load_steps=3 format=3 uid="uid://c7svoe7f7728p"]
+[gd_scene load_steps=4 format=3 uid="uid://c7svoe7f7728p"]
 
 [ext_resource type="Script" uid="uid://dw8d1vx4lku4a" path="res://scenes/testing.gd" id="1_256bo"]
 [ext_resource type="Script" uid="uid://dt1i6lp0puslg" path="res://DialogueSystem/SNLDisplay.gd" id="2_buvtb"]
+[ext_resource type="FontFile" uid="uid://clmilxgrpwpwu" path="res://asset/Syst_Fonts/TitilliumWeb-Regular.ttf" id="3_kfmb3"]
 
 [node name="MainTesting" type="Node2D" node_paths=PackedStringArray("SNLDisplay")]
 script = ExtResource("1_256bo")
-SNLDisplay = NodePath("CanvasLayer/Control")
+SNLDisplay = NodePath("CanvasLayer/SNLContainer")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
-[node name="Control" type="Control" parent="CanvasLayer" node_paths=PackedStringArray("text_label")]
+[node name="SNLContainer" type="Control" parent="CanvasLayer" node_paths=PackedStringArray("text_label", "dark_overlay")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -17,15 +18,19 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("2_buvtb")
-text_label = NodePath("RichTextLabel")
+text_label = NodePath("TextZone")
+dark_overlay = NodePath("ColorRect")
 
-[node name="TextureRect" type="TextureRect" parent="CanvasLayer/Control"]
+[node name="Background" type="TextureRect" parent="CanvasLayer/SNLContainer"]
 visible = false
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
-[node name="ColorRect" type="ColorRect" parent="CanvasLayer/Control"]
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer/SNLContainer"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -34,7 +39,41 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 1)
 
-[node name="RichTextLabel" type="RichTextLabel" parent="CanvasLayer/Control"]
+[node name="TextZone" type="RichTextLabel" parent="CanvasLayer/SNLContainer"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/normal_font = ExtResource("3_kfmb3")
+theme_override_font_sizes/normal_font_size = 28
+
+[node name="ADVContainer" type="Control" parent="CanvasLayer"]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/ADVContainer"]
+visible = false
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer/ADVContainer"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="RichTextLabel" type="RichTextLabel" parent="CanvasLayer/ADVContainer"]
 layout_mode = 1
 offset_right = 1152.0
 offset_bottom = 646.0

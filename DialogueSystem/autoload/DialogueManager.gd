@@ -24,6 +24,7 @@ func start_dialogue():
 	is_playing = true
 	dialogue_started.emit()
 	_process_current_line()
+	print("Dialogue started with ", current_chapter.size(), " lines")
 
 func next_line():
 	if not is_playing:
@@ -54,12 +55,37 @@ func get_current_line() -> DialogueData:
 
 func _process_current_line():
 	var current_line = get_current_line()
-	if current_line:
+	print("Current index: ", current_index)
+	if current_line.type == "chapter_title" and current_line.text == "":
 		line_changed.emit(current_line)
+	elif current_line.type == "chapter_title" and current_line.text != "":
+		line_changed.emit(current_line)
+	elif current_line.type == "background":
+		print("Background change: ", current_line.image)
+		# line_changed.emit(current_line)
+	elif current_line.type == "sound_effect":
+		print("Sound effect: ", current_line.audio)
+		# line_changed.emit(current_line)
+	elif current_line.type == "music":
+		print("Music change: ", current_line.audio)
+		# line_changed.emit(current_line)
+	elif current_line.type == "cg":
+		print("CG change: ", current_line.image)
+		# line_changed.emit(current_line)
+	elif current_line.type == "snl_monologue":
+		print("Display style: ", current_line.display_style)
+		print("SNL Monologue: ", current_line.text)
+		line_changed.emit(current_line)
+	# if current_line:
+	# 	line_changed.emit(current_line)
+		# if current_line.display_style == DialogueData.DisplayStyle.SNL:
+		# 	# Ici, on pourrait appeler une méthode pour afficher le texte SNL
+		# 	print("Displaying SNL line: ", current_line.text)
+		# 	return
 
-# Pour debug
-func print_chapter_info():
-	print("Chapter loaded with ", current_chapter.size(), " entries")
-	for i in range(min(5, current_chapter.size())):
-		var line = current_chapter[i]
-		print("Line ", i, ": ", line.type, " - ", line.text.substr(0, 50))
+# # Pour debug
+# func print_chapter_info():
+# 	print("Chapter loaded with ", current_chapter.size(), " entries")
+# 	for i in range(min(5, current_chapter.size())):
+# 		var line = current_chapter[i]
+# 		print("Line ", i, ": ", line.type, " - ", line.text.substr(0, 50))

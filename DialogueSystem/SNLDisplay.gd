@@ -3,14 +3,14 @@ class_name SNLDisplay
 extends Control
 
 @export var text_label: RichTextLabel
-@onready var dark_overlay: ColorRect
+@export var dark_overlay: ColorRect
 signal typing_finished
 
 
 var typewriter_speed: float = 0.03
 var is_typing: bool = false
 var full_text: String = ""
-var segments: Array[String] = []
+var segments: PackedStringArray = []
 var current_segment_index: int = 0
 var all_segments_finished: bool = false
 
@@ -46,10 +46,9 @@ func display_next_segment():
 		return
 	var segment_text = segments[current_segment_index]
 	is_typing = true
-
+	print(is_typing, " - Displaying segment: ", current_segment_index, " - Text: ", segment_text)
 	if current_segment_index > 0:
-		text_label.text += "\n"  # Ajoute une nouvelle ligne avant le segment
-	
+		text_label.text += "\n\n"  # Ajoute une nouvelle ligne avant le segment
 	for i in range(segment_text.length()):
 		if not is_typing:
 			break
@@ -66,7 +65,7 @@ func skip_typing():
 		text_label.text = ""
 		for i in range(current_segment.length()):
 			if i>0:
-				text_label.text += "\n" 
+				text_label.text += "" 
 			text_label.text += current_segment[i]
 	elif not all_segments_finished:
 		display_next_segment()

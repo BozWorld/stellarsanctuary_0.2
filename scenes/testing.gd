@@ -11,9 +11,9 @@ func _ready():
 	DialogueManager.start_dialogue()
 
 func _on_line_changed(current_line: DialogueData):
-	print("processing line: ", current_line.type, " - Style: ", current_line.display_style)
-	match current_line.DisplayStyle:
-		DialogueData.DisplayStyle.SNL:
+	print("Display Style: ", current_line.display_style, " - Type: ", current_line.type)
+	match current_line.display_style:
+		1:
 			SNLDisplay.display_line(current_line)
 		DialogueData.DisplayStyle.ADV:
 			print("ADV line", current_line.character, " - ", current_line.text)
@@ -38,6 +38,8 @@ func _process_system_line(line: DialogueData):
 			print("Music change: ", line.audio)
 		"cg":
 			print("CG change: ", line.image)
+		"snl_monologue":
+			print("SNL Monologue: ", line.text)
 		_:
 			print("Unknown line type: ", line.type)
 	
