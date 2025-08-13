@@ -1,0 +1,67 @@
+[gd_scene format=3 uid="uid://baih6yq3ah27u"]
+
+[node name="main_game" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="interface_SNL" type="Node" parent="."]
+
+[node name="background" type="Node" parent="."]
+
+[node name="parallax" type="Node" parent="."]
+
+[node name="interface_ADV" type="Node" parent="."]
+
+[node name="box_character" type="Node" parent="interface_ADV"]
+
+[node name="box_character_display" type="Node" parent="interface_ADV"]
+
+[node name="box_name" type="Node" parent="interface_ADV"]
+
+[node name="box_dialog" type="Node" parent="interface_ADV"]
+
+[node name="interface_log" type="Node" parent="."]
+
+[node name="box_log" type="Node" parent="interface_log"]
+
+[node name="interface_menu" type="Node" parent="."]
+
+[node name="button_menu" type="Node" parent="interface_menu"]
+
+[node name="button_log" type="Node" parent="interface_menu"]
+
+[node name="button_auto" type="Node" parent="interface_menu"]
+
+[node name="button_skip" type="Node" parent="interface_menu"]
+
+[node name="button_hide" type="Node" parent="interface_menu"]
+
+[node name="button_screen" type="Node" parent="interface_menu"]
+
+[node name="button_load" type="Node" parent="interface_menu"]
+
+[node name="button_title" type="Node" parent="interface_menu"]
+
+[node name="button_save" type="Node" parent="interface_menu"]
+
+[node name="button_config" type="Node" parent="."]
+
+[node name="button_music" type="Node" parent="button_config"]
+
+[node name="button_se" type="Node" parent="button_config"]
+
+[node name="button_textspeed" type="Node" parent="button_config"]
+
+[node name="button_autotextspeed" type="Node" parent="button_config"]
+
+[node name="button_onreadtextskip" type="Node" parent="button_config"]
+
+[node name="Node" type="Node" parent="."]
+
+[node name="Node6" type="Node" parent="."]
+
+[node name="Node7" type="Node" parent="."]

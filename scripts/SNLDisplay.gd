@@ -31,28 +31,41 @@ func _connect_signals() -> void:
 	if continue_button:
 		continue_button.connect("pressed", Callable(self, "_on_continue_button_pressed"))
 
-func display_text(text: String, style: DisplayStyle) -> void:
-	match style:
-		DisplayStyle.SNL:
-			_display_snl(text)
-		DisplayStyle.DYNAMIC_SNL:
-			_display_dynamic_snl(text)
 
-func _display_snl(text: String) -> void:
-	print("Displaying SNL text")
+# Affiche un segment unique (appelé à chaque segment)
+
+func show_segment(text: String, tag: String = "") -> void:
+	if tag == "#new_page":
+		clear_display()
+	
 	var label = line_label.instantiate()
 	story_vbox_container.add_child(label)
 	label_list.append(label)
 	current_label = label
+
+	if tag == "#segment_break":
+		current_label.text += "\n"  # Ajout d'un retour à la ligne si segment_break
+
 	current_label._add_full_text(text)
 	_start_text_animation()
 
-func _display_dynamic_snl(text: String) -> void:
-	print("Displaying Dynamic SNL text")
-	# Pour le Dynamic SNL, on peut réutiliser la logique SNL avec des effets différents
-	_display_snl(text)
-
+# Animation du texte segmenté
 func _start_text_animation() -> void:
+	if current_label:
+		current_text = current_label.full_text
+		current_char_index = 0
+		current_text_state = TextState.ANIMATING
+		if continue_button:
+			continue_button.visible = false
+
+func display_text(text: String, style: DisplayStyle) -> void:
+	# Pour compatibilité, on redirige vers show_segment
+	show_segment(text)
+
+
+
+
+
 	if current_label:
 		current_text = current_label.full_text
 		current_char_index = 0
@@ -67,7 +80,6 @@ func _process(delta: float) -> void:
 			timer = 0.0
 			current_char_index += 1
 			current_label.text = current_text.substr(0, current_char_index)
-			
 			if current_char_index >= current_text.length():
 				current_text_state = TextState.COMPLETED
 				if continue_button:
@@ -91,7 +103,6 @@ func _on_continue_button_pressed() -> void:
 	if current_text_state == TextState.ANIMATING:
 		_complete_text_immediately()
 	else:
-		print("Continue button pressed, emitting continue_requested signal")
 		emit_signal("continue_requested")
 
 func clear_display() -> void:

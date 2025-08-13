@@ -27,43 +27,52 @@ func _ready() -> void:
 	print("TextSegmentManager initialized")
 
 # Fonction principale pour traiter un texte avec tags
+
 func process_text_with_tags(raw_text: String, tags: Array) -> void:
 	print("Processing text with tags: ", tags)
 	_reset_state()
-	
-	# Analyse les tags Ink pour détecter segment_break et new_page
-	var processed_text = _extract_segments_from_tags(raw_text, tags)
-	
-	# Si pas de tags spéciaux, traite le texte comme un segment normal
+
+	# Nouvelle logique : découpe le texte selon les tags dans la ligne
+	var segments = _split_text_by_tags(raw_text)
+	for seg in segments:
+		_add_segment(seg.text, seg.type)
+
 	if _current_segments.is_empty():
-		_add_segment(processed_text, SegmentType.NORMAL)
-	
-	# Commence l'affichage du premier segment
+		return
 	_start_segment_display()
 
+# Découpe le texte en segments selon #segment_break et #new_page (même sur la même ligne)
+func _split_text_by_tags(text: String) -> Array:
+	var segments: Array = []
+	var buffer = ""
+	var i = 0
+	while i < text.length():
+		if text[i] == '#':
+			# Cherche le tag complet
+			var tag_start = i
+			var tag_end = text.find(" ", tag_start)
+			if tag_end == -1:
+				tag_end = text.length()
+			var tag = text.substr(tag_start, tag_end - tag_start)
+			var tag_type = null
+			if tag.begins_with("#segment_break"):
+				tag_type = SegmentType.SEGMENT_BREAK
+			elif tag.begins_with("#new_page"):
+				tag_type = SegmentType.NEW_PAGE
+			if tag_type != null:
+				if buffer.strip_edges() != "":
+					segments.append({"text": buffer.strip_edges(), "type": tag_type})
+				buffer = ""
+				i = tag_end
+				continue
+		buffer += text[i]
+		i += 1
+	if buffer.strip_edges() != "":
+		segments.append({"text": buffer.strip_edges(), "type": SegmentType.NORMAL})
+	return segments
+
 # Extrait les segments basés sur les tags Ink
-func _extract_segments_from_tags(text: String, tags: Array) -> String:
-	var processed_text = text
-	var has_segment_commands = false
-	
-	for tag in tags:
-		var tag_str = str(tag).strip_edges()
-		
-		if tag_str == "segment_break":
-			has_segment_commands = true
-			# Ajoute le texte actuel comme segment avec pause
-			if not processed_text.is_empty():
-				_add_segment(processed_text, SegmentType.SEGMENT_BREAK)
-				processed_text = ""
-				
-		elif tag_str == "new_page":
-			has_segment_commands = true
-			# Ajoute le texte actuel comme segment avec changement de page
-			if not processed_text.is_empty():
-				_add_segment(processed_text, SegmentType.NEW_PAGE)
-				processed_text = ""
-	
-	return processed_text
+## Ancienne fonction supprimée (remplacée par _split_text_by_tags)
 
 # Alternative : traite le texte avec des marqueurs inline (pour compatibilité)
 func process_text_with_markers(raw_text: String) -> void:
@@ -141,29 +150,24 @@ func _display_current_segment() -> void:
 	if _current_segment_index >= _current_segments.size():
 		_finish_processing()
 		return
-	
+
 	var segment = _current_segments[_current_segment_index]
 	segment.displayed = true
-	
+
 	print("Displaying segment ", _current_segment_index + 1, "/", _current_segments.size())
 	print("Segment type: ", SegmentType.keys()[segment.type])
 	print("Segment text: ", segment.text)
-	
-	# Émet le signal avec le segment
+
+	# Affiche le segment
 	emit_signal("segment_ready", segment.text, segment.type)
-	
-	# Gestion des pauses selon le type
-	match segment.type:
-		SegmentType.NEW_PAGE:
-			# Demande un changement de page
-			emit_signal("page_break_requested")
-		SegmentType.SEGMENT_BREAK:
-			# Pause normale entre segments
-			if auto_advance:
-				_advance_to_next_segment_delayed()
-		SegmentType.NORMAL:
-			# Segment normal, attend l'input utilisateur
-			pass
+
+	# Si c'est un NEW_PAGE, on efface l'affichage juste après ce segment
+	if segment.type == SegmentType.NEW_PAGE:
+		# On attend l'input utilisateur pour avancer, puis le DisplayStyleManager effacera l'affichage
+		emit_signal("page_break_requested")
+	elif segment.type == SegmentType.SEGMENT_BREAK:
+		if auto_advance:
+			_advance_to_next_segment_delayed()
 
 # Avance au segment suivant avec délai
 func _advance_to_next_segment_delayed() -> void:

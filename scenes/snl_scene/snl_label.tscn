@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://dxtpsrmdjxhyx"]
 
 [ext_resource type="FontFile" uid="uid://clmilxgrpwpwu" path="res://asset/Syst_Fonts/TitilliumWeb-Regular.ttf" id="1_ecx0c"]
-[ext_resource type="Script" uid="uid://v61msjbt323n" path="res://scenes/snl_scene/snl_label.gd" id="2_qxw4b"]
+[ext_resource type="Script" uid="uid://v61msjbt323n" path="res://scripts/snl_label.gd" id="2_qxw4b"]
 
 [node name="SnlLabel" type="RichTextLabel"]
 offset_right = 1.0

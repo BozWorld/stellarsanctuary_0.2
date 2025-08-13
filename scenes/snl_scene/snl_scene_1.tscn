@@ -8,8 +8,8 @@
 [ext_resource type="Texture2D" uid="uid://cmo3pojewc4yk" path="res://asset/SystVisuals_Config&UI/nextpage.png" id="5_7sfpw"]
 [ext_resource type="Texture2D" uid="uid://c8tkn7atej4ik" path="res://asset/transparent.png" id="5_ebrfb"]
 [ext_resource type="Script" uid="uid://wxsuj4ltp86w" path="res://scripts/ADVDisplay.gd" id="5_w55wh"]
-[ext_resource type="FontFile" uid="uid://clmilxgrpwpwu" path="res://asset/Syst_Fonts/TitilliumWeb-Regular.ttf" id="6_ebrfb"]
 [ext_resource type="Script" uid="uid://do6a1545hae36" path="res://scripts/TransitionManager.gd" id="6_exumd"]
+[ext_resource type="Script" uid="uid://duomxy5kq65mi" path="res://scripts/TextSegmentManager.gd" id="11_ot1tq"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hs07c"]
 bg_color = Color(0.270588, 0.270588, 0.270588, 1)
@@ -111,10 +111,6 @@ horizontal_scroll_mode = 0
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="RichTextLabel" type="RichTextLabel" parent="DisplayStyleManager/SNLDisplay/MarginContainer/ScrollContainer/VBoxContainer"]
-layout_mode = 2
-theme_override_fonts/normal_font = ExtResource("6_ebrfb")
-
 [node name="ADVDisplay" type="Control" parent="DisplayStyleManager"]
 layout_mode = 3
 anchors_preset = 0
@@ -124,3 +120,6 @@ script = ExtResource("5_w55wh")
 
 [node name="TransitionManager" type="Node" parent="DisplayStyleManager"]
 script = ExtResource("6_exumd")
+
+[node name="TextSegmentManager" type="Node" parent="DisplayStyleManager"]
+script = ExtResource("11_ot1tq")

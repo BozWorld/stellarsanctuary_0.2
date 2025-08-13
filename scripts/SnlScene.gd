@@ -1,4 +1,3 @@
-# Ink_Manager.gd
 class_name SnlScene
 extends Control
 
@@ -51,7 +50,7 @@ func _connect_ui_signals() -> void:
 func _initialize_ink_player() -> void:
 	ink_player = InkPlayer.new()
 	add_child(ink_player)
-	ink_player.ink_file = load("res://INK/introduction.json")
+	ink_player.ink_file = load("res://INK/scene1_clean.json")
 	ink_player.loads_in_background = true
 	ink_player.connect("loaded", Callable(self, "_on_story_loaded"))
 	ink_player.create_story()

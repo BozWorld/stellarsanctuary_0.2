@@ -123,23 +123,18 @@ func _continue_story() -> void:
 func _on_segment_ready(segment_text: String, segment_type: int) -> void:
 	print("Segment ready: ", segment_text.substr(0, 50), "... (Type: ", segment_type, ")")
 	
-	# Détermine le style d'affichage selon les tags
-	var tags = ink_story_loader._give_tag()
-	var display_style = current_display_style
-	
-	if "layout:ADV" in tags:
-		display_style = DisplayStyle.ADV
-		_switch_to_display(DisplayStyle.ADV)
-	elif "layout:SNL" in tags:
-		display_style = DisplayStyle.SNL
-		_switch_to_display(DisplayStyle.SNL)
-	
-	# Affiche le segment selon le style
-	match display_style:
-		DisplayStyle.ADV:
-			adv_display.display_text(segment_text)
-		DisplayStyle.SNL, DisplayStyle.DYNAMIC_SNL:
-			snl_display.display_text(segment_text, display_style)
+	match segment_type:
+		TextSegmentManager.SegmentType.NEW_PAGE:
+			print("Handling NEW_PAGE - clearing display")
+			snl_display.clear_display()
+			adv_display.clear_display()
+			snl_display.show_segment(segment_text)
+		TextSegmentManager.SegmentType.SEGMENT_BREAK:
+			print("Handling SEGMENT_BREAK - adding new line or label")
+			snl_display.show_segment(segment_text, "#segment_break")
+		TextSegmentManager.SegmentType.NORMAL:
+			print("Handling NORMAL segment")
+			snl_display.show_segment(segment_text)
 
 func _on_page_break_requested() -> void:
 	print("Page break requested - clearing display")
