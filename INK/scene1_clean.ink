@@ -1,13 +1,8 @@
-# scene1.ink
-# Version adaptée de scene1.ks pour Ink
-# Structure adaptée pour le système Godot DialogueManager
-# Utilise des tags personnalisés pour la segmentation et les commandes
-
 -> prologue_chapter
 
 === prologue_chapter ===
 
-#audio:playse:SoundEffects_Menu/chapter.ogg:70
+#audio:playse:asset/Sound/Sound_SFX/chapter.ogg:70
 #image:show:Chapters/chapter_1_begin.png:1000
 #text:show:SS-04:434:313:100:0xf2f2f2:earthorbiter:fadeInLeft:fadeOutRight
 #wait:2500

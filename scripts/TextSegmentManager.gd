@@ -22,20 +22,35 @@ var _is_processing: bool = false
 # Variables publiques
 var auto_advance: bool = false
 var segment_pause_duration: float = 1.0
+@export var enable_debug: bool = false
 
-func _ready() -> void:
-	print("TextSegmentManager initialized")
+#func _ready() -> void:
+	#print("TextSegmentManager initialized")
 
 # Fonction principale pour traiter un texte avec tags
 
 func process_text_with_tags(raw_text: String, tags: Array) -> void:
-	print("Processing text with tags: ", tags)
+	_debug("Processing text with tags: %s" % [tags])
 	_reset_state()
 
 	# Nouvelle logique : découpe le texte selon les tags dans la ligne
 	var segments = _split_text_by_tags(raw_text)
 	for seg in segments:
 		_add_segment(seg.text, seg.type)
+
+	# IMPORTANT : les tags Ink inline ne sont PAS présents dans raw_text (Ink les retire et les fournit via get_current_tags())
+	# On ajoute donc des segments de contrôle en fonction de la liste 'tags' passée en argument.
+	for t in tags:
+		match t:
+			"segment_break":
+				_add_segment("", SegmentType.SEGMENT_BREAK)
+			"new_page":
+				_add_segment("", SegmentType.NEW_PAGE)
+			_:
+				pass
+
+	# Post-traitement option C: fusion des SEGMENT_BREAK dans le texte du segment NORMAL suivant
+	_merge_segment_breaks_into_following()
 
 	if _current_segments.is_empty():
 		return
@@ -46,29 +61,44 @@ func _split_text_by_tags(text: String) -> Array:
 	var segments: Array = []
 	var buffer = ""
 	var i = 0
+
 	while i < text.length():
-		if text[i] == '#':
-			# Cherche le tag complet
+		if text[i] == "#":
+			# Chercher le tag complet
 			var tag_start = i
 			var tag_end = text.find(" ", tag_start)
 			if tag_end == -1:
 				tag_end = text.length()
 			var tag = text.substr(tag_start, tag_end - tag_start)
+
+			# Identifier le type de tag
 			var tag_type = null
-			if tag.begins_with("#segment_break"):
+			if tag == "#segment_break":
 				tag_type = SegmentType.SEGMENT_BREAK
-			elif tag.begins_with("#new_page"):
+			elif tag == "#new_page":
 				tag_type = SegmentType.NEW_PAGE
-			if tag_type != null:
-				if buffer.strip_edges() != "":
-					segments.append({"text": buffer.strip_edges(), "type": tag_type})
+
+			# Ajouter le texte accumulé avant le tag comme un segment NORMAL
+			if buffer.strip_edges() != "":
+				segments.append({"text": buffer.strip_edges(), "type": SegmentType.NORMAL})
 				buffer = ""
-				i = tag_end
-				continue
+
+			# Ajouter le tag comme un segment spécifique
+			if tag_type != null:
+				segments.append({"text": "", "type": tag_type})
+
+			# Avancer après le tag
+			i = tag_end
+			continue
+
+		# Ajouter le caractère au buffer
 		buffer += text[i]
 		i += 1
+
+	# Ajouter le dernier segment s'il existe
 	if buffer.strip_edges() != "":
 		segments.append({"text": buffer.strip_edges(), "type": SegmentType.NORMAL})
+
 	return segments
 
 # Extrait les segments basés sur les tags Ink
@@ -124,7 +154,8 @@ func _split_text_by_markers(text: String) -> Array[Dictionary]:
 
 # Ajoute un segment à la liste
 func _add_segment(text: String, type: SegmentType) -> void:
-	if text.is_empty():
+	# On autorise les segments vides pour les types de contrôle (SEGMENT_BREAK, NEW_PAGE)
+	if text.is_empty() and type == SegmentType.NORMAL:
 		return
 		
 	_current_segments.append({
@@ -132,13 +163,12 @@ func _add_segment(text: String, type: SegmentType) -> void:
 		"type": type,
 		"displayed": false
 	})
-	
-	print("Added segment: ", text.substr(0, 50), "... (Type: ", SegmentType.keys()[type], ")")
+	#print("Added segment: ", text.substr(0, 50), "... (Type: ", SegmentType.keys()[type], ")")
 
 # Démarre l'affichage des segments
 func _start_segment_display() -> void:
 	if _current_segments.is_empty():
-		print("No segments to display")
+		_debug("No segments to display")
 		return
 	
 	_current_segment_index = 0
@@ -153,10 +183,6 @@ func _display_current_segment() -> void:
 
 	var segment = _current_segments[_current_segment_index]
 	segment.displayed = true
-
-	print("Displaying segment ", _current_segment_index + 1, "/", _current_segments.size())
-	print("Segment type: ", SegmentType.keys()[segment.type])
-	print("Segment text: ", segment.text)
 
 	# Affiche le segment
 	emit_signal("segment_ready", segment.text, segment.type)
@@ -178,7 +204,7 @@ func _advance_to_next_segment_delayed() -> void:
 func advance_to_next_segment() -> void:
 	if not _is_processing:
 		return
-		
+	
 	_current_segment_index += 1
 	_display_current_segment()
 
@@ -209,16 +235,47 @@ func _reset_state() -> void:
 # Termine le traitement
 func _finish_processing() -> void:
 	_is_processing = false
-	print("All segments completed")
+	_debug("All segments completed")
 	emit_signal("all_segments_completed")
 
 # Fonction de debug pour afficher tous les segments
 func debug_print_segments() -> void:
-	print("=== DEBUG: All Segments ===")
+	if not enable_debug:
+		return
+	print("=== SEGMENTS DUMP ===")
 	for i in range(_current_segments.size()):
 		var segment = _current_segments[i]
 		print("Segment ", i, " (", SegmentType.keys()[segment.type], "): ", segment.text.substr(0, 100))
-	print("=== END DEBUG ===")
+	print("=== END SEGMENTS ===")
+
+# Helper log interne
+func _debug(msg: String) -> void:
+	if enable_debug:
+		print("[TextSegmentManager] ", msg)
+
+# Fusionne les SEGMENT_BREAK vides dans le segment NORMAL suivant en ajoutant une ligne vide
+func _merge_segment_breaks_into_following() -> void:
+	if _current_segments.is_empty():
+		return
+	var merged: Array[Dictionary] = []
+	var pending_blank_lines: int = 0
+	for seg in _current_segments:
+		if seg.type == SegmentType.SEGMENT_BREAK:
+			# Incrémente le compteur de lignes vides à insérer avant le prochain NORMAL
+			pending_blank_lines += 1
+			continue
+		elif seg.type == SegmentType.NORMAL:
+			if pending_blank_lines > 0:
+				var prefix = "\n".repeat(pending_blank_lines) # une ligne vide par segment_break (modifiable)
+				seg.text = prefix + seg.text
+				pending_blank_lines = 0
+			merged.append(seg)
+		elif seg.type == SegmentType.NEW_PAGE:
+			# On pousse un éventuel stack de blank lines avant un NEW_PAGE ? On les ignore car NEW_PAGE efface l'écran.
+			pending_blank_lines = 0
+			merged.append(seg)
+	# Si des blank lines restent en fin sans texte, on les ignore.
+	_current_segments = merged
 
 # Fonction pour forcer l'affichage de tous les segments (skip)
 func skip_to_end() -> void:

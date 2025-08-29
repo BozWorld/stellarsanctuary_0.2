@@ -16,10 +16,11 @@ enum DisplayStyle { SNL, DYNAMIC_SNL, ADV }
 @onready var adv_display = $ADVDisplay
 @onready var transition_manager = $TransitionManager
 @onready var text_segment_manager = $TextSegmentManager
-
+@onready var tag_processor = $TagCommandProcessor
 # Variables d'état
 var current_display_style: DisplayStyle = DisplayStyle.SNL
 var current_display_node: Control
+@export var enable_debug: bool = false
 
 func _ready() -> void:
 	_setup_display_nodes()
@@ -35,35 +36,56 @@ func _setup_display_nodes() -> void:
 	_switch_to_display(current_display_style)
 
 func _connect_signals() -> void:
+	print("Connecting signals in DisplayStyleManager")
 	# Connecte les signaux du loader
 	ink_story_loader.story_loaded.connect(_on_story_loaded)
-	ink_story_loader.story_continued.connect(_on_story_continued)
-	ink_story_loader.can_continue_section.connect(_on_can_continue_section)
+	ink_story_loader.story_step.connect(_on_story_step)
+	text_segment_manager.segment_ready.connect(_on_segment_ready)
+	text_segment_manager.all_segments_completed.connect(_on_all_segments_completed)
+	tag_processor.command_queue_drained.connect(_on_commands_done)
+	# ink_story_loader.story_continued.connect(_on_story_continued)
+	# ink_story_loader.can_continue_section.connect(_on_can_continue_section)
+	# text_parser.display_style_changed.connect(_on_display_style_changed)
+	# text_parser.text_processed.connect(_on_text_processed)
 	
 	# Connecte les signaux du parser
-	text_parser.display_style_changed.connect(_on_display_style_changed)
-	text_parser.text_processed.connect(_on_text_processed)
 	
 	# Connecte les signaux du TextSegmentManager
-	text_segment_manager.segment_ready.connect(_on_segment_ready)
-	text_segment_manager.page_break_requested.connect(_on_page_break_requested)
-	text_segment_manager.all_segments_completed.connect(_on_all_segments_completed)
+	# text_segment_manager.page_break_requested.connect(_on_page_break_requested)
 	
-	# Connecte les signaux des displays
-	snl_display.continue_requested.connect(_on_continue_requested)
-	adv_display.continue_requested.connect(_on_continue_requested)
+	# # Connecte les signaux des displays
+	# snl_display.continue_requested.connect(_on_continue_requested)
+	# adv_display.continue_requested.connect(_on_continue_requested)
 
 func _on_story_loaded(success: bool) -> void:
 	emit_signal("story_loaded", success)
 	if success:
 		_continue_story()
 
+func _on_story_step(text: String, tags: Array):
+	tag_processor.enqueue_tags(tags)
+
+	if text.strip_edges() != "":
+		# Traite le texte avec les tags
+		text_segment_manager.process_text_with_tags(text, [])
+		print("Processed text with tags: ", text, tags)
+	else:
+		# Si le texte est vide, on continue l'histoire
+		_continue_story_if_possible()
+
+func _on_commands_done():
+	if not text_segment_manager.has_more_segments() and text_segment_manager.get_total_segments() == 0:
+		_continue_story_if_possible()
+
+func _continue_story_if_possible() -> void:
+	if ink_story_loader.can_continue():
+		_continue_story()
+
 func _on_story_continued(text: String) -> void:
 	# Envoie le texte brut au TextSegmentManager avec les tags
-	print("Continuing story with text: ", text)
 	var tags = ink_story_loader._give_tag()
-	print("Current tags: ", tags)
-	
+	# print("Current tags: ", tags)
+
 	# Utilise le TextSegmentManager pour traiter le texte avec les tags
 	text_segment_manager.process_text_with_tags(text, tags)
 
@@ -121,38 +143,45 @@ func _continue_story() -> void:
 
 # Nouvelles fonctions de callback pour TextSegmentManager
 func _on_segment_ready(segment_text: String, segment_type: int) -> void:
-	print("Segment ready: ", segment_text.substr(0, 50), "... (Type: ", segment_type, ")")
-	
+	_debug("Segment type %s text='%.50s'" % [segment_type, segment_text])
+
 	match segment_type:
 		TextSegmentManager.SegmentType.NEW_PAGE:
-			print("Handling NEW_PAGE - clearing display")
+			# NEW_PAGE : on vide l'écran et on attend l'input pour avancer (le segment texte peut être vide)
+			_debug("NEW_PAGE -> clear display")
 			snl_display.clear_display()
-			adv_display.clear_display()
-			snl_display.show_segment(segment_text)
+			# Si un texte est associé (rare), on l'affiche après nettoyage
+			if segment_text.strip_edges() != "":
+				snl_display.show_segment(segment_text)
 		TextSegmentManager.SegmentType.SEGMENT_BREAK:
-			print("Handling SEGMENT_BREAK - adding new line or label")
-			snl_display.show_segment(segment_text, "#segment_break")
+			# SEGMENT_BREAK : on n'efface pas, on n'affiche rien si pas de texte, on attend l'input pour passer au suivant
+			_debug("SEGMENT_BREAK control segment")
+			if segment_text.strip_edges() != "":
+				snl_display.show_segment(segment_text, "#segment_break")
 		TextSegmentManager.SegmentType.NORMAL:
-			print("Handling NORMAL segment")
+			_debug("NORMAL segment")
 			snl_display.show_segment(segment_text)
 
 func _on_page_break_requested() -> void:
-	print("Page break requested - clearing display")
+	_debug("Page break signal")
 	# Efface l'affichage pour un nouveau page
 	snl_display.clear_display()
 	adv_display.clear_display()
 
 func _on_all_segments_completed() -> void:
-	print("All segments completed - ready for next story section")
+	_debug("All segments completed")
 	# Tous les segments sont terminés, on peut continuer l'histoire
 	_continue_story()
 
 func _on_continue_requested() -> void:
-	print("Continue requested from display")
+	_debug("Continue pressed")
 	# Vérifie s'il y a encore des segments à afficher
 	if text_segment_manager.has_more_segments():
-		print("Advancing to next segment")
+		_debug("Advance to next segment")
 		text_segment_manager.advance_to_next_segment()
 	else:
-		print("No more segments, continuing story")
 		_continue_story()
+
+func _debug(msg: String) -> void:
+	if enable_debug:
+		print("[DisplayStyleManager] ", msg)

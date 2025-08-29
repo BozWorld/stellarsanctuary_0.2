@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://bol26hah7max"]
+[gd_scene load_steps=20 format=3 uid="uid://bol26hah7max"]
 
 [ext_resource type="Script" uid="uid://buktnfaj8utl8" path="res://scripts/DisplayStyleManager.gd" id="1_2ea14"]
 [ext_resource type="Texture2D" uid="uid://basqecjp42yoy" path="res://asset/Visuals_Backgrounds/big_01_space_g.png" id="1_exumd"]
@@ -9,7 +9,10 @@
 [ext_resource type="Texture2D" uid="uid://c8tkn7atej4ik" path="res://asset/transparent.png" id="5_ebrfb"]
 [ext_resource type="Script" uid="uid://wxsuj4ltp86w" path="res://scripts/ADVDisplay.gd" id="5_w55wh"]
 [ext_resource type="Script" uid="uid://do6a1545hae36" path="res://scripts/TransitionManager.gd" id="6_exumd"]
+[ext_resource type="FontFile" uid="uid://7o6aqhiucp2y" path="res://asset/Syst_Fonts/earthorbiter.ttf" id="11_mevxt"]
 [ext_resource type="Script" uid="uid://duomxy5kq65mi" path="res://scripts/TextSegmentManager.gd" id="11_ot1tq"]
+[ext_resource type="AudioStream" uid="uid://677ap0kooffc" path="res://asset/Sound/Sound_SFX/chapter.ogg" id="12_lydvy"]
+[ext_resource type="Script" uid="uid://nw3cjvpr73tb" path="res://scripts/TagCommandProcessor.gd" id="12_oimod"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hs07c"]
 bg_color = Color(0.270588, 0.270588, 0.270588, 1)
@@ -34,6 +37,7 @@ bg_color = Color(0.270588, 0.270588, 0.270588, 1)
 [node name="SNLScene1" type="CanvasLayer"]
 
 [node name="BG" type="TextureRect" parent="."]
+modulate = Color(0, 0, 0, 1)
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -45,6 +49,27 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("1_exumd")
 
+[node name="RichTextLabel" type="RichTextLabel" parent="."]
+visible = false
+visibility_layer = 2
+anchors_preset = -1
+anchor_left = 0.244531
+anchor_top = 0.265278
+anchor_right = 0.695312
+anchor_bottom = 0.402778
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_outline_color = Color(0.519809, 0.535361, 0, 1)
+theme_override_colors/font_shadow_color = Color(0.762716, 0.515126, 0, 1)
+theme_override_constants/shadow_offset_y = 4
+theme_override_constants/shadow_offset_x = 5
+theme_override_fonts/normal_font = ExtResource("11_mevxt")
+theme_override_font_sizes/normal_font_size = 100
+text = "CHAPTER 1"
+metadata/_edit_use_anchors_ = true
+
+[node name="Node" type="Node" parent="RichTextLabel"]
+
 [node name="DisplayStyleManager" type="Control" parent="."]
 layout_mode = 3
 anchors_preset = 15
@@ -53,6 +78,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_2ea14")
+enable_debug = true
 
 [node name="InkStoryLoader" type="Node" parent="DisplayStyleManager"]
 script = ExtResource("2_0nq83")
@@ -123,3 +149,14 @@ script = ExtResource("6_exumd")
 
 [node name="TextSegmentManager" type="Node" parent="DisplayStyleManager"]
 script = ExtResource("11_ot1tq")
+enable_debug = true
+
+[node name="TagCommandProcessor" type="Node" parent="DisplayStyleManager"]
+script = ExtResource("12_oimod")
+enable_debug = true
+metadata/_custom_type_script = "uid://nw3cjvpr73tb"
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+position = Vector2(313, 191)
+stream = ExtResource("12_lydvy")
+volume_db = -0.04
