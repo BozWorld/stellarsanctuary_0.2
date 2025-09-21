@@ -9,6 +9,7 @@ var _queue : Array = []
 var _is_running := false
 var transition_manager: TransitionManager
 var display_style_manager: DisplayStyleManager
+var audio_manager
 
 func _debug(m): if enable_debug: print("[TagCmd]", m)
 
@@ -36,8 +37,8 @@ func _parse_tag(tag: String) -> Dictionary:
             return {"type":"window","action":"hide"}
         "show_window":
             return {"type":"window","action":"show"}
-        "layout":
-            return {"type":"layout","style":parts[1] if parts.size()>1 else "SNL"}
+        # "layout":
+        #     return {"type":"layout","style":parts[1] if parts.size()>1 else "SNL"}
         "wait":
             return {"type":"wait","ms":int(parts[1]) if parts.size()>1 else 0}
         "text":
@@ -64,10 +65,6 @@ func _parse_image(parts: Array) -> Dictionary:
     # image:show:path:time  / image:hide:time / image:free:index
     if parts.size()<2: return {}
     match parts[1]:
-        "show":
-            return {"type":"image","action":"show","path":parts[2] if parts.size()>2 else "", "time": float(parts[3])/1000.0 if parts.size()>3 else 1.0}
-        "hide":
-            return {"type":"image","action":"hide","time": float(parts[2])/1000.0 if parts.size()>2 else 1.0}
         "free":
             return {"type":"image","action":"free","idx": parts[2] if parts.size()>2 else ""}
     return {}
@@ -88,26 +85,44 @@ func _execute_command(cmd: Dictionary):
     match cmd.type:
         "wait":
             await get_tree().create_timer(cmd.ms/1000.0).timeout
+
         "bg":
             if transition_manager:
                 transition_manager.crossfade_background("res://%s" % cmd.path, cmd.dur)
+
         "cg":
             if transition_manager:
-                if cmd.sub == "": transition_manager.hide_cg()
-                else: transition_manager.show_cg("res://%s" % cmd.sub)
-        "layout":
-            if display_style_manager:
-                display_style_manager.request_style(cmd.style)
-        "window":               
-            if display_style_manager:
-                display_style_manager.toggle_window(cmd.action == "show")
+                if cmd.sub == "":
+                    transition_manager.hide_cg()
+                else:
+                    transition_manager.show_cg("res://%s" % cmd.sub)
+
+        "window":
+            # (Retiré si géré dans DisplayStyleManager – sinon laisse)
+            pass
+
         "audio":
-            # TODO branch vers AudioManager
-            _debug("Audio cmd %s" % cmd)
+            if audio_manager:
+                _handle_audio(cmd)
+            else:
+                _debug("Audio cmd (no audio_manager) %s" % cmd)
+
         "ptext":
-            # TODO afficher un ptext overlay
-            _debug("PText %s" % cmd.payload)
+            _debug("PText %s" % cmd.payload) # stub
+
         "image":
-            # TODO image overlay
-            _debug("Image %s" % cmd)
+            if transition_manager:
+                _debug("Image cmd (stub) %s" % cmd)
+                # Implémente plus tard (overlay manager)
     _process_next()
+
+func _handle_audio(cmd: Dictionary) -> void:
+    match cmd.sub:
+        "se":
+            audio_manager.play_se(cmd.path, cmd.vol)
+        "bgm":
+            audio_manager.play_bgm(cmd.path, loop = cmd.get("loop", false))
+        "fadeoutbgm":
+            audio_manager.fadeout_bgm(cmd.dur)
+        "fadeoutse":
+            audio_manager.fadeout_all_se(cmd.dur)
