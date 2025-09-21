@@ -121,7 +121,7 @@ func _handle_audio(cmd: Dictionary) -> void:
         "se":
             audio_manager.play_se(cmd.path, cmd.vol)
         "bgm":
-            audio_manager.play_bgm(cmd.path, loop = cmd.get("loop", false))
+            audio_manager.play_bgm(cmd.path, cmd.get("loop", false))
         "fadeoutbgm":
             audio_manager.fadeout_bgm(cmd.dur)
         "fadeoutse":
