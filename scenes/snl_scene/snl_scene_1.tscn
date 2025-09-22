@@ -11,8 +11,8 @@
 [ext_resource type="Script" uid="uid://do6a1545hae36" path="res://scripts/TransitionManager.gd" id="6_exumd"]
 [ext_resource type="FontFile" uid="uid://7o6aqhiucp2y" path="res://asset/Syst_Fonts/earthorbiter.ttf" id="11_mevxt"]
 [ext_resource type="Script" uid="uid://duomxy5kq65mi" path="res://scripts/TextSegmentManager.gd" id="11_ot1tq"]
-[ext_resource type="AudioStream" uid="uid://677ap0kooffc" path="res://asset/Sound/Sound_SFX/chapter.ogg" id="12_lydvy"]
 [ext_resource type="Script" uid="uid://nw3cjvpr73tb" path="res://scripts/TagCommandProcessor.gd" id="12_oimod"]
+[ext_resource type="Script" uid="uid://51dnlrycqh6e" path="res://scenes/snl_scene/audio_manager.gd" id="14_oimod"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hs07c"]
 bg_color = Color(0.270588, 0.270588, 0.270588, 1)
@@ -149,12 +149,12 @@ script = ExtResource("6_exumd")
 [node name="TextSegmentManager" type="Node" parent="DisplayStyleManager"]
 script = ExtResource("11_ot1tq")
 
-[node name="TagCommandProcessor" type="Node" parent="DisplayStyleManager"]
+[node name="TagCommandProcessor" type="Node" parent="DisplayStyleManager" node_paths=PackedStringArray("audio_manager")]
 script = ExtResource("12_oimod")
 enable_debug = true
+audio_manager = NodePath("../../AudioStreamPlayer2D")
 metadata/_custom_type_script = "uid://nw3cjvpr73tb"
 
-[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
-position = Vector2(313, 191)
-stream = ExtResource("12_lydvy")
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer" parent="."]
 volume_db = -0.04
+script = ExtResource("14_oimod")
