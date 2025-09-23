@@ -13,14 +13,272 @@ enum TransitionType { FADE, SLIDE, DISSOLVE, INSTANT }
 @export var default_transition_duration: float = 0.5
 @export var default_transition_type: TransitionType = TransitionType.FADE
 @export var enable_debug: bool = false
-
+var _image_layers := {} # Dictionnaire pour gérer les images par couche
 var current_tween: Tween
 var audio_player: AudioStreamPlayer
+var _ptexts := {} # id -> label
+@export var default_ptext_lifetime_ms: int = 3000  # Nouveau: durée par défaut si non fournie (-1)
 
 func _ready() -> void:
 	# Initialise l'audio pour les effets sonores de transition
 	audio_player = AudioStreamPlayer.new()
 	add_child(audio_player)
+
+func show_ptext(cmd: Dictionary) -> void:
+	var id = cmd.id
+	if id == "":
+		_debug("show_ptext: id is empty")
+		return
+	if _ptexts.has(id):
+		var old = _ptexts[id]
+		if is_instance_valid(old):
+			old.queue_free()
+		_ptexts.erase(id)
+	var lbl := RichTextLabel.new()
+	print(cmd.size)
+	lbl.name = "ptext_%s" % id
+	lbl.bbcode_enabled = true
+	lbl.text = id
+	lbl.modulate.a = 0.0
+	
+	lbl.size.x = cmd.x
+	lbl.size.y = cmd.y
+	if cmd.size != null:
+		var sz: int = int(cmd.size)
+		lbl.add_theme_font_size_override("normal_font_size", sz)
+	var color_col = _parse_color(cmd.color)
+	if color_col:
+		lbl.add_theme_color_override("default_color", color_col)
+	var root = get_parent()
+	if not root: return
+	root.add_child(lbl)
+	var vp_size = get_viewport().get_visible_rect().size
+	if cmd.x == null or cmd.y == null:
+		lbl.position = Vector2((vp_size.x - lbl.get_size().x)/2.0, (vp_size.y - lbl.get_size().y)/2.0)
+	else:
+		lbl.position = Vector2(cmd.x, cmd.y)
+	_ptexts[id] = lbl
+
+	var anim_in = _normalize_anim(cmd.anim_in, true)
+	var anim_out = _normalize_anim(cmd.anim_out, false)
+	await _animate_text(lbl, anim_in, true)
+
+	var lifetime = cmd.lifetime_ms
+	if lifetime == -1:
+		lifetime = default_ptext_lifetime_ms
+	if lifetime > 0:
+		await get_tree().create_timer(lifetime / 1000.0).timeout
+		await _animate_text(lbl, anim_out, false)
+		if is_instance_valid(lbl):
+			lbl.queue_free()
+		_ptexts.erase(id)
+
+func hide_ptext(cmd: Dictionary) -> void:
+	var id = cmd.id
+	if not _ptexts.has(id):
+		return
+	var lbl = _ptexts[id]
+	if not is_instance_valid(lbl):
+		_ptexts.erase(id)
+		return
+	var anim_out = _normalize_anim(cmd.anim_out, false)
+	await _animate_text(lbl, anim_out, false)
+	if is_instance_valid(lbl):
+		lbl.queue_free()
+	_ptexts.erase(id)
+
+func _normalize_anim(name: String, entering: bool) -> String:
+	if name == null: return "fade"
+	var n = name.to_lower()
+	match n:
+		"fadeinleft": return "slide_left"
+		"fadeoutleft": return "slide_left"
+		"fadeinright": return "slide_right"
+		"fadeoutright": return "slide_right"
+		"fadein": return "fade"
+		"fadeout": return "fade"
+		"fade": return "fade"
+		"slideinleft": return "slide_left"
+		"slideinright": return "slide_right"
+		_:
+			return n
+
+func free_ptext(id: String) -> void:
+	if not _ptexts.has(id):
+		return
+	var lbl = _ptexts[id]
+	if is_instance_valid(lbl):
+		lbl.queue_free()
+	_ptexts.erase(id)
+
+func _animate_text(lbl: RichTextLabel, anim: String, entering: bool) -> void:
+	var dur = default_transition_duration
+	var tw = create_tween()
+	match anim:
+		"fade", "":
+			if entering:
+				lbl.modulate.a = 0.0
+				tw.tween_property(lbl, "modulate:a", 1.0, dur)
+			else:
+				tw.tween_property(lbl, "modulate:a", 0.0, dur)
+		"instant":
+			lbl.modulate.a = 1.0 if entering else 0.0
+		"slide":
+			var offset = Vector2(0, 60)
+			if entering:
+				lbl.position += offset
+				lbl.modulate.a = 0.0
+				tw.set_parallel(true)
+				tw.tween_property(lbl, "position", lbl.position - offset, dur)
+				tw.tween_property(lbl, "modulate:a", 1.0, dur)
+			else:
+				tw.set_parallel(true)
+				tw.tween_property(lbl, "position", lbl.position + offset, dur)
+				tw.tween_property(lbl, "modulate:a", 0.0, dur)
+		"slide_left":
+			var off_l = Vector2(-120, 0)
+			if entering:
+				lbl.position += off_l
+				lbl.modulate.a = 0.0
+				tw.set_parallel(true)
+				tw.tween_property(lbl, "position", lbl.position - off_l, dur)
+				tw.tween_property(lbl, "modulate:a", 1.0, dur)
+			else:
+				tw.set_parallel(true)
+				tw.tween_property(lbl, "position", lbl.position + off_l, dur)
+				tw.tween_property(lbl, "modulate:a", 0.0, dur)
+		"slide_right":
+			var off_r = Vector2(120,0)
+			if entering:
+				lbl.position += off_r
+				lbl.modulate.a = 0.0
+				tw.set_parallel(true)
+				tw.tween_property(lbl, "position", lbl.position - off_r, dur)
+				tw.tween_property(lbl, "modulate:a", 1.0, dur)
+			else:
+				tw.set_parallel(true)
+				tw.tween_property(lbl, "position", lbl.position + off_r, dur)
+				tw.tween_property(lbl, "modulate:a", 0.0, dur)
+		"scale":
+			if entering:
+				lbl.scale = Vector2(0.8,0.8)
+				lbl.modulate.a = 0.0
+				tw.set_parallel(true)
+				tw.tween_property(lbl, "scale", Vector2(1.0,1.0), dur)
+				tw.tween_property(lbl, "modulate:a", 1.0, dur)
+			else:
+				tw.set_parallel(true)
+				tw.tween_property(lbl, "scale", Vector2(0.8,0.8), dur)
+				tw.tween_property(lbl, "modulate:a", 0.0, dur)
+		_:
+			if entering:
+				lbl.modulate.a = 0.0
+				tw.tween_property(lbl, "modulate:a", 1.0, dur)
+			else:
+				tw.tween_property(lbl, "modulate:a", 0.0, dur)
+	if tw:
+		await tw.finished
+
+func _parse_color(code: String):
+	if code == "" : return null
+	var c = code.strip_edges()
+	if c.begins_with("0x"):
+		var hex = c.substr(2, c.length() - 2)
+		if hex.length() == 6:
+			return Color("#%s" % hex)
+		elif hex.length() == 8:
+			return Color("#%s" % hex)
+	if c.begins_with("#"):
+		return Color(c)
+	return null
+
+func _ensure_image_layer(layer_name: String) -> Control:
+	if _image_layers.has(layer_name):
+		return _image_layers[layer_name]
+	var parent = get_parent()
+	if not parent:
+		return null
+	var holder := Control.new()
+	holder.name = "IMG_layer_%s" % layer_name
+	holder.anchor_right = 1.0
+	holder.anchor_bottom = 1.0
+	holder.grow_horizontal = Control.GROW_DIRECTION_BOTH
+	holder.grow_vertical = Control.GROW_DIRECTION_BOTH
+	parent.add_child(holder)
+	_image_layers[layer_name] = holder
+	return holder
+
+func show_image(cmd: Dictionary) -> void:
+	print("hello")
+	var path: String = cmd.path
+	if path == "":
+		_debug("show_image: path is empty")
+		return
+	var tex = load("res://%s" % path) if not path.begins_with("res://") else load(path)
+	if not tex:
+		_debug("show_image: texture not found %s" % path)
+		return
+	var layer := _ensure_image_layer(cmd.layer)
+	if not layer:
+		return
+	var sprite := TextureRect.new()
+	sprite.texture = tex
+	sprite.name = "img_%s" % str(Time.get_ticks_msec())
+	layer.add_child(sprite)
+
+	var vp_size = get_viewport().get_visible_rect().size
+	if cmd.x == null or cmd.y == null:
+		sprite.position = Vector2((vp_size.x - tex.get_width()) * 0.5, (vp_size.y - tex.get_height()) * 0.5
+		)
+	else:
+		sprite.position = Vector2(cmd.x, cmd.y)
+
+	var dur: float = cmd.dur
+	var effect: String = cmd.effect
+
+	match effect:
+		"fade":
+			var tw = create_tween()
+			tw.tween_property(sprite, "modulate:a", 1.0, dur)
+			await tw.finished
+		"slide":
+			sprite.position.y += 64
+			var tws = create_tween()
+			tws.set_parallel(true)
+			tws.tween_property(sprite, "modulate:a", 1.0, dur)
+			tws.tween_property(sprite, "position:y", sprite.position.y - 64, dur)
+			await tws.finished
+		"instant":
+			sprite.modulate.a = 1.0
+		_:
+			var tw2 = create_tween()
+			tw2.tween_property(sprite, "modulate:a", 1.0, dur)
+			await tw2.finished
+	_debug("Image shown on layer %s: %s" % [cmd.layer, path])
+
+func hide_image(cmd: Dictionary) -> void:
+	var layer_name: String = cmd.layer
+	var layer: Control = _image_layers.get(layer_name, null)
+	if not layer:
+		_debug("hide_image: layer not found %s" % layer_name)
+		return
+	var dur: float = cmd.dur
+	for c in layer.get_children():
+		var tw = create_tween()
+		tw.tween_property(c, "modulate:a", 0.0, dur)
+		await tw.finished
+		c.queue_free()
+	_debug("Images hidden on layer %s" % layer_name)
+
+func free_image_yaer(layer_name: String) -> void:
+	var layer: Control = _image_layers.get(layer_name, null)
+	if not layer:
+		_debug("free_image: layer not found %s" % layer_name)
+		return
+	layer.queue_free()
+	_image_layers.erase(layer_name)
+	_debug("Image layer freed %s" % layer_name)
+
 
 func transition_to_style(from_style: DisplayStyle, to_style: DisplayStyle) -> void:
 	_debug("Style transition %s -> %s" % [DisplayStyle.keys()[from_style], DisplayStyle.keys()[to_style]])

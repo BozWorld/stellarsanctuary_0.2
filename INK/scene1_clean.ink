@@ -3,12 +3,12 @@
 === prologue_chapter ===
 
 #audio:playse:asset/Sound/Sound_SFX/chapter.ogg:70
-#image:show:Chapters/chapter_1_begin.png:1000
+#image:show:asset/SystVisuals_ChapterEntry/chapter_1_begin.png:1000
 #text:show:SS-04:434:313:100:0xf2f2f2:earthorbiter:fadeInLeft:fadeOutRight
 #wait:2500
 #image:hide:1000
 #wait:800
-#audio:playbgm:Music/AIKATYPE_00.ogg:loop:fadein
+#audio:playbgm:asset/Music/AIKATYPE_00.ogg:loop:fadein
 #wait:500
 #layout:SNL
 #window:1280:720:0:0:250:80:270:black:130

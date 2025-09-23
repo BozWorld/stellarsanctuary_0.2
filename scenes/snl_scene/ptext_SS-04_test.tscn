@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://d4hkgo16fijvl"]
+
+[node name="ptext_SS-04" type="RichTextLabel"]
+offset_left = 434.0
+offset_top = 313.0
+offset_right = 868.0
+offset_bottom = 626.0
+bbcode_enabled = true
+text = "SS-04"

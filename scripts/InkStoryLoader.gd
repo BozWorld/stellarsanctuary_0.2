@@ -19,7 +19,7 @@ func _ready() -> void:
 func _initialize_ink_player() -> void:
 	ink_player = InkPlayer.new()
 	add_child(ink_player)
-	ink_player.ink_file = load("res://INK/scene1_clean.json")
+	ink_player.ink_file = load("res://out/scene1_clean.json")
 	ink_player.loads_in_background = true
 	ink_player.connect("loaded", Callable(self, "_on_ink_story_loaded"))
 
