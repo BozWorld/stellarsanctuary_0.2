@@ -4,7 +4,7 @@
 
 #audio:playse:asset/Sound/Sound_SFX/chapter.ogg:70
 #image:show:asset/SystVisuals_ChapterEntry/chapter_1_begin.png:1000
-#text:show:SS-04:434:313:100:0xf2f2f2:earthorbiter:fadeInLeft:fadeOutRight
+#text:show:SS-04:434:313:100:0xf2f2f2:earthorbiter:fadeinleft:fadeoutright
 #wait:2500
 #image:hide:1000
 #wait:800

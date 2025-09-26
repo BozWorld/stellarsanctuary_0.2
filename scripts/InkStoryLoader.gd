@@ -6,6 +6,7 @@ extends Node
 signal story_loaded(success: bool)
 signal story_continued(text: String)
 signal story_step(text: String, tags)
+var test = 0
 
 # Constantes
 const SAVE_PATH := "res://saves/save.save"
@@ -35,8 +36,11 @@ func _give_current_tags():
 	return tags
 
 func continue_story() -> void:
+	test += 1
+	print("Continue story called %d times" % test)
 	if ink_player.can_continue:
 		var current_text = ink_player.continue_story()
+		print(current_text)
 		var tags = _give_current_tags()
 		emit_signal("story_step", current_text, tags)
 		# emit_signal("story_continued", current_text)

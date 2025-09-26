@@ -61,11 +61,6 @@ func _start_text_animation() -> void:
 func display_text(text: String, style: DisplayStyle) -> void:
 	# Pour compatibilité, on redirige vers show_segment
 	show_segment(text)
-
-
-
-
-
 	if current_label:
 		current_text = current_label.full_text
 		current_char_index = 0
@@ -74,7 +69,7 @@ func display_text(text: String, style: DisplayStyle) -> void:
 			continue_button.visible = false
 
 func _process(delta: float) -> void:
-	if current_text_state == TextState.ANIMATING and current_label:
+	if current_text_state == TextState.ANIMATING and current_label and self.visible:
 		timer += delta
 		if timer >= text_speed:
 			timer = 0.0
@@ -112,3 +107,7 @@ func clear_display() -> void:
 	label_list.clear()
 	current_label = null
 	current_text_state = TextState.IDLE
+
+func force_continue_visible() -> void:
+	if continue_button:
+		continue_button.visible = true

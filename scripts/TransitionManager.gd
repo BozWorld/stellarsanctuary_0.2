@@ -35,7 +35,6 @@ func show_ptext(cmd: Dictionary) -> void:
 			old.queue_free()
 		_ptexts.erase(id)
 	var lbl := RichTextLabel.new()
-	print(cmd.size)
 	lbl.name = "ptext_%s" % id
 	lbl.bbcode_enabled = true
 	lbl.text = id
@@ -209,7 +208,6 @@ func _ensure_image_layer(layer_name: String) -> Control:
 	return holder
 
 func show_image(cmd: Dictionary) -> void:
-	print("hello")
 	var path: String = cmd.path
 	if path == "":
 		_debug("show_image: path is empty")

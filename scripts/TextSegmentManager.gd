@@ -32,7 +32,6 @@ var segment_pause_duration: float = 1.0
 func process_text_with_tags(raw_text: String, tags: Array) -> void:
 	_debug("Processing text with tags: %s" % [tags])
 	_reset_state()
-
 	# Nouvelle logique : découpe le texte selon les tags dans la ligne
 	var segments = _split_text_by_tags(raw_text)
 	for seg in segments:
@@ -106,7 +105,6 @@ func _split_text_by_tags(text: String) -> Array:
 
 # Alternative : traite le texte avec des marqueurs inline (pour compatibilité)
 func process_text_with_markers(raw_text: String) -> void:
-	print("Processing text with inline markers")
 	_reset_state()
 	
 	# Divise le texte selon les marqueurs #segment_break et #new_page
@@ -170,7 +168,6 @@ func _start_segment_display() -> void:
 	if _current_segments.is_empty():
 		_debug("No segments to display")
 		return
-	
 	_current_segment_index = 0
 	_is_processing = true
 	_display_current_segment()
