@@ -25,7 +25,7 @@ func _ready() -> void:
 	add_child(audio_player)
 
 func show_ptext(cmd: Dictionary) -> void:
-	var id = cmd.id
+	var id = cmd.get("id", "")
 	if id == "":
 		_debug("show_ptext: id is empty")
 		return
@@ -208,38 +208,45 @@ func _ensure_image_layer(layer_name: String) -> Control:
 	return holder
 
 func show_image(cmd: Dictionary) -> void:
-	var path: String = cmd.path
+	var path: String = cmd.get("path", "")
 	if path == "":
 		_debug("show_image: path is empty")
 		return
+	
 	var tex = load("res://%s" % path) if not path.begins_with("res://") else load(path)
 	if not tex:
 		_debug("show_image: texture not found %s" % path)
 		return
-	var layer := _ensure_image_layer(cmd.layer)
+	
+	var layer := _ensure_image_layer(cmd.get("layer", "default"))
 	if not layer:
 		return
+	
 	var sprite := TextureRect.new()
 	sprite.texture = tex
 	sprite.name = "img_%s" % str(Time.get_ticks_msec())
 	layer.add_child(sprite)
 
 	var vp_size = get_viewport().get_visible_rect().size
-	if cmd.x == null or cmd.y == null:
-		sprite.position = Vector2((vp_size.x - tex.get_width()) * 0.5, (vp_size.y - tex.get_height()) * 0.5
-		)
+	var x = cmd.get("x", null)
+	var y = cmd.get("y", null)
+	
+	if x == null or y == null:
+		sprite.position = Vector2((vp_size.x - tex.get_width()) * 0.5, (vp_size.y - tex.get_height()) * 0.5)
 	else:
-		sprite.position = Vector2(cmd.x, cmd.y)
+		sprite.position = Vector2(x, y)
 
-	var dur: float = cmd.dur
-	var effect: String = cmd.effect
+	var dur: float = cmd.get("dur", 1.0)  # Utiliser dur au lieu de duration
+	var effect: String = cmd.get("effect", "fade")  # Utiliser effect au lieu de method
 
 	match effect:
 		"fade":
+			sprite.modulate.a = 0.0  # Commencer invisible
 			var tw = create_tween()
 			tw.tween_property(sprite, "modulate:a", 1.0, dur)
 			await tw.finished
 		"slide":
+			sprite.modulate.a = 0.0
 			sprite.position.y += 64
 			var tws = create_tween()
 			tws.set_parallel(true)
@@ -249,26 +256,32 @@ func show_image(cmd: Dictionary) -> void:
 		"instant":
 			sprite.modulate.a = 1.0
 		_:
+			sprite.modulate.a = 0.0
 			var tw2 = create_tween()
 			tw2.tween_property(sprite, "modulate:a", 1.0, dur)
 			await tw2.finished
-	_debug("Image shown on layer %s: %s" % [cmd.layer, path])
+	var layer_name = cmd.get("layer", "default")
+	_debug("show_image: layer_name set to %s" % layer_name)
 
 func hide_image(cmd: Dictionary) -> void:
-	var layer_name: String = cmd.layer
-	var layer: Control = _image_layers.get(layer_name, null)
+	var dur = cmd.get("dur", 1.0)
+	
+	var layer_name = cmd.get("layer", "default")
+	var layer = _ensure_image_layer(layer_name)
 	if not layer:
-		_debug("hide_image: layer not found %s" % layer_name)
+		_debug("hide_image: layer not found: " + layer_name)
 		return
-	var dur: float = cmd.dur
-	for c in layer.get_children():
-		var tw = create_tween()
-		tw.tween_property(c, "modulate:a", 0.0, dur)
-		await tw.finished
-		c.queue_free()
-	_debug("Images hidden on layer %s" % layer_name)
+	
+	# Cacher TOUS les enfants de ce layer
+	for child in layer.get_children():
+		if child is TextureRect:
+			var tw = create_tween()
+			tw.tween_property(child, "modulate:a", 0.0, dur)
+			await tw.finished
+			child.queue_free()
+	_debug("hide_image: layer_name set to %s" % layer_name)
 
-func free_image_yaer(layer_name: String) -> void:
+func free_image_layer(layer_name: String) -> void:
 	var layer: Control = _image_layers.get(layer_name, null)
 	if not layer:
 		_debug("free_image: layer not found %s" % layer_name)

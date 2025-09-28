@@ -8,7 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://c8tkn7atej4ik" path="res://asset/transparent.png" id="5_ebrfb"]
 [ext_resource type="Script" uid="uid://wxsuj4ltp86w" path="res://scripts/ADVDisplay.gd" id="5_w55wh"]
 [ext_resource type="Script" uid="uid://do6a1545hae36" path="res://scripts/TransitionManager.gd" id="6_exumd"]
-[ext_resource type="FontFile" uid="uid://7o6aqhiucp2y" path="res://asset/Syst_Fonts/earthorbiter.ttf" id="11_mevxt"]
+[ext_resource type="AudioStream" uid="uid://677ap0kooffc" path="res://asset/Sound/Sound_SFX/chapter.ogg" id="11_mevxt"]
 [ext_resource type="Script" uid="uid://duomxy5kq65mi" path="res://scripts/TextSegmentManager.gd" id="11_ot1tq"]
 [ext_resource type="Script" uid="uid://nw3cjvpr73tb" path="res://scripts/TagCommandProcessor.gd" id="12_oimod"]
 [ext_resource type="Script" uid="uid://51dnlrycqh6e" path="res://scenes/snl_scene/audio_manager.gd" id="14_oimod"]
@@ -48,27 +48,6 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("1_exumd")
 
-[node name="RichTextLabel" type="RichTextLabel" parent="."]
-visible = false
-visibility_layer = 2
-anchors_preset = -1
-anchor_left = 0.244531
-anchor_top = 0.265278
-anchor_right = 0.695312
-anchor_bottom = 0.402778
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_colors/font_outline_color = Color(0.519809, 0.535361, 0, 1)
-theme_override_colors/font_shadow_color = Color(0.762716, 0.515126, 0, 1)
-theme_override_constants/shadow_offset_y = 4
-theme_override_constants/shadow_offset_x = 5
-theme_override_fonts/normal_font = ExtResource("11_mevxt")
-theme_override_font_sizes/normal_font_size = 100
-text = "CHAPTER 1"
-metadata/_edit_use_anchors_ = true
-
-[node name="Node" type="Node" parent="RichTextLabel"]
-
 [node name="DisplayStyleManager" type="Control" parent="."]
 layout_mode = 3
 anchors_preset = 15
@@ -103,14 +82,14 @@ anchor_left = 0.434896
 anchor_top = 0.950617
 anchor_right = 0.457465
 anchor_bottom = 0.998457
-offset_left = -3.97241
-offset_top = -4.68799
-offset_right = 3.97241
+offset_left = 1.42218
+offset_top = -4.68835
+offset_right = 9.367
+offset_bottom = -0.000366211
 grow_horizontal = 2
-grow_vertical = 0
+grow_vertical = 2
 icon = ExtResource("5_7sfpw")
 flat = true
-metadata/_edit_use_anchors_ = true
 
 [node name="MarginContainer" type="MarginContainer" parent="DisplayStyleManager/SNLDisplay"]
 layout_mode = 1
@@ -144,13 +123,15 @@ script = ExtResource("6_exumd")
 
 [node name="TextSegmentManager" type="Node" parent="DisplayStyleManager"]
 script = ExtResource("11_ot1tq")
+enable_debug = true
 
 [node name="TagCommandProcessor" type="Node" parent="DisplayStyleManager" node_paths=PackedStringArray("transition_manager", "audio_manager")]
 script = ExtResource("12_oimod")
 transition_manager = NodePath("../TransitionManager")
+enable_debug = true
 audio_manager = NodePath("../../AudioStreamPlayer2D")
 metadata/_custom_type_script = "uid://nw3cjvpr73tb"
 
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer" parent="."]
-volume_db = -0.04
+stream = ExtResource("11_mevxt")
 script = ExtResource("14_oimod")

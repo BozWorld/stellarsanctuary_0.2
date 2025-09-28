@@ -3,10 +3,7 @@ class_name InkStoryLoader
 extends Node
 
 # Signaux
-signal story_loaded(success: bool)
-signal story_continued(text: String)
-signal story_step(text: String, tags)
-var test = 0
+signal story_step(text: String, tags: Array)
 
 # Constantes
 const SAVE_PATH := "res://saves/save.save"
@@ -24,7 +21,7 @@ func _initialize_ink_player() -> void:
 	ink_player.loads_in_background = true
 	ink_player.connect("loaded", Callable(self, "_on_ink_story_loaded"))
 
-func _on_ink_story_loaded(success: bool) -> void:
+func _on_ink_story_loaded(_success: bool) -> void:
 	# emit_signal("story_loaded", success)
 	continue_story()
 
@@ -36,11 +33,8 @@ func _give_current_tags():
 	return tags
 
 func continue_story() -> void:
-	test += 1
-	print("Continue story called %d times" % test)
 	if ink_player.can_continue:
 		var current_text = ink_player.continue_story()
-		print(current_text)
 		var tags = _give_current_tags()
 		emit_signal("story_step", current_text, tags)
 		# emit_signal("story_continued", current_text)

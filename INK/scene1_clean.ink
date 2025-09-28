@@ -3,10 +3,10 @@
 === prologue_chapter ===
 
 #audio:playse:asset/Sound/Sound_SFX/chapter.ogg:70
-#image:show:asset/SystVisuals_ChapterEntry/chapter_1_begin.png:1000
+#image:show:asset/SystVisuals_ChapterEntry/chapter_1_begin.png:default:1000
 #text:show:SS-04:434:313:100:0xf2f2f2:earthorbiter:fadeinleft:fadeoutright
 #wait:2500
-#image:hide:1000
+#image:hide:default:1000
 #wait:800
 #audio:playbgm:asset/Music/AIKATYPE_00.ogg:loop:fadein
 #wait:500
@@ -24,9 +24,8 @@ A vast sea of stars that doesn't ever seem to end, filled with suns, planets, an
 
 No one knows just how dense our universe is, and humans will be long gone before they even know if there's someplace else where life blooms like it does on our earth. #new_page
 
-#cg:Space
 #hide_window
-#bg:Backgrounds/big_01_space_g0.png:crossfade:2000
+#bg:asset/Visuals_CG/big_01_space_g.png:crossfade:2000
 #show_window
 
 For now, all we can do is watch the stars lighting up our skies and attempt to uncover the wonders we've been blessed with, feeding our curiosity with theories, ideas and fantasies. #segment_break
@@ -41,7 +40,7 @@ It's even one of the closest things to time travel: #segment_break
 
 Time shapes space, just as space shapes time. #new_page
 
-#bg:Backgrounds/big_01_space_g1.png:crossfade:2000
+#bg:asset/Visuals_Backgrounds/big_01_space_1.png:crossfade:2000
 
 For that reason, science will probably never attain the absolute truth of our universe. 
 
@@ -51,7 +50,7 @@ And like people, stars shine bright before their death, as the remnants of our a
 
 And just like anyone else, I want people to see my life burning with passion and pride, before I become a corpse with nothing but my past to prove my existence. #new_page
 
-#bg:Backgrounds/big_01_space_g2.png:crossfade:2000
+#bg:Asset/Visuals_Backgrounds/big_01_space_2.png:crossfade:2000
 
 After all, as a woman of science, I cannot believe in the afterlife. #segment_break
 
@@ -68,8 +67,7 @@ Many tried to play with their lives like they're some sort of god, but none of t
 === euphie_introduction ===
 
 #hide_window
-#image:show:CG/cg01_spaceship.png:0:crossfade:1000:1280:720
-#cg:B22
+#image:show:asset/Visuals_CG/cg01_spaceship.png:0:crossfade:1000:1280:720
 #wait:1000
 #bg:Backgrounds/bg00_shuttle.jpg
 #show_window

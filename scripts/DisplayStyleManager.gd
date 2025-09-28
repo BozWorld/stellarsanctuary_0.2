@@ -1,6 +1,6 @@
 # DisplayStyleManager.gd
-class_name DisplayStyleManager
 extends Control
+class_name DisplayStyleManager
 
 # Signaux principaux
 signal story_loaded(success: bool)
@@ -9,179 +9,112 @@ signal transition_requested(style: String)
 # Enums
 enum DisplayStyle { SNL, DYNAMIC_SNL, ADV }
 
-# Composants enfants
+# === Composants ===
 @onready var ink_story_loader = $InkStoryLoader
+@onready var tag_processor = $TagCommandProcessor
+@onready var text_manager = $TextSegmentManager
 @onready var snl_display = $SNLDisplay
 @onready var adv_display = $ADVDisplay
-@onready var transition_manager = $TransitionManager
-@onready var text_segment_manager = $TextSegmentManager
-@onready var tag_processor = $TagCommandProcessor
-@export var enable_debug: bool = false
 
-# Variables d'état
-var current_display_style: DisplayStyle = DisplayStyle.SNL
-var current_display_node: Control
-var waiting_segments := false
-var waiting_commands: = false
-var _pending_text: String = ""
-var _pending_seg_tags: Array = []
-var _pending_line_break: bool = false
+# === ÉTAT ===
+enum ProcessingState { IDLE, PROCESSING_COMMANDS, PROCESSING_TEXT, WAITING_USER }
+var current_state: ProcessingState = ProcessingState.IDLE
+var current_story_step: Dictionary = {}
+
 func _ready() -> void:
-	_setup_display_nodes()
 	_connect_signals()
 	ink_story_loader.load_story()
 
-func _setup_display_nodes() -> void:
-	# Cache tous les displays par défaut
-	snl_display.visible = false
-	adv_display.visible = false
-
-func _connect_signals() -> void:
-	ink_story_loader.story_loaded.connect(_on_story_loaded)
+func _connect_signals():
 	ink_story_loader.story_step.connect(_on_story_step)
-	text_segment_manager.segment_ready.connect(_on_segment_ready)
-	text_segment_manager.all_segments_completed.connect(_on_all_segments_completed)
-	tag_processor.command_queue_drained.connect(_on_commands_done)
-	snl_display.continue_requested.connect(_on_snl_continue_requested)
-	
-func _on_story_loaded(success: bool) -> void:
-	emit_signal("story_loaded", success)
-	if success:
-		pass
+	tag_processor.command_queue_drained.connect(_on_commands_completed)
+	text_manager.all_segments_completed.connect(_on_text_completed)
+	text_manager.segment_ready.connect(_on_segment_ready)
+	snl_display.continue_requested.connect(_on_user_continue)
 
+# === POINT D'ENTREE UNIQUE ===
 func _on_story_step(text: String, tags: Array):
-	print("Story step received text='%.50s' tags=%s" % [text, tags])
-	var groups = classify_tags(tags)
-
-	for t in groups.layout:
-		if t.contains("layout:"):
-			var target = t.split(":")[1]
-			if target in DisplayStyle.keys():
-				target = DisplayStyle[target]
-				if target != current_display_style:
-					transition_manager.transition_to_style(current_display_style, target)
-					current_display_style = target
-		elif t == "show_window":
-			self.visible = true
-		elif t == "hide_window":
-			self.visible = false
-		elif t.contains("window:"):
-			pass
-	if groups.commands.size() > 0:
-		waiting_commands = true
-		tag_processor.enqueue_tags(groups.commands)
-	else:
-		waiting_commands = false
-	if text.strip_edges() != "":
-		waiting_segments = true
-		if waiting_segments:
-			_pending_text = text
-			_pending_seg_tags = groups.segmentation.duplicate()
-		else:
-			snl_display.visible = true
-			text_segment_manager.process_text_with_tags(text, groups.segmentation)
-	else:
-		waiting_segments = false
-	_try_continue_when_idle()
-
-func show_window() -> void:
-	self.visible = true
-
-func _on_commands_done():
-	waiting_commands = false
-	if waiting_segments and _pending_text != "":
-		snl_display.visible = true
-		text_segment_manager.process_text_with_tags(_pending_text, _pending_seg_tags)
-		_pending_text = ""
-		_pending_seg_tags.clear()
-	_try_continue_when_idle()
-
-func _on_all_segments_completed():
-	waiting_segments = false
-	_try_continue_when_idle()
-
-func _try_continue_when_idle():
-	if not waiting_segments and not waiting_commands and ink_story_loader.can_continue():
-		ink_story_loader.continue_story()
-
-func _on_snl_continue_requested() -> void:
-	text_segment_manager.advance_to_next_segment()
-
-
-func _on_display_style_changed(new_style: DisplayStyle) -> void:
-	if new_style != current_display_style:
-		transition_manager.transition_to_style(current_display_style, new_style)
-		_switch_to_display(new_style)
-		current_display_style = new_style
+	print("[DSM] New story step - Text: '", text.substr(0,50), "...' tags: ",tags)
 	
-func _switch_to_display(style: DisplayStyle) -> void:
-	# Cache tous les displays
-	if current_display_node:
-		current_display_node.visible = false
-	# Affiche le bon display
-	match style:
-		DisplayStyle.SNL, DisplayStyle.DYNAMIC_SNL:
-			current_display_node = snl_display
-		DisplayStyle.ADV:
-			current_display_node = adv_display
-	
-	if current_display_node:
-		current_display_node.visible = true
+	#sauvegarde le step
+	current_story_step = {"text": text, "tags": tags}
 
-func _continue_story() -> void:
-	ink_story_loader.continue_story()
+	# 1.classifier les tags
+	var classified = _classify_tags(tags)
 
-# Nouvelles fonctions de callback pour TextSegmentManager
-func _on_segment_ready(segment_text: String, segment_type: int) -> void:
-	_debug("Segment type %s text='%.50s'" % [segment_type, segment_text])
+	# 2. traitement séquentiel
+	if classified.commands.size() > 0:
+		_process_commands(classified.commands)
+	elif text.strip_edges() != "":
+		_process_text(text, classified.segmentation)
+	else:
+		continue_story()
 
-	match segment_type:
-		TextSegmentManager.SegmentType.NEW_PAGE:
-			# NEW_PAGE : on vide l'écran et on attend l'input pour avancer (le segment texte peut être vide)
-			_debug("NEW_PAGE -> clear display")
-			snl_display.clear_display()
-			text_segment_manager.advance_to_next_segment()
-		TextSegmentManager.SegmentType.SEGMENT_BREAK:
-			snl_display.force_continue_visible()
-			_pending_line_break = true
-		TextSegmentManager.SegmentType.NORMAL:
-			if _pending_line_break:
-				snl_display.show_segment(segment_text, "#segment_break")
-				_pending_line_break = false
-			else:
-				snl_display.show_segment(segment_text)
+func _classify_tags(tags: Array) -> Dictionary:
+	var commands = []
+	var segmentation = []
 
-func _debug(msg: String) -> void:
-	if enable_debug:
-		print("[DisplayStyleManager] ", msg)
-
-func classify_tags(tags):
-	var segmentation: = []
-	var commands: = []
-	var layout: = []
-	var meta: = []
-	var style = null
 	for tag in tags:
 		if tag in ["segment_break", "new_page"]:
 			segmentation.append(tag)
-		elif tag.contains("layout:") or tag == "show_window" or  tag == "hide_window" or tag.contains("window:"):
-			layout.append(tag)
-		elif tag.contains("speaker:") or tag.contains("color:"):
-			meta.append(tag)
 		else:
 			commands.append(tag)
-	return {
-		"segmentation" : segmentation,
-		"commands": commands,
-		"layout": layout,
-		"meta": meta
-	}
+	
+	return {"commands": commands, "segmentation": segmentation}
+# === TRAITEMENT COMMANDS ===
+func _process_commands(commands: Array):
+	current_state = ProcessingState.PROCESSING_COMMANDS
+	tag_processor.enqueue_tags(commands)
 
-# func _on_continue_requested() -> void:
-# 	_debug("Continue pressed")
-# 	# Vérifie s'il y a encore des segments à afficher
-# 	if text_segment_manager.has_more_segments():
-# 		_debug("Advance to next segment")
-# 		text_segment_manager.advance_to_next_segment()
-# 	else:
-		# _continue_story()
+func _on_commands_completed():
+	print("[DSM] Command processing completed.")
+	var text = current_story_step.get("text", "")
+	if text.strip_edges() != "":
+		var classified = _classify_tags(current_story_step.get("tags", []))
+		_process_text(text, classified.segmentation)
+	else:
+		continue_story()
+# === TRAITEMENT TEXTE ===
+func _process_text(text: String, segmentation_tags: Array):
+	current_state = ProcessingState.PROCESSING_TEXT
+	snl_display.visible = true
+	text_manager.process_text_with_tags(text, segmentation_tags)
+
+func _on_segment_ready(segment_text: String, segment_type: int):
+	print("[DSM] Segment ready - Type: ", TextSegmentManager.SegmentType.keys()[segment_type], " Text: '", segment_text.substr(0,30), "...'")
+	match segment_type:
+		TextSegmentManager.SegmentType.NEW_PAGE:
+			snl_display.clear_display()
+			text_manager.advance_to_next_segment()
+		TextSegmentManager.SegmentType.SEGMENT_BREAK:
+			snl_display.force_continue_visible()
+			text_manager.advance_to_next_segment()
+		TextSegmentManager.SegmentType.NORMAL:
+			snl_display.show_segment(segment_text)
+			current_state = ProcessingState.WAITING_USER
+
+func _on_text_completed():
+	current_state = ProcessingState.IDLE
+	continue_story()
+
+# === INTERACTION UTILISATEUR ===
+func _on_user_continue():
+	print("[DSM] User requested to continue.")
+	match current_state:
+		ProcessingState.WAITING_USER:
+			print("[DSM] Continuing from WAITING_USER state.")
+			current_state = ProcessingState.PROCESSING_TEXT
+			text_manager.advance_to_next_segment()
+		ProcessingState.PROCESSING_TEXT:
+			print("[DSM] User requested continue during text processing, advancing segment.")
+			text_manager.advance_to_next_segment()
+
+# === CONTINUATION HISTOIRE ===
+func continue_story():
+	print("[DSM] Continuing story...")
+	if current_state == ProcessingState.IDLE and ink_story_loader.can_continue():
+		ink_story_loader.continue_story()
+
+
+func _debug(msg: String) -> void:
+	print("[DSM DEBUG]: ", msg)
