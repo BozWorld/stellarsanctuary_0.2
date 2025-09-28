@@ -21,6 +21,8 @@ enum ProcessingState { IDLE, PROCESSING_COMMANDS, PROCESSING_TEXT, WAITING_USER 
 var current_state: ProcessingState = ProcessingState.IDLE
 var current_story_step: Dictionary = {}
 
+# === Variables d'état ===
+
 func _ready() -> void:
 	_connect_signals()
 	ink_story_loader.load_story()

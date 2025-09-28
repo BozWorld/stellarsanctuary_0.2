@@ -37,7 +37,6 @@ func continue_story() -> void:
 		var current_text = ink_player.continue_story()
 		var tags = _give_current_tags()
 		emit_signal("story_step", current_text, tags)
-		# emit_signal("story_continued", current_text)
 
 func can_continue() -> bool:
 	return ink_player.can_continue if ink_player else false

@@ -23,7 +23,17 @@ func _ready() -> void:
 	# Initialise l'audio pour les effets sonores de transition
 	audio_player = AudioStreamPlayer.new()
 	add_child(audio_player)
+	
+	# S'assurer que le BG est caché au démarrage s'il n'a pas de texture
+	await get_tree().process_frame  # Attendre que tout soit initialisé
+	_initialize_bg_state()
 
+func _initialize_bg_state() -> void:
+	var bg = _get_bg_node()
+	if bg and bg is TextureRect:
+		_debug("BG initial état - modulate: %s, texture: %s, visible: %s" % [bg.modulate, bg.texture, bg.visible])
+		# Ne pas modifier l'état du BG - il sera géré par crossfade_background quand nécessaire
+		# Le BG peut commencer noir (modulate 0,0,0,1) et c'est voulu jusqu'au premier #bg tag
 
 func hide_window():
 	var dsm = get_parent()  # DisplayStyleManager
@@ -40,29 +50,36 @@ func show_window():
 		snl_display.visible = true
 		_debug("SNLDisplay shown via TransitionManager")
 	
-	# 2. Changer la couleur du BG
+	# 2. Ne pas forcer la modulation du BG - laissons-le dans son état actuel
+	# Le BG sera géré uniquement par crossfade_background() quand nécessaire
 	var bg = _get_bg_node()
 	if bg:
-		var white_color = Color(1.0, 1.0, 1.0, 1.0)
-		var tween = create_tween()
-		tween.tween_property(bg, "modulate", white_color, 0.5)
-		await tween.finished
-		_debug("BG color changed to white")
+		print("[DEBUG] BG modulate: ", bg.modulate)
+		print("[DEBUG] BG texture: ", bg.texture)
+		print("[DEBUG] BG visible: ", bg.visible)
+		# NE PAS modifier la modulation ici - cela causait les problèmes de reset
 
 func _get_bg_node() -> Node:
 	# Chercher le BG dans différents endroits possibles
+	_debug("Recherche du noeud BG...")
+	
 	var main_scene = get_tree().current_scene
+	_debug("Current scene: %s" % str(main_scene))
 	if main_scene:
 		var bg = main_scene.get_node_or_null("BG")
+		_debug("BG in current_scene: %s" % str(bg))
 		if bg:
 			return bg
 	
 	var dsm = get_parent()
+	_debug("DisplayStyleManager: %s" % str(dsm))
 	if dsm:
 		var bg = dsm.get_parent().get_node_or_null("BG")
+		_debug("BG in dsm.parent: %s" % str(bg))
 		if bg:
 			return bg
 	
+	_debug("BG node NOT FOUND!")
 	return null
 
 func show_ptext(cmd: Dictionary) -> void:
@@ -475,54 +492,148 @@ func set_transition_type(type: TransitionType) -> void:
 
 # Crossfade d'un TextureRect nommé "BG" au niveau parent (ex: scène principale)
 func crossfade_background(new_path: String, duration: float = 1.0) -> void:
-	var parent = get_parent()
-	if not parent:
-		return
-	var bg = parent.get_node_or_null("BG")
+	var bg = _get_bg_node()
 	if not bg or not (bg is TextureRect):
-		_debug("BG node introuvable pour crossfade")
+		_debug("BG node introuvable pour crossfade: %s" % str(bg))
 		return
 	var tex = load(new_path)
 	if not tex:
 		_debug("Texture non trouvée: %s" % new_path)
 		return
-	# Crée un overlay pour transition
-	var overlay := TextureRect.new()
-	overlay.texture = tex
-	overlay.stretch_mode = bg.stretch_mode
-	overlay.size = bg.size
-	parent.add_child(overlay)
-	overlay.z_index = bg.z_index + 1
-	overlay.modulate.a = 0.0
-	var tw = create_tween()
-	tw.tween_property(overlay, "modulate:a", 1.0, duration)
-	await tw.finished
-	bg.texture = tex
-	overlay.queue_free()
-	_debug("Background crossfade done -> %s" % new_path)
-
-# Affiche une image plein écran "CG" (crée si absent)
-func show_cg(path: String, duration: float = 0.3) -> void:
+	
+	_debug("BG AVANT crossfade - modulate: %s, texture: %s, visible: %s" % [bg.modulate, bg.texture, bg.visible])
+	
+	# IMPORTANT : Supprimer automatiquement les CG existants quand un nouveau BG arrive
 	var parent = get_parent()
-	if not parent: return
-	var node = parent.get_node_or_null("CG")
-	if not node:
-		node = TextureRect.new()
-		node.name = "CG"
-		node.anchor_right = 1.0
-		node.anchor_bottom = 1.0
-		node.grow_horizontal = Control.GROW_DIRECTION_BOTH
-		node.grow_vertical = Control.GROW_DIRECTION_BOTH
-		parent.add_child(node)
-	var tex = load(path)
-	if not tex: return
-	node.texture = tex
-	node.visible = true
-	node.modulate.a = 0.0
-	var tw = create_tween()
-	tw.tween_property(node, "modulate:a", 1.0, duration)
-	await tw.finished
-	_debug("CG shown %s" % path)
+	if parent:
+		var existing_cg = parent.get_node_or_null("CG")
+		if existing_cg:
+			_debug("CG existant détecté, fade out automatique pour le nouveau BG")
+			# Faire un fade out doux du CG pendant que le BG change
+			var cg_fadeout = create_tween()
+			cg_fadeout.tween_property(existing_cg, "modulate:a", 0.0, duration * 0.5)  # Fade plus rapide que le BG
+			cg_fadeout.tween_callback(existing_cg.queue_free)
+	
+	# TOUJOURS faire un crossfade direct sur le BG existant (pas d'overlay temporaire)
+	# Si le BG est invisible/noir, l'animer vers visible
+	# Sinon, crossfade entre les textures
+	
+	if bg.modulate.a == 0.0 or (bg.modulate.r == 0.0 and bg.modulate.g == 0.0 and bg.modulate.b == 0.0):
+		_debug("Premier BG ou BG invisible, apparition directe sur BG")
+		# Changer directement la texture du BG et l'animer vers visible
+		bg.texture = tex
+		bg.visible = true
+		bg.modulate = Color(1.0, 1.0, 1.0, 0.0)  # Commencer transparent
+		var tween_appear = create_tween()
+		tween_appear.tween_property(bg, "modulate", Color(1.0, 1.0, 1.0, 1.0), duration)
+		await tween_appear.finished
+		_debug("Background appeared directly -> %s" % new_path)
+	else:
+		_debug("Vrai crossfade simultané - utilisation de bg.tscn comme template")
+		
+		# Charger bg.tscn comme template pour créer un overlay parfaitement identique
+		var bg_scene = preload("res://scenes/bg.tscn")
+		var overlay_instance = bg_scene.instantiate()
+		
+		# Renommer pour éviter les conflits
+		overlay_instance.name = "BG_Crossfade_Overlay_" + str(Time.get_ticks_msec())
+		
+		# Appliquer la nouvelle texture
+		overlay_instance.texture = tex
+		
+		# Commencer invisible pour la transition
+		overlay_instance.modulate = Color(1.0, 1.0, 1.0, 0.0)
+		
+		# Ajouter l'overlay au même parent que le BG original
+		bg.get_parent().add_child(overlay_instance)
+		overlay_instance.z_index = bg.z_index + 1
+		
+		_debug("Overlay créé depuis bg.tscn - expand_mode: %s, anchors: (%s,%s,%s,%s)" % [overlay_instance.expand_mode, overlay_instance.anchor_left, overlay_instance.anchor_top, overlay_instance.anchor_right, overlay_instance.anchor_bottom])
+		
+		# Crossfade simultané : nouvelle image apparaît pendant que l'ancienne reste
+		var tween_crossfade = create_tween()
+		tween_crossfade.tween_property(overlay_instance, "modulate:a", 1.0, duration)
+		await tween_crossfade.finished
+		
+		# Une fois la transition terminée, remplacer le BG et supprimer l'overlay
+		bg.texture = tex
+		bg.modulate = Color(1.0, 1.0, 1.0, 1.0)
+		overlay_instance.queue_free()
+		_debug("Background crossfaded seamlessly using bg.tscn template -> %s" % new_path)
+	
+	# S'assurer que l'état final est correct
+	bg.modulate = Color(1.0, 1.0, 1.0, 1.0)
+	bg.visible = true
+	_debug("BG APRÈS crossfade - modulate: %s, texture: %s, visible: %s" % [bg.modulate, bg.texture, bg.visible])
+
+# Crossfade d'un CG plein écran en utilisant cg.tscn comme template
+func crossfade_cg(new_path: String, duration: float = 0.3) -> void:
+	var parent = get_parent()
+	if not parent: 
+		_debug("Pas de parent pour crossfade CG")
+		return
+	
+	var tex = load(new_path)
+	if not tex:
+		_debug("Texture CG non trouvée: %s" % new_path)
+		return
+	
+	var existing_cg = parent.get_node_or_null("CG")
+	
+	if not existing_cg or existing_cg.modulate.a == 0.0:
+		_debug("Premier CG ou CG invisible, apparition directe")
+		# Premier CG ou CG invisible - créer depuis cg.tscn et apparaître
+		if existing_cg:
+			existing_cg.queue_free()
+		
+		var cg_scene = preload("res://scenes/cg.tscn")
+		var cg_instance = cg_scene.instantiate()
+		cg_instance.name = "CG"
+		cg_instance.texture = tex
+		cg_instance.modulate = Color(1.0, 1.0, 1.0, 0.0)  # Commencer transparent
+		parent.add_child(cg_instance)
+		
+		var tween_appear = create_tween()
+		tween_appear.tween_property(cg_instance, "modulate", Color(1.0, 1.0, 1.0, 1.0), duration)
+		await tween_appear.finished
+		_debug("CG appeared directly -> %s" % new_path)
+	else:
+		_debug("Vrai crossfade CG - utilisation de cg.tscn comme template")
+		
+		# Charger cg.tscn comme template pour créer un overlay parfaitement identique
+		var cg_scene = preload("res://scenes/cg.tscn")
+		var overlay_instance = cg_scene.instantiate()
+		
+		# Renommer pour éviter les conflits
+		overlay_instance.name = "CG_Crossfade_Overlay_" + str(Time.get_ticks_msec())
+		
+		# Appliquer la nouvelle texture
+		overlay_instance.texture = tex
+		
+		# Commencer invisible pour la transition
+		overlay_instance.modulate = Color(1.0, 1.0, 1.0, 0.0)
+		
+		# Ajouter l'overlay au même parent que le CG original
+		parent.add_child(overlay_instance)
+		overlay_instance.z_index = existing_cg.z_index + 1
+		
+		_debug("Overlay CG créé depuis cg.tscn - expand_mode: %s" % overlay_instance.expand_mode)
+		
+		# Crossfade simultané : nouvelle image apparaît pendant que l'ancienne reste
+		var tween_crossfade = create_tween()
+		tween_crossfade.tween_property(overlay_instance, "modulate:a", 1.0, duration)
+		await tween_crossfade.finished
+		
+		# Une fois la transition terminée, remplacer le CG et supprimer l'overlay
+		existing_cg.texture = tex
+		existing_cg.modulate = Color(1.0, 1.0, 1.0, 1.0)
+		overlay_instance.queue_free()
+		_debug("CG crossfaded seamlessly using cg.tscn template -> %s" % new_path)
+
+# Affiche une image plein écran "CG" - DEPRECATED, utiliser crossfade_cg à la place
+func show_cg(path: String, duration: float = 0.3) -> void:
+	_debug("show_cg() appelé - redirection vers crossfade_cg() pour une transition fluide")
+	await crossfade_cg(path, duration)
 
 func hide_cg(duration: float = 0.3) -> void:
 	var parent = get_parent()

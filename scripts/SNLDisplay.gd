@@ -119,9 +119,11 @@ func _add_continue_indicator():
 func _input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.pressed:
 		if current_text_state == TextState.ANIMATING:
+			# Premier clic pendant animation : compléter le texte seulement
 			_complete_text_immediately()
-			emit_signal("continue_requested")
+			print("[SNLDisplay] Animation completed by user click")
 		elif current_text_state == TextState.COMPLETED:
+			# Deuxième clic après completion : continuer vers le segment suivant
 			print("[SNLDisplay] User clicked to continue")
 			_remove_continue_indicator()
 			current_text_state = TextState.IDLE
@@ -135,8 +137,11 @@ func _complete_text_immediately() -> void:
 
 func _on_continue_button_pressed() -> void:
 	if current_text_state == TextState.ANIMATING:
+		# Pendant animation : compléter le texte seulement
 		_complete_text_immediately()
-	else:	
+		print("[SNLDisplay] Animation completed by button press")
+	elif current_text_state == TextState.COMPLETED:
+		# Après completion : continuer vers le segment suivant
 		_remove_continue_indicator()
 		current_text_state = TextState.IDLE
 		emit_signal("continue_requested")

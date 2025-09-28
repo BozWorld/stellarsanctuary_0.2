@@ -40,11 +40,23 @@ func _process_single_tag(tag: String):
 		"bg":
 			if transition_manager:
 				await transition_manager.crossfade_background("res://" + parsed.path, parsed.dur)
+		"cg":
+			if transition_manager:
+				match parsed.action:
+					"show":
+						await transition_manager.crossfade_cg("res://" + parsed.path, parsed.dur)
+					"hide":
+						await transition_manager.hide_cg(parsed.dur)
 		"image":
 			if transition_manager:
 				match parsed.action:
 					"show":
-						await transition_manager.show_image(parsed)
+						# Détecter si c'est un CG basé sur le chemin (contient "Visuals_CG")
+						if "Visuals_CG" in parsed.path:
+							_debug("CG détecté dans image:show, utilisation de crossfade_cg")
+							await transition_manager.crossfade_cg("res://" + parsed.path, parsed.dur)
+						else:
+							await transition_manager.show_image(parsed)
 					"hide":
 						await transition_manager.hide_image(parsed)
 		"text":
@@ -55,10 +67,10 @@ func _process_single_tag(tag: String):
 					"hide":
 						await transition_manager.hide_ptext(parsed)
 		"hide_window":
-			if transition_manager and transition_manager.has_method("hide_window"):
+			if transition_manager:
 				transition_manager.hide_window()
 		"show_window":
-			if transition_manager and transition_manager.has_method("show_window"):
+			if transition_manager:
 				await transition_manager.show_window()
 		"window":
 			#traitement fenêtre (show/hide)
@@ -79,19 +91,11 @@ func _parse_tag(tag: String) -> Dictionary:
 
 	match parts[0]:
 		"hide_window":
-			# Récupérer SNLDisplay depuis DisplayStyleManager
-			var dsm = get_parent()  # DisplayStyleManager
-			if dsm and dsm.has_node("SNLDisplay"):
-				var snl_display = dsm.get_node("SNLDisplay")
-				snl_display.visible = false
-				_debug("SNLDisplay hidden")
+			# Ne rien faire ici, sera traité dans _process_single_tag()
+			pass
 		"show_window":
-			# Récupérer SNLDisplay depuis DisplayStyleManager
-			var dsm = get_parent()  # DisplayStyleManager
-			if dsm and dsm.has_node("SNLDisplay"):
-				var snl_display = dsm.get_node("SNLDisplay")
-				snl_display.visible = true
-				_debug("SNLDisplay shown")
+			# Ne rien faire ici, sera traité dans _process_single_tag()
+			pass
 		"layout":
 			result["layout_type"] = parts[1] if parts.size() > 1 else "SNL"
 		"window":
@@ -114,6 +118,13 @@ func _parse_tag(tag: String) -> Dictionary:
 			result["path"] = parts[1] if parts.size() > 1 else ""
 			result["method"] = parts[2] if parts.size() > 2 else "fade"
 			result["dur"] = float(parts[3]) / 1000.0 if parts.size() > 3 else 1.0
+		"cg":
+			result["action"] = parts[1] if parts.size() > 1 else "show"  # show ou hide
+			if result["action"] == "show":
+				result["path"] = parts[2] if parts.size() > 2 else ""
+				result["dur"] = float(parts[3]) / 1000.0 if parts.size() > 3 else 0.3
+			else:  # hide
+				result["dur"] = float(parts[2]) / 1000.0 if parts.size() > 2 else 0.3
 		"image":
 			result["action"] = parts[1]
 			if result["action"] == "hide":
@@ -122,9 +133,11 @@ func _parse_tag(tag: String) -> Dictionary:
 				result["dur"] = float(parts[3]) / 1000.0 if parts.size() > 3 else 1.0
 			else:  # show
 				result["path"] = parts[2] if parts.size() > 2 else ""
-				result["layer"] = "default"
-				result["effect"] = "fade"
-				result["dur"] = float(parts[3]) / 1000.0 if parts.size() > 3 else 1.0
+				result["layer"] = parts[3] if parts.size() > 3 else "default"
+				result["effect"] = parts[4] if parts.size() > 4 else "fade"
+				result["dur"] = float(parts[5]) / 1000.0 if parts.size() > 5 else 1.0
+				result["width"] = int(parts[6]) if parts.size() > 6 else 1280
+				result["height"] = int(parts[7]) if parts.size() > 7 else 720
 				result["x"] = null
 				result["y"] = null
 		"text":

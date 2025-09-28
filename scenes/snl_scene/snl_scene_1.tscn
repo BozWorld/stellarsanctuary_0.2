@@ -1,7 +1,7 @@
 [gd_scene load_steps=19 format=3 uid="uid://bol26hah7max"]
 
 [ext_resource type="Script" uid="uid://buktnfaj8utl8" path="res://scripts/DisplayStyleManager.gd" id="1_2ea14"]
-[ext_resource type="Texture2D" uid="uid://basqecjp42yoy" path="res://asset/Visuals_Backgrounds/big_01_space_g.png" id="1_exumd"]
+[ext_resource type="PackedScene" uid="uid://c6stexslvt8e8" path="res://scenes/bg.tscn" id="1_mevxt"]
 [ext_resource type="Script" uid="uid://d0vi1v0by1yoc" path="res://scripts/InkStoryLoader.gd" id="2_0nq83"]
 [ext_resource type="Script" uid="uid://ddlutjnt3msa3" path="res://scripts/SNLDisplay.gd" id="4_ebrfb"]
 [ext_resource type="Texture2D" uid="uid://cmo3pojewc4yk" path="res://asset/SystVisuals_Config&UI/nextpage.png" id="5_7sfpw"]
@@ -35,18 +35,7 @@ bg_color = Color(0.270588, 0.270588, 0.270588, 1)
 
 [node name="SNLScene1" type="CanvasLayer"]
 
-[node name="BG" type="TextureRect" parent="."]
-modulate = Color(0, 0, 0, 1)
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -384.0
-offset_top = -1676.0
-offset_right = 384.0
-offset_bottom = 1676.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("1_exumd")
+[node name="BG" parent="." instance=ExtResource("1_mevxt")]
 
 [node name="DisplayStyleManager" type="Control" parent="."]
 layout_mode = 3
@@ -120,6 +109,7 @@ script = ExtResource("5_w55wh")
 
 [node name="TransitionManager" type="Node" parent="DisplayStyleManager"]
 script = ExtResource("6_exumd")
+enable_debug = true
 
 [node name="TextSegmentManager" type="Node" parent="DisplayStyleManager"]
 script = ExtResource("11_ot1tq")
@@ -128,7 +118,6 @@ enable_debug = true
 [node name="TagCommandProcessor" type="Node" parent="DisplayStyleManager" node_paths=PackedStringArray("transition_manager", "audio_manager")]
 script = ExtResource("12_oimod")
 transition_manager = NodePath("../TransitionManager")
-enable_debug = true
 audio_manager = NodePath("../../AudioStreamPlayer2D")
 metadata/_custom_type_script = "uid://nw3cjvpr73tb"
 
