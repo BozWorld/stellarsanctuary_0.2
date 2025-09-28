@@ -60,6 +60,7 @@ func _start_text_animation() -> void:
 		if continue_button:
 			continue_button.visible = false
 
+
 func display_text(text: String, style: DisplayStyle) -> void:
 	# Pour compatibilité, on redirige vers show_segment
 	show_segment(text)

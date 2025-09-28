@@ -24,6 +24,47 @@ func _ready() -> void:
 	audio_player = AudioStreamPlayer.new()
 	add_child(audio_player)
 
+
+func hide_window():
+	var dsm = get_parent()  # DisplayStyleManager
+	if dsm and dsm.has_node("SNLDisplay"):
+		var snl_display = dsm.get_node("SNLDisplay")
+		snl_display.visible = false
+		_debug("SNLDisplay hidden via TransitionManager")
+
+func show_window():
+	# 1. Afficher SNLDisplay
+	var dsm = get_parent()  # DisplayStyleManager
+	if dsm and dsm.has_node("SNLDisplay"):
+		var snl_display = dsm.get_node("SNLDisplay")
+		snl_display.visible = true
+		_debug("SNLDisplay shown via TransitionManager")
+	
+	# 2. Changer la couleur du BG
+	var bg = _get_bg_node()
+	if bg:
+		var white_color = Color(1.0, 1.0, 1.0, 1.0)
+		var tween = create_tween()
+		tween.tween_property(bg, "modulate", white_color, 0.5)
+		await tween.finished
+		_debug("BG color changed to white")
+
+func _get_bg_node() -> Node:
+	# Chercher le BG dans différents endroits possibles
+	var main_scene = get_tree().current_scene
+	if main_scene:
+		var bg = main_scene.get_node_or_null("BG")
+		if bg:
+			return bg
+	
+	var dsm = get_parent()
+	if dsm:
+		var bg = dsm.get_parent().get_node_or_null("BG")
+		if bg:
+			return bg
+	
+	return null
+
 func show_ptext(cmd: Dictionary) -> void:
 	var id = cmd.get("id", "")
 	if id == "":

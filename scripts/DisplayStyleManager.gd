@@ -36,20 +36,33 @@ func _connect_signals():
 func _on_story_step(text: String, tags: Array):
 	print("[DSM] New story step - Text: '", text.substr(0,50), "...' tags: ",tags)
 	
-	#sauvegarde le step
+	# AJOUT : Stocker les données pour _on_commands_completed
 	current_story_step = {"text": text, "tags": tags}
+	
+	var command_tags = []
+	var text_control_tags = []
 
-	# 1.classifier les tags
-	var classified = _classify_tags(tags)
-
-	# 2. traitement séquentiel
-	if classified.commands.size() > 0:
-		_process_commands(classified.commands)
-	elif text.strip_edges() != "":
-		_process_text(text, classified.segmentation)
+	for tag in tags:
+		if tag in ["segment_break", "new_page"]:
+			text_control_tags.append(tag)
+		else:
+			command_tags.append(tag)
+		
+	if command_tags.size() > 0:
+		current_state = ProcessingState.PROCESSING_COMMANDS
+		tag_processor.enqueue_tags(command_tags)
+		return  # IMPORTANT : Ne pas continuer ici
+		
+	if not text.strip_edges().is_empty():
+		current_state = ProcessingState.PROCESSING_TEXT
+		text_manager.process_text_with_tags(text, text_control_tags)
 	else:
-		continue_story()
+		_continue_story()
 
+func _continue_story():
+	current_state = ProcessingState.IDLE
+	await get_tree().process_frame
+	ink_story_loader.continue_story()
 func _classify_tags(tags: Array) -> Dictionary:
 	var commands = []
 	var segmentation = []
@@ -69,11 +82,18 @@ func _process_commands(commands: Array):
 func _on_commands_completed():
 	print("[DSM] Command processing completed.")
 	var text = current_story_step.get("text", "")
-	if text.strip_edges() != "":
-		var classified = _classify_tags(current_story_step.get("tags", []))
-		_process_text(text, classified.segmentation)
+	var tags = current_story_step.get("tags", [])
+
+	var text_control_tags = []
+	for tag in tags:
+		if tag in ["segment_break", "new_page"]:
+			text_control_tags.append(tag)
+
+	if not text.strip_edges().is_empty():
+		current_state = ProcessingState.PROCESSING_TEXT
+		text_manager.process_text_with_tags(text, text_control_tags)
 	else:
-		continue_story()
+		_continue_story()
 # === TRAITEMENT TEXTE ===
 func _process_text(text: String, segmentation_tags: Array):
 	current_state = ProcessingState.PROCESSING_TEXT
@@ -95,7 +115,7 @@ func _on_segment_ready(segment_text: String, segment_type: int):
 
 func _on_text_completed():
 	current_state = ProcessingState.IDLE
-	continue_story()
+	continue_story_public()
 
 # === INTERACTION UTILISATEUR ===
 func _on_user_continue():
@@ -110,7 +130,7 @@ func _on_user_continue():
 			text_manager.advance_to_next_segment()
 
 # === CONTINUATION HISTOIRE ===
-func continue_story():
+func continue_story_public():
 	print("[DSM] Continuing story...")
 	if current_state == ProcessingState.IDLE and ink_story_loader.can_continue():
 		ink_story_loader.continue_story()

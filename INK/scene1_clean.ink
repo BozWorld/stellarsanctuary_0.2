@@ -25,7 +25,7 @@ A vast sea of stars that doesn't ever seem to end, filled with suns, planets, an
 No one knows just how dense our universe is, and humans will be long gone before they even know if there's someplace else where life blooms like it does on our earth. #new_page
 
 #hide_window
-#bg:asset/Visuals_CG/big_01_space_g.png:crossfade:2000
+#bg:asset/Visuals_Backgrounds/big_01_space_g.png:crossfade:2000
 #show_window
 
 For now, all we can do is watch the stars lighting up our skies and attempt to uncover the wonders we've been blessed with, feeding our curiosity with theories, ideas and fantasies. #segment_break

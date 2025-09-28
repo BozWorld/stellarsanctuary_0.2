@@ -54,20 +54,56 @@ func _process_single_tag(tag: String):
 						await transition_manager.show_ptext(parsed)
 					"hide":
 						await transition_manager.hide_ptext(parsed)
+		"hide_window":
+			if transition_manager and transition_manager.has_method("hide_window"):
+				transition_manager.hide_window()
+		"show_window":
+			if transition_manager and transition_manager.has_method("show_window"):
+				await transition_manager.show_window()
 		"window":
 			#traitement fenêtre (show/hide)
 			pass
 		_:
 			_debug("Unknown command type: " + parsed.type)
 
+
+func _handle_window(cmd: Dictionary):
+	_debug("layout command processed")
+
 # === PARSING ===
 func _parse_tag(tag: String) -> Dictionary:
 	var parts = tag.split(":")
-	if parts.size() < 2:
+	if parts.size() < 1:
 		return {}
 	var result = {"type": parts[0]}
 
 	match parts[0]:
+		"hide_window":
+			# Récupérer SNLDisplay depuis DisplayStyleManager
+			var dsm = get_parent()  # DisplayStyleManager
+			if dsm and dsm.has_node("SNLDisplay"):
+				var snl_display = dsm.get_node("SNLDisplay")
+				snl_display.visible = false
+				_debug("SNLDisplay hidden")
+		"show_window":
+			# Récupérer SNLDisplay depuis DisplayStyleManager
+			var dsm = get_parent()  # DisplayStyleManager
+			if dsm and dsm.has_node("SNLDisplay"):
+				var snl_display = dsm.get_node("SNLDisplay")
+				snl_display.visible = true
+				_debug("SNLDisplay shown")
+		"layout":
+			result["layout_type"] = parts[1] if parts.size() > 1 else "SNL"
+		"window":
+			result["width"] = int(parts[1]) if parts.size() > 1 else 1280
+			result["height"] = int(parts[2]) if parts.size() > 2 else 720
+			result["x"] = int(parts[3]) if parts.size() > 3 else 0
+			result["y"] = int(parts[4]) if parts.size() > 4 else 0
+			result["margin_left"] = int(parts[5]) if parts.size() > 5 else 0
+			result["margin_top"] = int(parts[6]) if parts.size() > 6 else 0
+			result["margin_right"] = int(parts[7]) if parts.size() > 7 else 0
+			result["color"] = parts[8] if parts.size() > 8 else "#000000"
+			result["opacity"] = float(parts[9]) / 100.0 if parts.size() > 9 else 255
 		"wait":
 			result["ms"] = float(parts[1]) / 1000.0
 		"audio":
