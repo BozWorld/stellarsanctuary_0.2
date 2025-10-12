@@ -104,7 +104,7 @@ Suddenly, a synthetic voice jolts me out of my thoughts. #new_page
 === computer_announcement ===
 
 #layout:ADV
-#audio:playse:SoundEffects_Action/beep1.ogg
+#audio:playse:asset/Sound/Sound_SFX/beep1.ogg
 #ui:show:UI_Elements/stellar_ui_chat2big.png:1:35:458:0:181:217
 
 Arrival in five minutes. #segment_break
