@@ -105,14 +105,12 @@ Suddenly, a synthetic voice jolts me out of my thoughts. #new_page
 
 #layout:ADV
 #audio:playse:asset/Sound/Sound_SFX/beep1.ogg
-#ui:show:UI_Elements/stellar_ui_chat2big.png:1:35:458:0:181:217
 
 Arrival in five minutes. #segment_break
 
 Please sit tight and make sure your belts are fastened as we approach Orbital Station SS-04. #speaker:Computer #color:#94b8b8 #new_page
 
-#audio:playbgm:Music/03_-_Space_Confessional_-_juneji.ogg
-#ui:free:1
+#audio:playbgm:asset/Music/03_-_Space_Confessional_-_juneji.ogg
 #layout:SNL
 
 Sounds like we're nearly there. #segment_break
@@ -137,8 +135,8 @@ It's entirely white, with a giant tube as the supporting and main part of the st
 
 === ship_docking ===
 
-#audio:playse:SoundEffects_Action/engine_stop.ogg
-#bg:Backgrounds/bg01_space_shuttle.png:crossfade:1000
+#audio:playse:asset/Sound_SFX/engine_stop.ogg
+#bg:asset/Visuals_Backgrounds/bg01_space_shuttle.png:crossfade:1000
 
 The spaceship I'm on comes to a stop. #segment_break
 
@@ -158,7 +156,6 @@ Outside the little round window next to me, I could see the giant logo of the st
 
 #layout:ADV
 #chara:show:Pilot:chara/9/pilot_neutral.png:1000:495:720:410:0
-#ui:show:UI_Elements/stellar_ui_chat2big.png:1:35:458:0:181:217
 #chara:mod:Pilot:chara/9/pilot_neutral2.png:200
 
 Are you ready to get onboard? #speaker:Pilot #color:#ffb366 #new_page
@@ -210,14 +207,14 @@ I already know this kind of protocol by heart, but I can't act like a bratty kno
 
 === gravity_chamber ===
 
-#bg:Backgrounds/bg02_corridor_A.png:crossfade:1000
+#bg:asset/Visuals_Backgrounds/bg02_corridor_A.png:crossfade:1000
 #wait:1500
 
 I enter the GCC (Gravity Change Chamber). #segment_break
 
 Nothing too peculiar, I've done this countless times. #new_page
 
-#audio:playse:BGS/inside_spaceship.ogg:loop:3
+#audio:playse:asset/Sound/Sound_SFX/inside_spaceship.ogg:loop:3
 #wait:1000
 
 The air pressure starts to shift. #segment_break
@@ -231,7 +228,7 @@ Or maybe I'm just weird. #new_page
 
 My body now feels much heavier than before, and the gravity feels like what you're used to on Earth. #new_page
 
-#audio:playse:SoundEffects_Action/door1.ogg:2
+#audio:playse:asset/Sound/Sound_SFX/door1.ogg:2
 #wait:2000
 
 The door to the station opens. #new_page
@@ -271,7 +268,7 @@ Oh, yes, of course. #speaker:Euphie #color:#ff8080 #new_page
 
 #ui:free:2
 #ui:free:1
-#bg:Backgrounds/bg02_corridor_B.png:crossfade:1000
+#bg:asset/Visuals_Backgrounds/bg02_corridor_B.png:crossfade:1000
 
 -> corridor_tour
 
@@ -450,11 +447,11 @@ The station is divided into multiple floors, and you access them through the cen
 
 === elevator_section ===
 
-#bg:Backgrounds/bg03_elevators_front.png:crossfade:1000
+#bg:asset/Visuals_Backgrounds/bg03_elevators_front.png:crossfade:1000
 
 Klaus came to a stop in front of the elevators. #new_page
 
-#audio:playse:SoundEffects_Action/beep1.ogg
+#audio:playse:asset/Sound/Sound_SFX/beep1.ogg
 
 #layout:ADV
 #ui:show:UI_Elements/stellar_ui_chat2big.png:1:35:458:0:181:217
@@ -464,22 +461,22 @@ For practical reasons, there are two different ones. #segment_break
 
 They're just as easy to use as any kind of elevator. #segment_break
 
-#audio:playse:SoundEffects_Action/door1_soft.ogg
+#audio:playse:asset/Sound/Sound_SFX/door1_soft.ogg
 
 Now, if you would get inside so we can continue our tour. #speaker:Klaus #color:#cc66ff #new_page
 
 #ui:free:1
-#bg:Backgrounds/bg04_elevators_inside.png:crossfade:1000
+#bg:asset/Visuals_Backgrounds/bg04_elevators_inside.png:crossfade:1000
 
-#audio:playse:SoundEffects_Action/footsteps_light.ogg
+#audio:playse:asset/Sound/Sound_SFX/footsteps_light.ogg
 
 Klaus goes in the elevator, and I follow him in. #new_page
 
-#audio:playse:SoundEffects_Action/door1_soft_2.ogg
+#audio:playse:asset/Sound/Sound_SFX/door1_soft_2.ogg
 
 The gate closes and the elevator starts to move slowly. #segment_break
 
-#audio:playse:BGS/elevator_up.ogg:loop
+#audio:playse:asset/Sound/Sound_SFX/elevator_up.ogg:loop
 
 To break the silence, Klaus continues his explanations. #new_page
 
@@ -512,11 +509,11 @@ Easy enough. #speaker:Euphie #color:#ff8080 #new_page
 #layout:SNL
 
 #audio:fadeoutse:400:BGS/elevator_up.ogg
-#audio:playse:SoundEffects_Action/elevator_ding.ogg
+#audio:playse:asset/Sound/Sound_SFX/elevator_ding.ogg
 
 A soft ring indicates we've arrived on floor one. #segment_break
 
-#audio:playse:SoundEffects_Action/door1_soft.ogg
+#audio:playse:asset/Sound/Sound_SFX/door1_soft.ogg
 
 The doors open once again. #new_page
 

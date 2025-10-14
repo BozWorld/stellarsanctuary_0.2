@@ -1,0 +1,156 @@
+[gd_resource type="Resource" script_class="CharacterResource" load_steps=44 format=3 uid="uid://br8t1b46vlgwv"]
+
+[ext_resource type="Script" uid="uid://duoeekyxke4g7" path="res://asset/CharacterResource.gd" id="1_ns2sp"]
+[ext_resource type="Script" uid="uid://becf6i7nnp1o5" path="res://asset/CharacterSprite.gd" id="2_18wck"]
+[ext_resource type="Texture2D" uid="uid://bve7oc17kyyf6" path="res://asset/Visuals_Sprites/Klaus/klaus.png" id="3_v3gf8"]
+[ext_resource type="Texture2D" uid="uid://xy82ck8jndpc" path="res://asset/Visuals_Sprites/Klaus/klaus_angry.png" id="4_7nfx0"]
+[ext_resource type="Texture2D" uid="uid://8ngkni1qp5ly" path="res://asset/Visuals_Sprites/Klaus/klaus_blush.png" id="5_imf5j"]
+[ext_resource type="Texture2D" uid="uid://c7e1nl0p68b87" path="res://asset/Visuals_Sprites/Klaus/klaus_closed.png" id="6_bc3up"]
+[ext_resource type="Texture2D" uid="uid://xtj8hnl82y4s" path="res://asset/Visuals_Sprites/Klaus/klaus_pathetic.png" id="7_kw4fy"]
+[ext_resource type="Texture2D" uid="uid://dhgk1fa2p1gd8" path="res://asset/Visuals_Sprites/Klaus/klaus_smile.png" id="8_50v8h"]
+[ext_resource type="Texture2D" uid="uid://bd86kfap4escn" path="res://asset/Visuals_Sprites/Klaus/klaus_sweat.png" id="9_rj6i5"]
+[ext_resource type="Texture2D" uid="uid://crj8nfyb8fn2h" path="res://asset/Visuals_Sprites/Klaus/klaus_thinking2.png" id="10_pdvld"]
+[ext_resource type="Texture2D" uid="uid://dujbwkbcgl4cj" path="res://asset/Visuals_Sprites/Klaus/klaus_thinking.png" id="11_rncut"]
+[ext_resource type="Texture2D" uid="uid://bd81h0jt1wpu6" path="res://asset/Visuals_Sprites/Klaus/klaus_wary_normal.png" id="12_h7am4"]
+[ext_resource type="Texture2D" uid="uid://vvtasg0xryk3" path="res://asset/Visuals_Sprites/Klaus/klaus_wary_shocked.png" id="13_678sw"]
+[ext_resource type="Texture2D" uid="uid://2qsdsxlh1ie6" path="res://asset/Visuals_Sprites/Klaus/klaus_confused.png" id="14_5wm0j"]
+[ext_resource type="Texture2D" uid="uid://dd4c2xnh0k724" path="res://asset/Visuals_Sprites/Klaus/Jogging/klaus_jogging.png" id="15_dy48o"]
+[ext_resource type="Texture2D" uid="uid://qlxyyosm4mu7" path="res://asset/Visuals_Sprites/Klaus/Jogging/klaus_jogging_angry.png" id="16_8nes0"]
+[ext_resource type="Texture2D" uid="uid://cdfg58c5mvb4o" path="res://asset/Visuals_Sprites/Klaus/Jogging/klaus_jogging_closed.png" id="17_f7o8b"]
+[ext_resource type="Texture2D" uid="uid://6gvg4047asun" path="res://asset/Visuals_Sprites/Klaus/Jogging/klaus_jogging_smile.png" id="18_c11dn"]
+[ext_resource type="Texture2D" uid="uid://l6hjv2vhavax" path="res://asset/Visuals_Sprites/Klaus/Jogging/klaus_jogging_thinking.png" id="19_3dldm"]
+[ext_resource type="Texture2D" uid="uid://dpfdfocsylbgf" path="res://asset/Visuals_Sprites/Klaus/Suit Helmet Off/klaus_suit.png" id="20_tkeng"]
+[ext_resource type="Texture2D" uid="uid://8eqxs7u6d3g4" path="res://asset/Visuals_Sprites/Klaus/Suit Helmet Off/klaus_suit_closed.png" id="21_rp0lp"]
+[ext_resource type="Texture2D" uid="uid://blruas7u7kqdu" path="res://asset/Visuals_Sprites/Klaus/Suit Helmet Off/klaus_suit_smile.png" id="22_l2qqy"]
+
+[sub_resource type="Resource" id="Resource_vwjct"]
+script = ExtResource("2_18wck")
+sprite_name = "klaus"
+texture = ExtResource("3_v3gf8")
+metadata/_custom_type_script = "uid://becf6i7nnp1o5"
+
+[sub_resource type="Resource" id="Resource_p8c31"]
+script = ExtResource("2_18wck")
+sprite_name = "angry2"
+texture = ExtResource("4_7nfx0")
+metadata/_custom_type_script = "uid://becf6i7nnp1o5"
+
+[sub_resource type="Resource" id="Resource_r675x"]
+script = ExtResource("2_18wck")
+sprite_name = "angry"
+texture = ExtResource("4_7nfx0")
+metadata/_custom_type_script = "uid://becf6i7nnp1o5"
+
+[sub_resource type="Resource" id="Resource_w5dy5"]
+script = ExtResource("2_18wck")
+sprite_name = "blush"
+texture = ExtResource("5_imf5j")
+metadata/_custom_type_script = "uid://becf6i7nnp1o5"
+
+[sub_resource type="Resource" id="Resource_ycg1x"]
+script = ExtResource("2_18wck")
+sprite_name = "closed"
+texture = ExtResource("6_bc3up")
+metadata/_custom_type_script = "uid://becf6i7nnp1o5"
+
+[sub_resource type="Resource" id="Resource_aigh4"]
+script = ExtResource("2_18wck")
+sprite_name = "pathetic"
+texture = ExtResource("7_kw4fy")
+metadata/_custom_type_script = "uid://becf6i7nnp1o5"
+
+[sub_resource type="Resource" id="Resource_qydgn"]
+script = ExtResource("2_18wck")
+sprite_name = "smile"
+texture = ExtResource("8_50v8h")
+metadata/_custom_type_script = "uid://becf6i7nnp1o5"
+
+[sub_resource type="Resource" id="Resource_0mspy"]
+script = ExtResource("2_18wck")
+sprite_name = "sweat"
+texture = ExtResource("9_rj6i5")
+metadata/_custom_type_script = "uid://becf6i7nnp1o5"
+
+[sub_resource type="Resource" id="Resource_528sa"]
+script = ExtResource("2_18wck")
+sprite_name = "thinking2"
+texture = ExtResource("10_pdvld")
+metadata/_custom_type_script = "uid://becf6i7nnp1o5"
+
+[sub_resource type="Resource" id="Resource_ed834"]
+script = ExtResource("2_18wck")
+sprite_name = "thinking"
+texture = ExtResource("11_rncut")
+metadata/_custom_type_script = "uid://becf6i7nnp1o5"
+
+[sub_resource type="Resource" id="Resource_8itm7"]
+script = ExtResource("2_18wck")
+sprite_name = "wary_normal"
+texture = ExtResource("12_h7am4")
+metadata/_custom_type_script = "uid://becf6i7nnp1o5"
+
+[sub_resource type="Resource" id="Resource_xtvy8"]
+script = ExtResource("2_18wck")
+sprite_name = "wary_shocked"
+texture = ExtResource("13_678sw")
+metadata/_custom_type_script = "uid://becf6i7nnp1o5"
+
+[sub_resource type="Resource" id="Resource_pwano"]
+script = ExtResource("2_18wck")
+sprite_name = "confused"
+texture = ExtResource("14_5wm0j")
+metadata/_custom_type_script = "uid://becf6i7nnp1o5"
+
+[sub_resource type="Resource" id="Resource_8ewnn"]
+script = ExtResource("2_18wck")
+sprite_name = "jogging"
+texture = ExtResource("15_dy48o")
+metadata/_custom_type_script = "uid://becf6i7nnp1o5"
+
+[sub_resource type="Resource" id="Resource_evjho"]
+script = ExtResource("2_18wck")
+sprite_name = "jogging_angry"
+texture = ExtResource("16_8nes0")
+metadata/_custom_type_script = "uid://becf6i7nnp1o5"
+
+[sub_resource type="Resource" id="Resource_k5vul"]
+script = ExtResource("2_18wck")
+sprite_name = "jogging_closed"
+texture = ExtResource("17_f7o8b")
+metadata/_custom_type_script = "uid://becf6i7nnp1o5"
+
+[sub_resource type="Resource" id="Resource_v8x0q"]
+script = ExtResource("2_18wck")
+sprite_name = "jogging_smile"
+texture = ExtResource("18_c11dn")
+metadata/_custom_type_script = "uid://becf6i7nnp1o5"
+
+[sub_resource type="Resource" id="Resource_eae7f"]
+script = ExtResource("2_18wck")
+sprite_name = "jogging_thinking"
+texture = ExtResource("19_3dldm")
+metadata/_custom_type_script = "uid://becf6i7nnp1o5"
+
+[sub_resource type="Resource" id="Resource_sbtft"]
+script = ExtResource("2_18wck")
+sprite_name = "suit"
+texture = ExtResource("20_tkeng")
+metadata/_custom_type_script = "uid://becf6i7nnp1o5"
+
+[sub_resource type="Resource" id="Resource_4id2s"]
+script = ExtResource("2_18wck")
+sprite_name = "suit_closed"
+texture = ExtResource("21_rp0lp")
+metadata/_custom_type_script = "uid://becf6i7nnp1o5"
+
+[sub_resource type="Resource" id="Resource_nd6p7"]
+script = ExtResource("2_18wck")
+sprite_name = "suit_smile"
+texture = ExtResource("22_l2qqy")
+metadata/_custom_type_script = "uid://becf6i7nnp1o5"
+
+[resource]
+script = ExtResource("1_ns2sp")
+character_name = "klaus"
+sprite = Array[ExtResource("2_18wck")]([SubResource("Resource_vwjct"), SubResource("Resource_p8c31"), SubResource("Resource_r675x"), SubResource("Resource_w5dy5"), SubResource("Resource_ycg1x"), SubResource("Resource_aigh4"), SubResource("Resource_qydgn"), SubResource("Resource_0mspy"), SubResource("Resource_528sa"), SubResource("Resource_ed834"), SubResource("Resource_8itm7"), SubResource("Resource_xtvy8"), SubResource("Resource_pwano"), SubResource("Resource_8ewnn"), SubResource("Resource_evjho"), SubResource("Resource_k5vul"), SubResource("Resource_v8x0q"), SubResource("Resource_eae7f"), SubResource("Resource_sbtft"), SubResource("Resource_4id2s"), SubResource("Resource_nd6p7")])
+metadata/_custom_type_script = "uid://duoeekyxke4g7"

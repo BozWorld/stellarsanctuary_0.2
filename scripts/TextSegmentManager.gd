@@ -3,7 +3,7 @@ class_name TextSegmentManager
 extends Node
 
 # Signaux
-signal segment_ready(segment_text: String, segment_type: SegmentType)
+signal segment_ready(segment_text: String, segment_type: SegmentType, display_style: int)
 signal all_segments_completed()
 
 # Enums
@@ -14,12 +14,14 @@ enum SegmentType {NORMAL, SEGMENT_BREAK, NEW_PAGE}
 var _segments: Array[Dictionary] = []
 var _current_index: int = 0
 var _is_active := false
+var _current_display_style: int = 0  # DisplayStyleManager.DisplayStyle
 
 
 # === API PUBLIQUE ===
-func process_text_with_tags(text: String, tags: Array) -> void:
-	_debug("Processing text with tags: %s" % [tags])
+func process_text_with_tags(text: String, tags: Array, display_style: int) -> void:
+	_debug("Processing text with tags: %s for style: %s" % [tags, display_style])
 	
+	_current_display_style = display_style
 	_reset()
 	_build_segments(text, tags)
 	_start_processing()
@@ -102,7 +104,7 @@ func _process_current_segment():
 	var segment = _segments[_current_index]
 	_debug("Processing segment " + str(_current_index) + ": " + SegmentType.keys()[segment.type])
 	
-	emit_signal("segment_ready", segment.text, segment.type)
+	emit_signal("segment_ready", segment.text, segment.type, _current_display_style)
 
 func _finish():
 	_is_active = false

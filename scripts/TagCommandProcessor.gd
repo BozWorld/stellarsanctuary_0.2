@@ -51,7 +51,6 @@ func _process_single_tag(tag: String):
 			if transition_manager:
 				match parsed.action:
 					"show":
-						# Détecter si c'est un CG basé sur le chemin (contient "Visuals_CG")
 						if "Visuals_CG" in parsed.path:
 							_debug("CG détecté dans image:show, utilisation de crossfade_cg")
 							await transition_manager.crossfade_cg("res://" + parsed.path, parsed.dur)
@@ -73,14 +72,140 @@ func _process_single_tag(tag: String):
 			if transition_manager:
 				await transition_manager.show_window()
 		"window":
-			#traitement fenêtre (show/hide)
+			# traitement fenêtre (show/hide)
 			pass
+		"layout":
+			_process_layout_tag(parsed.layout_type)
+		"chara":
+			_process_chara_tag(parsed)
+		"characterSprite":
+			_process_character_sprite_tag(parsed)
+		"characterPortrait":
+			_process_character_portrait_tag(parsed)
+		"speaker":
+			_process_speaker_tag(parsed)
+		"color":
+			_process_color_tag(parsed)
 		_:
 			_debug("Unknown command type: " + parsed.type)
 
+func _process_layout_tag(layout_value: String) -> void:
+	var dsm = get_parent()
+	if not dsm:
+		return
+	match layout_value.to_upper():
+		"SNL":
+			dsm.switch_to_style(DisplayStyleManager.DisplayStyle.SNL)
+		"DYNAMIC_SNL":
+			dsm.switch_to_style(DisplayStyleManager.DisplayStyle.DYNAMIC_SNL)
+		"ADV":
+			dsm.switch_to_style(DisplayStyleManager.DisplayStyle.ADV)
+		_:
+			_debug("Unknown layout style: " + layout_value)
 
-func _handle_window(cmd: Dictionary):
-	_debug("layout command processed")
+func _process_chara_tag(parsed: Dictionary) -> void:
+	var dsm = get_parent()
+	if not dsm or not dsm.adv_display:
+		return
+	
+	match parsed.action:
+		"show":
+			dsm.adv_display.show_character(
+				parsed.get("name", ""),
+				parsed.get("sprite", ""),
+				Vector2.ZERO  # Position par défaut
+			)
+		"hide":
+			dsm.adv_display.hide_character(parsed.get("name", ""))
+		_:
+			_debug("Unknown chara action: " + parsed.action)
+
+func _process_speaker_tag(parsed: Dictionary) -> void:
+	var dsm = get_parent()
+	if not dsm:
+		return
+	
+	var speaker_name = parsed.get("name", "")
+	dsm.set_current_speaker(speaker_name)
+	_debug("Speaker set to: %s" % speaker_name)
+
+func _process_color_tag(parsed: Dictionary) -> void:
+	var dsm = get_parent()
+	if not dsm:
+		return
+	
+	var color_hex = parsed.get("color", "#FFFFFF")
+	dsm.set_speaker_color(color_hex)
+	_debug("Color set to: %s" % color_hex)
+
+func _process_character_sprite_tag(parsed: Dictionary) -> void:
+	var dsm = get_parent()
+	if not dsm or not dsm.adv_display:
+		return
+	
+	match parsed.action:
+		"show":
+			var character_name = parsed.get("name", "")
+			var sprite_name = parsed.get("sprite", "")
+			var texture = dsm.get_character_sprite(character_name, sprite_name)
+			
+			if texture:
+				dsm.adv_display.show_character(character_name, sprite_name)
+				_debug("Character sprite shown: %s:%s" % [character_name, sprite_name])
+			else:
+				_debug("Character sprite not found: %s:%s" % [character_name, sprite_name])
+		
+		"hide":
+			var character_name = parsed.get("name", "")
+			dsm.adv_display.hide_character(character_name)
+			_debug("Character sprite hidden: %s" % character_name)
+		
+		"mod":
+			# Change sprite d'un personnage déjà affiché
+			var character_name = parsed.get("name", "")
+			var sprite_name = parsed.get("sprite", "")
+			dsm.adv_display.show_character(character_name, sprite_name)
+			_debug("Character sprite modified: %s:%s" % [character_name, sprite_name])
+
+func _process_character_portrait_tag(parsed: Dictionary) -> void:
+	# Portrait UI - petites images dans l'interface de dialogue
+	if not transition_manager:
+		return
+	
+	match parsed.action:
+		"show":
+			var character_name = parsed.get("name", "")
+			var expression = parsed.get("expression", "neutral")
+			var path = "asset/Portraits/%s_%s.png" % [character_name.to_lower(), expression]
+			
+			var cmd = {
+				"path": path,
+				"layer": "portrait",
+				"dur": 0.2,
+				"effect": "fade"
+			}
+			await transition_manager.show_image(cmd)
+			_debug("Character portrait shown: %s:%s" % [character_name, expression])
+		
+		"hide":
+			var cmd = {
+				"layer": "portrait",
+				"dur": 0.2
+			}
+			await transition_manager.hide_image(cmd)
+			_debug("Character portrait hidden")
+
+func _process_ui_tag(parsed: Dictionary) -> void:
+	if not transition_manager:
+		return
+	
+	match parsed.action:
+		"show":
+			await transition_manager.show_ui_overlay(parsed.get("path", ""))
+		"hide", "free":
+			await transition_manager.clear_ui_overlays()
+		_:
+			_debug("Unknown ui action: " + parsed.action)
 
 # === PARSING ===
 func _parse_tag(tag: String) -> Dictionary:
@@ -90,24 +215,32 @@ func _parse_tag(tag: String) -> Dictionary:
 	var result = {"type": parts[0]}
 
 	match parts[0]:
-		"hide_window":
-			# Ne rien faire ici, sera traité dans _process_single_tag()
-			pass
-		"show_window":
-			# Ne rien faire ici, sera traité dans _process_single_tag()
-			pass
 		"layout":
 			result["layout_type"] = parts[1] if parts.size() > 1 else "SNL"
-		"window":
-			result["width"] = int(parts[1]) if parts.size() > 1 else 1280
-			result["height"] = int(parts[2]) if parts.size() > 2 else 720
-			result["x"] = int(parts[3]) if parts.size() > 3 else 0
-			result["y"] = int(parts[4]) if parts.size() > 4 else 0
-			result["margin_left"] = int(parts[5]) if parts.size() > 5 else 0
-			result["margin_top"] = int(parts[6]) if parts.size() > 6 else 0
-			result["margin_right"] = int(parts[7]) if parts.size() > 7 else 0
-			result["color"] = parts[8] if parts.size() > 8 else "#000000"
-			result["opacity"] = float(parts[9]) / 100.0 if parts.size() > 9 else 255
+		"chara":
+			result["action"] = parts[1] if parts.size() > 1 else "show"
+			result["name"] = parts[2] if parts.size() > 2 else ""
+			result["sprite"] = parts[3] if parts.size() > 3 else ""
+			result["duration"] = float(parts[4]) / 1000.0 if parts.size() > 4 else 0.5
+			result["position"] = parts[5] if parts.size() > 5 else "center"
+		"characterSprite":
+			result["action"] = parts[1] if parts.size() > 1 else "show"  # show, hide, mod
+			result["name"] = parts[2] if parts.size() > 2 else ""
+			result["sprite"] = parts[3] if parts.size() > 3 else ""
+			result["position"] = parts[4] if parts.size() > 4 else "center"
+			result["duration"] = float(parts[5]) / 1000.0 if parts.size() > 5 else 0.3
+		"characterPortrait":
+			result["action"] = parts[1] if parts.size() > 1 else "show"  # show, hide
+			result["name"] = parts[2] if parts.size() > 2 else ""
+			result["expression"] = parts[3] if parts.size() > 3 else "neutral"
+		"ui":
+			result["action"] = parts[1] if parts.size() > 1 else "show"
+			result["element"] = parts[2] if parts.size() > 2 else ""
+			result["path"] = parts[3] if parts.size() > 3 else ""
+		"speaker":
+			result["name"] = parts[1] if parts.size() > 1 else ""
+		"color":
+			result["color"] = parts[1] if parts.size() > 1 else "#FFFFFF"
 		"wait":
 			result["ms"] = float(parts[1]) / 1000.0
 		"audio":

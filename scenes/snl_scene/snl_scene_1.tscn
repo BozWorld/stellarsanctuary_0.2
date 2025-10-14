@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://bol26hah7max"]
+[gd_scene load_steps=23 format=3 uid="uid://bol26hah7max"]
 
 [ext_resource type="Script" uid="uid://buktnfaj8utl8" path="res://scripts/DisplayStyleManager.gd" id="1_2ea14"]
 [ext_resource type="PackedScene" uid="uid://c6stexslvt8e8" path="res://scenes/bg.tscn" id="1_mevxt"]
@@ -10,7 +10,9 @@
 [ext_resource type="Script" uid="uid://do6a1545hae36" path="res://scripts/TransitionManager.gd" id="6_exumd"]
 [ext_resource type="Texture2D" uid="uid://d4l32ffsys4lf" path="res://asset/SystVisuals_Config&UI/UI/stellar_ui_chat2big.png" id="8_oimod"]
 [ext_resource type="Texture2D" uid="uid://ct35rv4m574vu" path="res://asset/SystVisuals_Config&UI/UI/window6.png" id="9_4o8jx"]
+[ext_resource type="FontFile" uid="uid://cw6ls5ajhe1rt" path="res://asset/Syst_Fonts/OpenSans-ExtraBold.ttf" id="10_3gmos"]
 [ext_resource type="AudioStream" uid="uid://677ap0kooffc" path="res://asset/Sound/Sound_SFX/chapter.ogg" id="11_mevxt"]
+[ext_resource type="FontFile" uid="uid://clmilxgrpwpwu" path="res://asset/Syst_Fonts/TitilliumWeb-Regular.ttf" id="11_n3ixh"]
 [ext_resource type="Script" uid="uid://duomxy5kq65mi" path="res://scripts/TextSegmentManager.gd" id="11_ot1tq"]
 [ext_resource type="Script" uid="uid://nw3cjvpr73tb" path="res://scripts/TagCommandProcessor.gd" id="12_oimod"]
 [ext_resource type="Script" uid="uid://51dnlrycqh6e" path="res://scenes/snl_scene/audio_manager.gd" id="14_oimod"]
@@ -35,14 +37,6 @@ bg_color = Color(0.270588, 0.270588, 0.270588, 1)
 /styles/scroll = SubResource("StyleBoxEmpty_0oit4")
 /styles/scroll_focus = SubResource("StyleBoxEmpty_orrgr")
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_oimod"]
-content_margin_top = 0.0
-content_margin_right = 0.0
-content_margin_bottom = 0.0
-bg_color = Color(0.1, 0.1, 0.1, 0.6)
-corner_radius_bottom_left = 3
-corner_detail = 5
-
 [node name="SNLScene1" type="CanvasLayer"]
 
 [node name="BG" parent="." instance=ExtResource("1_mevxt")]
@@ -55,6 +49,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_2ea14")
+metadata/_edit_use_anchors_ = true
 
 [node name="InkStoryLoader" type="Node" parent="DisplayStyleManager"]
 script = ExtResource("2_0nq83")
@@ -110,7 +105,8 @@ horizontal_scroll_mode = 0
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="ADVDisplay" type="Control" parent="DisplayStyleManager" node_paths=PackedStringArray("text_label", "continue_button")]
+[node name="ADVDisplay" type="Control" parent="DisplayStyleManager" node_paths=PackedStringArray("character_container", "dialog_box", "name_box", "text_label", "continue_button")]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -118,42 +114,59 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("5_w55wh")
-text_label = NodePath("PanelContainer/HBoxContainer/TextureRect2/RichTextLabel")
+character_container = NodePath("CharacterContainer")
+dialog_box = NodePath("DialogueTexture/DialogueLabel")
+name_box = NodePath("DialogueTexture/NameLabel")
+text_label = NodePath("DialogueTexture/DialogueLabel")
 continue_button = NodePath("../SNLDisplay/BtContinue")
 
-[node name="PanelContainer" type="PanelContainer" parent="DisplayStyleManager/ADVDisplay"]
-layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -614.5
-offset_top = -323.0
-offset_right = 614.5
-grow_horizontal = 2
-grow_vertical = 0
-theme_override_styles/panel = SubResource("StyleBoxFlat_oimod")
-
-[node name="HBoxContainer" type="HBoxContainer" parent="DisplayStyleManager/ADVDisplay/PanelContainer"]
-layout_mode = 2
-theme_override_constants/separation = 69
-
-[node name="TextureRect" type="TextureRect" parent="DisplayStyleManager/ADVDisplay/PanelContainer/HBoxContainer"]
-layout_mode = 2
-texture = ExtResource("8_oimod")
-
-[node name="TextureRect2" type="TextureRect" parent="DisplayStyleManager/ADVDisplay/PanelContainer/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-texture = ExtResource("9_4o8jx")
-
-[node name="RichTextLabel" type="RichTextLabel" parent="DisplayStyleManager/ADVDisplay/PanelContainer/HBoxContainer/TextureRect2"]
+[node name="CharacterContainer" type="TextureRect" parent="DisplayStyleManager/ADVDisplay"]
 layout_mode = 0
-offset_left = 59.994446
-offset_top = 21.111084
-offset_right = 345.55
-offset_bottom = 73.33331
+offset_left = 36.0
+offset_top = 413.0
+offset_right = 36.0
+offset_bottom = 639.0
+texture = ExtResource("8_oimod")
+expand_mode = 1
+
+[node name="DialogueTexture" type="TextureRect" parent="DisplayStyleManager/ADVDisplay"]
+layout_mode = 0
+offset_left = 212.0
+offset_top = 412.0
+offset_right = 1099.0
+offset_bottom = 635.0
+scale = Vector2(1.025, 1.025)
+texture = ExtResource("9_4o8jx")
+expand_mode = 1
+
+[node name="NameLabel" type="RichTextLabel" parent="DisplayStyleManager/ADVDisplay/DialogueTexture"]
+layout_mode = 0
+offset_left = 57.56099
+offset_top = -7.8048706
+offset_right = 343.11652
+offset_bottom = 61.19513
+theme_override_fonts/normal_font = ExtResource("10_3gmos")
+theme_override_font_sizes/normal_font_size = 50
+fit_content = true
+
+[node name="DialogueLabel" type="RichTextLabel" parent="DisplayStyleManager/ADVDisplay/DialogueTexture"]
+layout_mode = 0
+offset_left = 48.780487
+offset_top = 65.365845
+offset_right = 800.0
+offset_bottom = 185.36584
+theme_override_fonts/normal_font = ExtResource("11_n3ixh")
+theme_override_font_sizes/normal_font_size = 40
+
+[node name="CharacterPortrait" type="TextureRect" parent="DisplayStyleManager/ADVDisplay"]
+layout_mode = 0
+offset_left = 36.0
+offset_top = 436.0
+offset_right = 200.0
+offset_bottom = 639.0
+scale = Vector2(1.025, 1.025)
+texture = ExtResource("8_oimod")
+expand_mode = 1
 
 [node name="TransitionManager" type="Node" parent="DisplayStyleManager"]
 script = ExtResource("6_exumd")
@@ -172,3 +185,8 @@ metadata/_custom_type_script = "uid://nw3cjvpr73tb"
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("11_mevxt")
 script = ExtResource("14_oimod")
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+visible = false
+offset_right = 40.0
+offset_bottom = 40.0

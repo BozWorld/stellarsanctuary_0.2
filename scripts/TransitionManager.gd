@@ -646,40 +646,6 @@ func hide_cg(duration: float = 0.3) -> void:
 	node.queue_free()
 	_debug("CG hidden")
 
-# Pour éléments UI overlay (nommés UIContainer)
-func show_ui_overlay(path: String, duration: float = 0.25) -> void:
-	var parent = get_parent()
-	if not parent: return
-	var holder = parent.get_node_or_null("UIContainer")
-	if not holder:
-		holder = Control.new()
-		holder.name = "UIContainer"
-		holder.anchor_right = 1.0
-		holder.anchor_bottom = 1.0
-		parent.add_child(holder)
-	var tex = load(path)
-	if not tex: return
-	var ui_tex := TextureRect.new()
-	ui_tex.texture = tex
-	ui_tex.modulate.a = 0.0
-	holder.add_child(ui_tex)
-	var tw = create_tween()
-	tw.tween_property(ui_tex, "modulate:a", 1.0, duration)
-	await tw.finished
-	_debug("UI overlay added %s" % path)
-
-func clear_ui_overlays(duration: float = 0.2) -> void:
-	var parent = get_parent()
-	if not parent: return
-	var holder = parent.get_node_or_null("UIContainer")
-	if not holder: return
-	for c in holder.get_children():
-		var tw = create_tween()
-		tw.tween_property(c, "modulate:a", 0.0, duration)
-		await tw.finished
-		c.queue_free()
-	_debug("UI overlays cleared")
-
 func _debug(msg: String) -> void:
 	if enable_debug:
 		print("[TransitionManager] ", msg)

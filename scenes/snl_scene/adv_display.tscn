@@ -1,0 +1,82 @@
+[gd_scene load_steps=7 format=3 uid="uid://dcj2eeklu30dn"]
+
+[ext_resource type="Script" uid="uid://wxsuj4ltp86w" path="res://scripts/ADVDisplay.gd" id="1_e5thb"]
+[ext_resource type="Texture2D" uid="uid://b7y8hk63t8lp4" path="res://asset/Visuals_Sprites/Alexei/alex.png" id="2_loalj"]
+[ext_resource type="Texture2D" uid="uid://d4l32ffsys4lf" path="res://asset/SystVisuals_Config&UI/UI/stellar_ui_chat2big.png" id="3_po8sy"]
+[ext_resource type="Texture2D" uid="uid://ct35rv4m574vu" path="res://asset/SystVisuals_Config&UI/UI/window6.png" id="4_qn0kk"]
+[ext_resource type="Texture2D" uid="uid://bi3ggoqvxvtui" path="res://asset/Visuals_Sprites/Euphémia/STESAN-euphie-04.png" id="5_xenck"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_oimod"]
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(0.1, 0.1, 0.1, 0.6)
+corner_radius_bottom_left = 3
+corner_detail = 5
+
+[node name="ADVDisplay" type="Control" node_paths=PackedStringArray("text_label", "continue_button")]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_e5thb")
+text_label = NodePath("PanelContainer/HBoxContainer/TextureRect2/RichTextLabel")
+continue_button = NodePath("")
+
+[node name="CharacterSprite" type="TextureRect" parent="."]
+visible = false
+layout_mode = 0
+offset_left = 488.0
+offset_top = 146.0
+offset_right = 1230.0
+offset_bottom = 1226.0
+scale = Vector2(0.534, 0.534)
+texture = ExtResource("2_loalj")
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -525.0
+offset_top = -244.00006
+offset_right = 1217.0
+offset_bottom = 114.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_oimod")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer"]
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 69
+
+[node name="TextureRect" type="TextureRect" parent="PanelContainer/HBoxContainer"]
+visible = false
+layout_mode = 2
+texture = ExtResource("3_po8sy")
+
+[node name="TextureRect2" type="TextureRect" parent="PanelContainer/HBoxContainer"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+texture = ExtResource("4_qn0kk")
+
+[node name="RichTextLabel" type="RichTextLabel" parent="PanelContainer/HBoxContainer/TextureRect2"]
+visible = false
+layout_mode = 0
+offset_left = 59.994446
+offset_top = 21.111084
+offset_right = 345.55
+offset_bottom = 73.33331
+
+[node name="TextureRect3" type="TextureRect" parent="PanelContainer/HBoxContainer"]
+visible = false
+layout_mode = 2
+texture = ExtResource("5_xenck")
