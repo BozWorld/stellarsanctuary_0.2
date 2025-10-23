@@ -146,7 +146,7 @@ offset_top = -7.8048706
 offset_right = 343.11652
 offset_bottom = 61.19513
 theme_override_fonts/normal_font = ExtResource("10_3gmos")
-theme_override_font_sizes/normal_font_size = 50
+theme_override_font_sizes/normal_font_size = 35
 fit_content = true
 
 [node name="DialogueLabel" type="RichTextLabel" parent="DisplayStyleManager/ADVDisplay/DialogueTexture"]
@@ -156,7 +156,7 @@ offset_top = 65.365845
 offset_right = 800.0
 offset_bottom = 185.36584
 theme_override_fonts/normal_font = ExtResource("11_n3ixh")
-theme_override_font_sizes/normal_font_size = 40
+theme_override_font_sizes/normal_font_size = 35
 
 [node name="CharacterPortrait" type="TextureRect" parent="DisplayStyleManager/ADVDisplay"]
 layout_mode = 0

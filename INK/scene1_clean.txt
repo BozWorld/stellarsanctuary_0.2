@@ -155,7 +155,7 @@ Outside the little round window next to me, I could see the giant logo of the st
 === pilot_dialogue ===
 
 #layout:ADV
-#characterSprite:show:Pilot:chara/9/pilot_neutral.png:1000:495:720:410:0
+#chara:show:Pilot:chara/9/pilot_neutral.png:1000:495:720:410:0
 #chara:mod:Pilot:chara/9/pilot_neutral2.png:200
 
 Are you ready to get onboard? #speaker:Pilot #color:#ffb366 #new_page

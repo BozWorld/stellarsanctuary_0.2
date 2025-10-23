@@ -11,11 +11,27 @@ var _is_processing := false
 
 # === API PUBLIQUE SIMPLE ===
 func enqueue_tags(tags: Array) -> void:
-	_command_queue.append_array(tags)
+	var normalized := _normalize_tags(tags)
+	_command_queue.append_array(normalized)
 	if not _is_processing:
 		_process_queue()
 
 # === Traitement SÉQUENCIEL ===
+
+func _normalize_tags(tags: Array) -> Array:
+	var out: Array = []
+	var i := 0
+	while i < tags.size():
+		var t := str(tags[i]).strip_edges()
+		if t.ends_with("\\") and i + 1 < tags.size():
+			var nxt := str(tags[i + 1]).strip_edges()
+			out.append(t + nxt )
+			i += 2
+		else:
+			out.append(t)
+			i += 2 
+	return out
+
 func _process_queue() -> void:
 	_is_processing = true
 
@@ -135,6 +151,10 @@ func _process_color_tag(parsed: Dictionary) -> void:
 		return
 	
 	var color_hex = parsed.get("color", "#FFFFFF")
+	if color_hex == "" or color_hex == "null":
+		color_hex = "#FFFFFF"
+	if not color_hex.begins_with("#"):
+		color_hex = "#" + color_hex
 	dsm.set_speaker_color(color_hex)
 	_debug("Color set to: %s" % color_hex)
 
@@ -242,7 +262,7 @@ func _parse_tag(tag: String) -> Dictionary:
 		"color":
 			result["color"] = parts[1] if parts.size() > 1 else "#FFFFFF"
 		"wait":
-			result["ms"] = float(parts[1]) / 1000.0
+			result["ms"] = int(parts[1]) if parts.size() > 1 else 0
 		"audio":
 			result["action"] = parts[1]
 			result["path"] = parts[2] if parts.size() > 2 else ""
