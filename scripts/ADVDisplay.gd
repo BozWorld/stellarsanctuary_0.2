@@ -58,11 +58,19 @@ func display_text(text: String) -> void:
 
 func set_current_speaker(speaker_name: String, color_hex: String = "#FFFFFF") -> void:
 	_current_speaker = speaker_name
-	_current_speaker_color = Color(color_hex) if color_hex.begins_with("#") else Color.WHITE
+	_current_speaker_color = _color_from_any(color_hex)
+	# Met à jour immédiatement la boîte de nom si disponible
+	if name_box:
+		if _current_speaker != "":
+			name_box.text = _current_speaker
+			name_box.modulate = _current_speaker_color
+			name_box.visible = true
+		else:
+			name_box.visible = false
 	_debug("Speaker set to: %s with color: %s" % [speaker_name, color_hex])
 
 func set_text_color(color_hex: String) -> void:
-	_current_speaker_color = Color(color_hex) if color_hex.begins_with("#") else Color.WHITE
+	_current_speaker_color = _color_from_any(color_hex)
 	if name_box:
 		name_box.modulate = _current_speaker_color
 
@@ -91,8 +99,18 @@ func show_character(character_name: String, sprite_name: String = "", char_posit
 	
 	# Fallback au système legacy si pas de texture
 	if not texture and not sprite_name.is_empty():
-		texture = load("res://" + sprite_name) if sprite_name.begins_with("asset/") else null
-		texture = load("res://" + sprite_name) if sprite_name.begins_with("asset/") else null
+		var candidates: Array[String] = []
+		if sprite_name.begins_with("res://"):
+			candidates.append(sprite_name)
+		elif sprite_name.begins_with("asset/"):
+			candidates.append("res://" + sprite_name)
+		else:
+			candidates.append("res://" + sprite_name)
+			candidates.append("res://asset/" + sprite_name)
+		for path in candidates:
+			if ResourceLoader.exists(path):
+				texture = load(path)
+				break
 	
 	if texture:
 		character.texture = texture
@@ -107,6 +125,51 @@ func hide_character(character_name: String) -> void:
 		var character = _characters[character_name]
 		character.visible = false
 		_debug("Character %s hidden" % character_name)
+
+
+func show_portrait(name: String, expression: String) -> void:
+	var dsm = get_tree().get_first_node_in_group("display_style_manager")
+	if dsm == null:
+		_debug("No DisplayStyleManager found for portrait")
+		return
+
+	var tex: Texture2D = dsm.get_character_portrait(name, expression)
+	if tex:
+		$CharacterPortrait.texture = tex
+		$CharacterPortrait.visible = true
+		_debug("Portrait %s:%s shown" % [	name, expression])
+	else:
+		_debug("Portrait not found  %s %s" % [name, expression])
+
+func show_portrait_path(res_path: String) -> void:
+	var portrait := $CharacterPortrait as TextureRect
+	if portrait and ResourceLoader.exists(res_path):
+		portrait.texture = load(res_path)
+		portrait.visible = true
+	else:
+		_debug("Failed to load portrait from path: %s" % res_path)
+
+func hide_portrait():
+	var portrait := $CharacterPortrait as TextureRect
+	if portrait:
+		portrait.visible = false
+		portrait.texture = null
+
+func get_character_portrait(name: String, expr: String) -> Texture2D:
+	var res = _lookup_character(name)
+	if res and res.has_method("get_portrait"):
+		return res.call("get_portrait", expr)
+	return null
+
+func _lookup_character(name: String):
+	# Lookup a character resource by name from the local cache or via the DisplayStyleManager
+	if character_resource.has(name):
+		return character_resource[name]
+	var dsm = get_tree().get_first_node_in_group("display_style_manager")
+	if dsm and dsm.has_method("get_character_resource"):
+		return dsm.call("get_character_resource", name)
+	return null
+
 
 func clear_display() -> void:
 	if text_label:
@@ -152,3 +215,13 @@ func _input(event: InputEvent) -> void:
 
 func _debug(msg: String) -> void:
 	print("[ADVDisplay] ", msg)
+
+# Helpers
+func _color_from_any(s: String) -> Color:
+	var hex := (s if s != null else "").strip_edges()
+	if hex == "":
+		return Color.WHITE
+	if not hex.begins_with("#") and hex.length() in [3, 4, 6, 8]:
+		hex = "#" + hex
+	var c := Color(hex)
+	return c

@@ -151,6 +151,7 @@ metadata/_custom_type_script = "uid://becf6i7nnp1o5"
 
 [resource]
 script = ExtResource("1_ns2sp")
-character_name = "klaus"
+character_name = "Klaus"
+default_color = Color(0.8, 0.4, 1, 1)
 sprite = Array[ExtResource("2_18wck")]([SubResource("Resource_vwjct"), SubResource("Resource_p8c31"), SubResource("Resource_r675x"), SubResource("Resource_w5dy5"), SubResource("Resource_ycg1x"), SubResource("Resource_aigh4"), SubResource("Resource_qydgn"), SubResource("Resource_0mspy"), SubResource("Resource_528sa"), SubResource("Resource_ed834"), SubResource("Resource_8itm7"), SubResource("Resource_xtvy8"), SubResource("Resource_pwano"), SubResource("Resource_8ewnn"), SubResource("Resource_evjho"), SubResource("Resource_k5vul"), SubResource("Resource_v8x0q"), SubResource("Resource_eae7f"), SubResource("Resource_sbtft"), SubResource("Resource_4id2s"), SubResource("Resource_nd6p7")])
 metadata/_custom_type_script = "uid://duoeekyxke4g7"

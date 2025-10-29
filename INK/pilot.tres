@@ -13,11 +13,13 @@ metadata/_custom_type_script = "uid://becf6i7nnp1o5"
 
 [sub_resource type="Resource" id="Resource_p8c31"]
 script = ExtResource("2_i0wc7")
+sprite_name = "neutral_2"
 texture = ExtResource("4_yjgkk")
 metadata/_custom_type_script = "uid://becf6i7nnp1o5"
 
 [resource]
 script = ExtResource("1_6li6x")
-character_name = "pilot"
+character_name = "Pilot"
+default_color = Color(1, 0.7019608, 0.4, 1)
 sprite = Array[ExtResource("2_i0wc7")]([SubResource("Resource_vwjct"), SubResource("Resource_p8c31")])
 metadata/_custom_type_script = "uid://duoeekyxke4g7"

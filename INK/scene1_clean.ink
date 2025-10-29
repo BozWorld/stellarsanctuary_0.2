@@ -155,18 +155,17 @@ Outside the little round window next to me, I could see the giant logo of the st
 === pilot_dialogue ===
 
 #layout:ADV
-#characterSprite:show:Pilot:chara/9/pilot_neutral.png:1000:495:720:410:0
-#chara:mod:Pilot:chara/9/pilot_neutral2.png:200
+#characterSprite:show:Pilot:neutral
+#chara:mod:Pilot:neutral_2
 
 Are you ready to get onboard? #speaker:Pilot #color:#ffb366 #new_page
 
-#chara:mod:Pilot:chara/9/pilot_neutral.png:200
-#ui:show:EuphieSprites/euphie_normal_shocked.png:2:35:458:0:181:217
-
+#chara:mod:Pilot:neutral
+#characterPortrait:show:Euphie:normal_shocked
 Ah! #speaker:Euphie #color:#ff8080 #new_page
 
 #ui:free:2
-#chara:mod:Pilot:chara/9/pilot_neutral.png:200
+#chara:mod:Pilot:neutral
 #ui:free:1
 #layout:SNL
 
@@ -180,12 +179,12 @@ I'd been sitting for so long, my legs felt weak. #new_page
 
 #layout:ADV
 #ui:show:UI_Elements/stellar_ui_chat2big.png:1:35:458:0:181:217
-#ui:show:EuphieSprites/euphie_normal_speak.png:2:35:458:0:181:217
+#ui:show:EuphieSprites/normal_speak.png:2:35:458:0:181:217
 
 Y-Yes! #speaker:Euphie #color:#ff8080 #new_page
 
 #ui:free:2
-#chara:mod:Pilot:chara/9/pilot_neutral2.png:200
+#characterSprite:show:Pilot:neutral
 
 Then please let us lead the way. #segment_break
 
@@ -195,7 +194,7 @@ It'll acclimate your body to the station's gravity. #speaker:Pilot #color:#ffb36
 
 Once the process is done, you shall be greeted by Klaus, the senior past chief of the station. #speaker:Pilot #color:#ffb366 #new_page
 
-#chara:mod:Pilot:chara/9/pilot_neutral.png:200
+#characterSprite:show:Pilot:neutral
 #ui:free:1
 #layout:SNL
 
@@ -236,8 +235,7 @@ The door to the station opens. #new_page
 -> klaus_meeting
 
 === klaus_meeting ===
-
-#chara:show:Klaus:chara/2/klaus.png:1000:495:720:410:0
+#characterSprite:show:Klaus:klaus
 #wait:1200
 
 Right behind it, a tall and fierce looking man is standing there, crossing his arms. #segment_break
@@ -247,7 +245,7 @@ I'm taken aback a little, since his gaze is so intimidating it feels like he's a
 #layout:ADV
 #ui:show:UI_Elements/stellar_ui_chat2big.png:1:35:458:0:181:217
 
-I presume you are Euphémia? #speaker:Klaus #color:#cc66ff #new_page
+I presume you are Euphémia? #speaker:Klaus #color:#  #new_page
 
 #ui:show:EuphieSprites/euphie_normal_neutral.png:2:35:458:0:181:217
 
@@ -302,7 +300,7 @@ Kind of important? #speaker:Euphie #color:#ff8080 #new_page
 
 What do you mean? #speaker:Klaus #color:#cc66ff #new_page
 
-#ui:show:EuphieSprites/euphie_thinking_normal.png:2:35:458:0:181:217
+#ui:show:EuphieSprites/thinking_normal.png:2:35:458:0:181:217
 
 Knowing about every single room the station has. #segment_break
 

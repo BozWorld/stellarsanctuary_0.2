@@ -16,6 +16,7 @@ enum DisplayStyle { SNL, DYNAMIC_SNL, ADV }
 @onready var adv_display = $ADVDisplay
 
 # === DONNÉES PERSONNAGES ===
+@export var character_resources_list: Array[CharacterResource] = []
 var _character_resources: Dictionary = {}
 var _current_speaker: String = ""
 var _current_speaker_color: Color = Color.WHITE
@@ -27,6 +28,7 @@ var current_story_step: Dictionary = {}
 var current_display_style: DisplayStyle = DisplayStyle.SNL
 
 func _ready() -> void:
+	add_to_group("display_style_manager")
 	_load_character_resources()
 	_connect_signals()
 	_update_display_visibility()
@@ -159,11 +161,18 @@ func continue_story_public():
 
 # === GESTION PERSONNAGES ===
 func _load_character_resources() -> void:
-	var character_files = _find_character_files("res://asset/")
-	for file_path in character_files:
-		var resource = load(file_path) as CharacterResource
-		if resource and resource.character_name:
-			_character_resources[resource.character_name] = resource
+	# 1) Ressources assignées manuellement dans la scène (recommandé)
+	for res in character_resources_list:
+		if res and res.character_name:
+			_character_resources[res.character_name] = res
+	# 2) Découverte automatique dans les dossiers standards
+	var roots = ["res://asset/", "res://INK/"]
+	for root in roots:
+		var character_files = _find_character_files(root)
+		for file_path in character_files:
+			var resource = load(file_path) as CharacterResource
+			if resource and resource.character_name and not _character_resources.has(resource.character_name):
+				_character_resources[resource.character_name] = resource
 
 func _find_character_files(directory: String) -> Array[String]:
 	var files: Array[String] = []
@@ -186,7 +195,7 @@ func set_current_speaker(speaker_name: String) -> void:
 	_current_speaker = speaker_name
 	if _character_resources.has(speaker_name):
 		var resource = _character_resources[speaker_name] as CharacterResource
-		_current_speaker_color = resource.default_color
+		_current_speaker_color = _lookup_character(speaker_name).default_color
 	else:
 		_current_speaker_color = Color.WHITE
 	
@@ -195,15 +204,37 @@ func set_current_speaker(speaker_name: String) -> void:
 		adv_display.set_current_speaker(speaker_name, "#" + _current_speaker_color.to_html())
 
 func set_speaker_color(color_hex: String) -> void:
-	_current_speaker_color = Color(color_hex) if color_hex.begins_with("#") else Color.WHITE
+	var normalized := _normalize_color_hex(color_hex)
+	_current_speaker_color = Color(normalized)
 	if adv_display:
-		adv_display.set_text_color(color_hex)
-
-func get_character_sprite(character_name: String, sprite_name: String = "") -> Texture2D:
-	if not _character_resources.has(character_name):
-		return null
-	var resource = _character_resources[character_name] as CharacterResource
-	return resource.get_sprite(sprite_name) if not sprite_name.is_empty() else (resource.sprite[0].texture if resource.sprite.size() > 0 else null)
+		adv_display.set_text_color(normalized)
 
 func _debug(msg: String) -> void:
 	print("[DSM DEBUG]: ", msg)
+
+func _normalize_color_hex(s: String) -> String:
+	var hex := (s if s != null else "").strip_edges()
+	if hex == "":
+		return "#FFFFFF"
+	if not hex.begins_with("#") and hex.length() in [3, 4, 6, 8]:
+		hex = "#" + hex
+	return hex
+
+func _lookup_character(name: String) -> CharacterResource:
+	if _character_resources.has(name):
+		return _character_resources[name]
+	var lowered := name.to_lower()
+	for key in _character_resources.keys():
+		if str(key).to_lower() == lowered:
+			return _character_resources[key]
+	return null
+func get_character_sprite(name: String, expr: String) -> Texture2D:
+	var res = _lookup_character(name)
+	if res:
+		return res.get_sprite(expr)	
+	return null
+func get_character_portrait(name: String, expr: String) -> Texture2D:
+	var res = _lookup_character(name)
+	if res:
+		return res.get_portrait(expr)
+	return null

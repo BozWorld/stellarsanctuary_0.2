@@ -23,13 +23,24 @@ func _normalize_tags(tags: Array) -> Array:
 	var i := 0
 	while i < tags.size():
 		var t := str(tags[i]).strip_edges()
-		if t.ends_with("\\") and i + 1 < tags.size():
+		# Cas 1: tag fragmenté avec deux points à la fin (ex: "color:" puis "94b8b8")
+		if t.ends_with(":") and i + 1 < tags.size():
 			var nxt := str(tags[i + 1]).strip_edges()
-			out.append(t + nxt )
+			out.append(t + nxt)
 			i += 2
-		else:
-			out.append(t)
-			i += 2 
+			continue
+
+		# Cas 2: concaténation de lignes via backslash final
+		if t.ends_with("\\") and i + 1 < tags.size():
+			var nxt2 := str(tags[i + 1]).strip_edges()
+			out.append(t.left(t.length() - 1) + nxt2)
+			i += 2
+			continue
+
+		# Cas standard
+		out.append(t)
+		i += 1
+
 	return out
 
 func _process_queue() -> void:
@@ -167,13 +178,9 @@ func _process_character_sprite_tag(parsed: Dictionary) -> void:
 		"show":
 			var character_name = parsed.get("name", "")
 			var sprite_name = parsed.get("sprite", "")
-			var texture = dsm.get_character_sprite(character_name, sprite_name)
-			
-			if texture:
-				dsm.adv_display.show_character(character_name, sprite_name)
-				_debug("Character sprite shown: %s:%s" % [character_name, sprite_name])
-			else:
-				_debug("Character sprite not found: %s:%s" % [character_name, sprite_name])
+			# Toujours déléguer à ADVDisplay: il gère le fallback via res:// si la resource n'existe pas
+			dsm.adv_display.show_character(character_name, sprite_name)
+			_debug("Character sprite requested: %s:%s" % [character_name, sprite_name])
 		
 		"hide":
 			var character_name = parsed.get("name", "")
@@ -188,32 +195,24 @@ func _process_character_sprite_tag(parsed: Dictionary) -> void:
 			_debug("Character sprite modified: %s:%s" % [character_name, sprite_name])
 
 func _process_character_portrait_tag(parsed: Dictionary) -> void:
-	# Portrait UI - petites images dans l'interface de dialogue
-	if not transition_manager:
+	var dsm = get_parent()
+	if not dsm or not dsm.adv_display:
 		return
-	
+
 	match parsed.action:
 		"show":
-			var character_name = parsed.get("name", "")
-			var expression = parsed.get("expression", "neutral")
-			var path = "asset/Portraits/%s_%s.png" % [character_name.to_lower(), expression]
-			
-			var cmd = {
-				"path": path,
-				"layer": "portrait",
-				"dur": 0.2,
-				"effect": "fade"
-			}
-			await transition_manager.show_image(cmd)
-			_debug("Character portrait shown: %s:%s" % [character_name, expression])
-		
+			var name = parsed.get("name", "")
+			var expr = parsed.get("expression", "neutral")
+			# Mode par défaut: symbolique via resources
+			dsm.adv_display.show_portrait(name, expr)
+			_debug("Character portrait (resource) requested: %s:%s" % [name, expr])
+
 		"hide":
-			var cmd = {
-				"layer": "portrait",
-				"dur": 0.2
-			}
-			await transition_manager.hide_image(cmd)
+			dsm.adv_display.hide_portrait()
 			_debug("Character portrait hidden")
+
+		_:
+			_debug("Unknown characterPortrait action: " + str(parsed.action))
 
 func _process_ui_tag(parsed: Dictionary) -> void:
 	if not transition_manager:

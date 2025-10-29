@@ -1,0 +1,318 @@
+[gd_resource type="Resource" script_class="CharacterResource" load_steps=90 format=3 uid="uid://dkec2lt72c0h2"]
+
+[ext_resource type="Script" uid="uid://duoeekyxke4g7" path="res://asset/CharacterResource.gd" id="1_5lyas"]
+[ext_resource type="Script" uid="uid://becf6i7nnp1o5" path="res://asset/CharacterSprite.gd" id="2_vb22m"]
+[ext_resource type="Texture2D" uid="uid://ca2lrpi5hgl4y" path="res://asset/Visuals_Sprites/Euphémia/STESAN-euphie-01.png" id="3_jwoxr"]
+[ext_resource type="Texture2D" uid="uid://cikimfkm8xktv" path="res://asset/Visuals_Sprites/Euphémia/STESAN-euphie-02.png" id="4_3b4ys"]
+[ext_resource type="Texture2D" uid="uid://6iyxc3v41jbm" path="res://asset/Visuals_Sprites/Euphémia/STESAN-euphie-03.png" id="5_x586k"]
+[ext_resource type="Texture2D" uid="uid://bi3ggoqvxvtui" path="res://asset/Visuals_Sprites/Euphémia/STESAN-euphie-04.png" id="6_5r5px"]
+[ext_resource type="Texture2D" uid="uid://csd65ct34ygmh" path="res://asset/Visuals_Sprites/Euphémia/STESAN-euphie-05.png" id="7_ncwgc"]
+[ext_resource type="Texture2D" uid="uid://dqeu5eqpmyn0t" path="res://asset/Visuals_Sprites/Euphémia/STESAN-euphie-06.png" id="8_hmybm"]
+[ext_resource type="Texture2D" uid="uid://cratg3fck2mqp" path="res://asset/Visuals_Sprites/Euphémia/STESAN-euphie-07.png" id="9_msqlk"]
+[ext_resource type="Texture2D" uid="uid://cco0vwqumjgh0" path="res://asset/Visuals_Sprites/Euphémia/STESAN-euphie-08.png" id="10_60a75"]
+[ext_resource type="Texture2D" uid="uid://cqoct68b1uuiv" path="res://asset/Visuals_Sprites/Euphémia/STESAN-euphie-09.png" id="11_1t8u8"]
+[ext_resource type="Texture2D" uid="uid://bdjuo0ndcm3cw" path="res://asset/Visuals_Sprites/Euphémia/STESAN-euphie-10.png" id="12_bc64v"]
+[ext_resource type="Texture2D" uid="uid://cbjlwv4fvx1wo" path="res://asset/Visuals_Sprites/Euphémia/STESAN-euphie-11.png" id="13_sqyfv"]
+[ext_resource type="Texture2D" uid="uid://c4vsj53dykocg" path="res://asset/Visuals_Sprites/Euphémia/STESAN-euphie-12.png" id="14_npjx3"]
+[ext_resource type="Texture2D" uid="uid://lqc0n3t0a45n" path="res://asset/Visuals_Sprites/Euphémia/STESAN-euphie-13.png" id="15_ngvkk"]
+[ext_resource type="Texture2D" uid="uid://bwkpr8ytrqia8" path="res://asset/Visuals_Sprites/Euphémia/STESAN-euphie-14.png" id="16_3cd3y"]
+[ext_resource type="Texture2D" uid="uid://cr750kueche8x" path="res://asset/Visuals_Sprites/Euphémia/STESAN-euphie-15.png" id="17_gqwco"]
+[ext_resource type="Texture2D" uid="uid://b4ahlgviwv855" path="res://asset/Visuals_Sprites/Euphémia/STESAN-euphie-16.png" id="18_qmuys"]
+[ext_resource type="Texture2D" uid="uid://kkr0a7ouhtde" path="res://asset/Visuals_Sprites/Euphémia/STESAN-euphie-17.png" id="19_galgb"]
+[ext_resource type="Texture2D" uid="uid://b8gj4ys2lrnjh" path="res://asset/Visuals_Sprites/Euphémia/STESAN-euphie-19.png" id="20_3l71v"]
+[ext_resource type="Texture2D" uid="uid://4i5cijngdhk8" path="res://asset/Visuals_Sprites/Euphémia/STESAN-euphie-20.png" id="21_dcs6p"]
+[ext_resource type="Texture2D" uid="uid://3byrx370khy2" path="res://asset/Visuals_Sprites/Euphémia/STESAN-euphie-21.png" id="22_85b7h"]
+[ext_resource type="Texture2D" uid="uid://b8u4sbj0bcprw" path="res://asset/Visuals_Sprites/Euphémia/STESAN-euphie-22.png" id="23_emafk"]
+[ext_resource type="Texture2D" uid="uid://byuq1mwkrbgny" path="res://asset/Visuals_Sprites/Euphémia/euphie_normal_angry.png" id="24_tr2os"]
+[ext_resource type="Texture2D" uid="uid://c50od8p27ktwj" path="res://asset/Visuals_Sprites/Euphémia/euphie_normal_embarassed.png" id="25_1iccd"]
+[ext_resource type="Texture2D" uid="uid://r8q35lmcjqxx" path="res://asset/Visuals_Sprites/Euphémia/euphie_normal_flustered.png" id="26_nj5kn"]
+[ext_resource type="Texture2D" uid="uid://bh3i5a0phdf8v" path="res://asset/Visuals_Sprites/Euphémia/euphie_normal_frustrated.png" id="27_e5p51"]
+[ext_resource type="Texture2D" uid="uid://b1vtiq40tfibm" path="res://asset/Visuals_Sprites/Euphémia/euphie_normal_happy.png" id="28_e71kt"]
+[ext_resource type="Texture2D" uid="uid://cfoa1rftb1bwv" path="res://asset/Visuals_Sprites/Euphémia/euphie_normal_neutral.png" id="29_tllk0"]
+[ext_resource type="Texture2D" uid="uid://bl212kxirl3np" path="res://asset/Visuals_Sprites/Euphémia/euphie_normal_sad.png" id="30_og4kb"]
+[ext_resource type="Texture2D" uid="uid://dtxynd0q6p42v" path="res://asset/Visuals_Sprites/Euphémia/euphie_normal_sad_lookout.png" id="31_35gir"]
+[ext_resource type="Texture2D" uid="uid://xjvxkydixbvy" path="res://asset/Visuals_Sprites/Euphémia/euphie_normal_scared.png" id="32_c0mfn"]
+[ext_resource type="Texture2D" uid="uid://pcornk0ama1e" path="res://asset/Visuals_Sprites/Euphémia/euphie_normal_scream.png" id="33_xmb5n"]
+[ext_resource type="Texture2D" uid="uid://bbxs1r532stjl" path="res://asset/Visuals_Sprites/Euphémia/euphie_normal_shocked.png" id="34_rhcsk"]
+[ext_resource type="Texture2D" uid="uid://d1l11a4rt8y5l" path="res://asset/Visuals_Sprites/Euphémia/euphie_normal_shockedscream.png" id="35_7u8hy"]
+[ext_resource type="Texture2D" uid="uid://dhmcniy40ooha" path="res://asset/Visuals_Sprites/Euphémia/euphie_normal_shocked_teeth.png" id="36_n4uy5"]
+[ext_resource type="Texture2D" uid="uid://dav1orfovj4bs" path="res://asset/Visuals_Sprites/Euphémia/euphie_normal_smile.png" id="37_pdpmc"]
+[ext_resource type="Texture2D" uid="uid://dm84c2yno0ld8" path="res://asset/Visuals_Sprites/Euphémia/euphie_normal_smile_big.png" id="38_kq3t8"]
+[ext_resource type="Texture2D" uid="uid://bskyv3cieuvkn" path="res://asset/Visuals_Sprites/Euphémia/euphie_normal_speak.png" id="39_dv2jk"]
+[ext_resource type="Texture2D" uid="uid://8nu61dk45gxp" path="res://asset/Visuals_Sprites/Euphémia/euphie_normal_stressed.png" id="40_6dik4"]
+[ext_resource type="Texture2D" uid="uid://d0mgxjysap63k" path="res://asset/Visuals_Sprites/Euphémia/euphie_normal_surprised.png" id="41_8tbxa"]
+[ext_resource type="Texture2D" uid="uid://bioa1bh165d3n" path="res://asset/Visuals_Sprites/Euphémia/euphie_thinking_embarassed.png" id="42_ljuq0"]
+[ext_resource type="Texture2D" uid="uid://buew55geh4mi7" path="res://asset/Visuals_Sprites/Euphémia/euphie_thinking_normal.png" id="43_8cy8c"]
+[ext_resource type="Texture2D" uid="uid://klj83k0l48dh" path="res://asset/Visuals_Sprites/Euphémia/euphie_thinking_panicking.png" id="44_75trb"]
+[ext_resource type="Texture2D" uid="uid://ld1wynke6gfl" path="res://asset/Visuals_Sprites/Euphémia/euphie_thinking_smug.png" id="45_pxq1f"]
+
+[sub_resource type="Resource" id="Resource_vwjct"]
+script = ExtResource("2_vb22m")
+sprite_name = "euphie-01"
+texture = ExtResource("3_jwoxr")
+metadata/_custom_type_script = "uid://becf6i7nnp1o5"
+
+[sub_resource type="Resource" id="Resource_p8c31"]
+script = ExtResource("2_vb22m")
+sprite_name = "euphie-02"
+texture = ExtResource("4_3b4ys")
+metadata/_custom_type_script = "uid://becf6i7nnp1o5"
+
+[sub_resource type="Resource" id="Resource_cmxpk"]
+script = ExtResource("2_vb22m")
+sprite_name = "euphie-03"
+texture = ExtResource("5_x586k")
+metadata/_custom_type_script = "uid://becf6i7nnp1o5"
+
+[sub_resource type="Resource" id="Resource_ex6lf"]
+script = ExtResource("2_vb22m")
+sprite_name = "euphie-04"
+texture = ExtResource("6_5r5px")
+metadata/_custom_type_script = "uid://becf6i7nnp1o5"
+
+[sub_resource type="Resource" id="Resource_aa1qn"]
+script = ExtResource("2_vb22m")
+sprite_name = "euphie-05"
+texture = ExtResource("7_ncwgc")
+metadata/_custom_type_script = "uid://becf6i7nnp1o5"
+
+[sub_resource type="Resource" id="Resource_sd4ey"]
+script = ExtResource("2_vb22m")
+sprite_name = "euphie-06"
+texture = ExtResource("8_hmybm")
+metadata/_custom_type_script = "uid://becf6i7nnp1o5"
+
+[sub_resource type="Resource" id="Resource_a6yhf"]
+script = ExtResource("2_vb22m")
+sprite_name = "euphie-07"
+texture = ExtResource("9_msqlk")
+metadata/_custom_type_script = "uid://becf6i7nnp1o5"
+
+[sub_resource type="Resource" id="Resource_u6il2"]
+script = ExtResource("2_vb22m")
+sprite_name = "euphie-08"
+texture = ExtResource("10_60a75")
+metadata/_custom_type_script = "uid://becf6i7nnp1o5"
+
+[sub_resource type="Resource" id="Resource_qu0tp"]
+script = ExtResource("2_vb22m")
+sprite_name = "euphie-09"
+texture = ExtResource("11_1t8u8")
+metadata/_custom_type_script = "uid://becf6i7nnp1o5"
+
+[sub_resource type="Resource" id="Resource_mfkre"]
+script = ExtResource("2_vb22m")
+sprite_name = "euphie-10"
+texture = ExtResource("12_bc64v")
+metadata/_custom_type_script = "uid://becf6i7nnp1o5"
+
+[sub_resource type="Resource" id="Resource_uvoqx"]
+script = ExtResource("2_vb22m")
+sprite_name = "euphie-11"
+texture = ExtResource("13_sqyfv")
+metadata/_custom_type_script = "uid://becf6i7nnp1o5"
+
+[sub_resource type="Resource" id="Resource_wbh86"]
+script = ExtResource("2_vb22m")
+sprite_name = "euphie-12"
+texture = ExtResource("14_npjx3")
+metadata/_custom_type_script = "uid://becf6i7nnp1o5"
+
+[sub_resource type="Resource" id="Resource_72qqi"]
+script = ExtResource("2_vb22m")
+sprite_name = "euphie-13"
+texture = ExtResource("15_ngvkk")
+metadata/_custom_type_script = "uid://becf6i7nnp1o5"
+
+[sub_resource type="Resource" id="Resource_ixk30"]
+script = ExtResource("2_vb22m")
+sprite_name = "euphie-14"
+texture = ExtResource("16_3cd3y")
+metadata/_custom_type_script = "uid://becf6i7nnp1o5"
+
+[sub_resource type="Resource" id="Resource_s1c67"]
+script = ExtResource("2_vb22m")
+sprite_name = "euphie-15"
+texture = ExtResource("17_gqwco")
+metadata/_custom_type_script = "uid://becf6i7nnp1o5"
+
+[sub_resource type="Resource" id="Resource_j7gqm"]
+script = ExtResource("2_vb22m")
+sprite_name = "euphie-16"
+texture = ExtResource("18_qmuys")
+metadata/_custom_type_script = "uid://becf6i7nnp1o5"
+
+[sub_resource type="Resource" id="Resource_op54x"]
+script = ExtResource("2_vb22m")
+sprite_name = "euphie-17"
+texture = ExtResource("19_galgb")
+metadata/_custom_type_script = "uid://becf6i7nnp1o5"
+
+[sub_resource type="Resource" id="Resource_5j0h0"]
+script = ExtResource("2_vb22m")
+sprite_name = "euphie-18"
+texture = ExtResource("20_3l71v")
+metadata/_custom_type_script = "uid://becf6i7nnp1o5"
+
+[sub_resource type="Resource" id="Resource_8c4rs"]
+script = ExtResource("2_vb22m")
+sprite_name = "euphie-19"
+texture = ExtResource("21_dcs6p")
+metadata/_custom_type_script = "uid://becf6i7nnp1o5"
+
+[sub_resource type="Resource" id="Resource_1fka5"]
+script = ExtResource("2_vb22m")
+sprite_name = "euphie-21"
+texture = ExtResource("22_85b7h")
+metadata/_custom_type_script = "uid://becf6i7nnp1o5"
+
+[sub_resource type="Resource" id="Resource_ib8ao"]
+script = ExtResource("2_vb22m")
+sprite_name = "euphie-22"
+texture = ExtResource("23_emafk")
+metadata/_custom_type_script = "uid://becf6i7nnp1o5"
+
+[sub_resource type="Resource" id="Resource_h8wqu"]
+script = ExtResource("2_vb22m")
+sprite_name = "euphie_normal_angry"
+texture = ExtResource("24_tr2os")
+metadata/_custom_type_script = "uid://becf6i7nnp1o5"
+
+[sub_resource type="Resource" id="Resource_ilood"]
+script = ExtResource("2_vb22m")
+sprite_name = "euphie_normal_embarassed"
+texture = ExtResource("25_1iccd")
+metadata/_custom_type_script = "uid://becf6i7nnp1o5"
+
+[sub_resource type="Resource" id="Resource_cuxut"]
+script = ExtResource("2_vb22m")
+sprite_name = "euphie_normal_flustered"
+texture = ExtResource("26_nj5kn")
+metadata/_custom_type_script = "uid://becf6i7nnp1o5"
+
+[sub_resource type="Resource" id="Resource_hq073"]
+script = ExtResource("2_vb22m")
+sprite_name = "euphie_normal_frustrated"
+texture = ExtResource("27_e5p51")
+metadata/_custom_type_script = "uid://becf6i7nnp1o5"
+
+[sub_resource type="Resource" id="Resource_pqws0"]
+script = ExtResource("2_vb22m")
+sprite_name = "euphie_normal_happy"
+texture = ExtResource("28_e71kt")
+metadata/_custom_type_script = "uid://becf6i7nnp1o5"
+
+[sub_resource type="Resource" id="Resource_3a1ds"]
+script = ExtResource("2_vb22m")
+sprite_name = "euphie_normal_neutral"
+texture = ExtResource("29_tllk0")
+metadata/_custom_type_script = "uid://becf6i7nnp1o5"
+
+[sub_resource type="Resource" id="Resource_tkdlv"]
+script = ExtResource("2_vb22m")
+sprite_name = "euphie_normal_sad"
+texture = ExtResource("30_og4kb")
+metadata/_custom_type_script = "uid://becf6i7nnp1o5"
+
+[sub_resource type="Resource" id="Resource_s24x2"]
+script = ExtResource("2_vb22m")
+sprite_name = "euphie_normal_sad_lookout"
+texture = ExtResource("31_35gir")
+metadata/_custom_type_script = "uid://becf6i7nnp1o5"
+
+[sub_resource type="Resource" id="Resource_gkjj7"]
+script = ExtResource("2_vb22m")
+sprite_name = "euphie_normal_scared"
+texture = ExtResource("32_c0mfn")
+metadata/_custom_type_script = "uid://becf6i7nnp1o5"
+
+[sub_resource type="Resource" id="Resource_ovakv"]
+script = ExtResource("2_vb22m")
+sprite_name = "euphie_normal_scream"
+texture = ExtResource("33_xmb5n")
+metadata/_custom_type_script = "uid://becf6i7nnp1o5"
+
+[sub_resource type="Resource" id="Resource_qb2ek"]
+script = ExtResource("2_vb22m")
+sprite_name = "euphie_normal_shocked"
+texture = ExtResource("34_rhcsk")
+metadata/_custom_type_script = "uid://becf6i7nnp1o5"
+
+[sub_resource type="Resource" id="Resource_ig0n6"]
+script = ExtResource("2_vb22m")
+sprite_name = "euphie_normal_shockedscream"
+texture = ExtResource("35_7u8hy")
+metadata/_custom_type_script = "uid://becf6i7nnp1o5"
+
+[sub_resource type="Resource" id="Resource_i2xtt"]
+script = ExtResource("2_vb22m")
+sprite_name = "euphie_normal_shocked_teeth"
+texture = ExtResource("36_n4uy5")
+metadata/_custom_type_script = "uid://becf6i7nnp1o5"
+
+[sub_resource type="Resource" id="Resource_1an4h"]
+script = ExtResource("2_vb22m")
+sprite_name = "euphie_normal_smile"
+texture = ExtResource("37_pdpmc")
+metadata/_custom_type_script = "uid://becf6i7nnp1o5"
+
+[sub_resource type="Resource" id="Resource_wd5hl"]
+script = ExtResource("2_vb22m")
+sprite_name = "euphie_normal_smile_big"
+texture = ExtResource("38_kq3t8")
+metadata/_custom_type_script = "uid://becf6i7nnp1o5"
+
+[sub_resource type="Resource" id="Resource_e1anj"]
+script = ExtResource("2_vb22m")
+sprite_name = "euphie_normal_speak"
+texture = ExtResource("39_dv2jk")
+metadata/_custom_type_script = "uid://becf6i7nnp1o5"
+
+[sub_resource type="Resource" id="Resource_0b4be"]
+script = ExtResource("2_vb22m")
+sprite_name = "euphie_normal_stressed"
+texture = ExtResource("40_6dik4")
+metadata/_custom_type_script = "uid://becf6i7nnp1o5"
+
+[sub_resource type="Resource" id="Resource_s31sg"]
+script = ExtResource("2_vb22m")
+sprite_name = "euphie_normal_surprised"
+texture = ExtResource("41_8tbxa")
+metadata/_custom_type_script = "uid://becf6i7nnp1o5"
+
+[sub_resource type="Resource" id="Resource_lu5ue"]
+script = ExtResource("2_vb22m")
+sprite_name = "euphie_thinking_embarassed"
+texture = ExtResource("42_ljuq0")
+metadata/_custom_type_script = "uid://becf6i7nnp1o5"
+
+[sub_resource type="Resource" id="Resource_o70pl"]
+script = ExtResource("2_vb22m")
+sprite_name = "euphie_thinking_embarassed"
+texture = ExtResource("42_ljuq0")
+metadata/_custom_type_script = "uid://becf6i7nnp1o5"
+
+[sub_resource type="Resource" id="Resource_8itk4"]
+script = ExtResource("2_vb22m")
+sprite_name = "euphie_thinking_normal"
+texture = ExtResource("43_8cy8c")
+metadata/_custom_type_script = "uid://becf6i7nnp1o5"
+
+[sub_resource type="Resource" id="Resource_f2buv"]
+script = ExtResource("2_vb22m")
+sprite_name = "euphie_thinking_panicking"
+texture = ExtResource("44_75trb")
+metadata/_custom_type_script = "uid://becf6i7nnp1o5"
+
+[sub_resource type="Resource" id="Resource_xv167"]
+script = ExtResource("2_vb22m")
+sprite_name = "euphie_thinking_smug"
+texture = ExtResource("45_pxq1f")
+metadata/_custom_type_script = "uid://becf6i7nnp1o5"
+
+[resource]
+script = ExtResource("1_5lyas")
+character_name = "Euphie"
+default_color = Color(1, 0.5019608, 0.5019608, 1)
+sprite = Array[ExtResource("2_vb22m")]([SubResource("Resource_vwjct"), SubResource("Resource_p8c31"), SubResource("Resource_cmxpk"), SubResource("Resource_ex6lf"), SubResource("Resource_aa1qn"), SubResource("Resource_sd4ey"), SubResource("Resource_a6yhf"), SubResource("Resource_u6il2"), SubResource("Resource_qu0tp"), SubResource("Resource_mfkre"), SubResource("Resource_uvoqx"), SubResource("Resource_wbh86"), SubResource("Resource_72qqi"), SubResource("Resource_ixk30"), SubResource("Resource_s1c67"), SubResource("Resource_j7gqm"), SubResource("Resource_op54x"), SubResource("Resource_5j0h0"), SubResource("Resource_8c4rs"), SubResource("Resource_1fka5"), SubResource("Resource_ib8ao"), SubResource("Resource_h8wqu"), SubResource("Resource_ilood"), SubResource("Resource_cuxut"), SubResource("Resource_hq073"), SubResource("Resource_pqws0"), SubResource("Resource_3a1ds"), SubResource("Resource_tkdlv"), SubResource("Resource_s24x2"), SubResource("Resource_gkjj7"), SubResource("Resource_ovakv"), SubResource("Resource_qb2ek"), SubResource("Resource_ig0n6"), SubResource("Resource_i2xtt"), SubResource("Resource_1an4h"), SubResource("Resource_wd5hl"), SubResource("Resource_e1anj"), SubResource("Resource_0b4be"), SubResource("Resource_s31sg"), SubResource("Resource_lu5ue"), SubResource("Resource_o70pl"), SubResource("Resource_8itk4"), SubResource("Resource_f2buv"), SubResource("Resource_xv167")])
+metadata/_custom_type_script = "uid://duoeekyxke4g7"

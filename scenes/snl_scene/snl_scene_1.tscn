@@ -1,13 +1,17 @@
-[gd_scene load_steps=23 format=3 uid="uid://bol26hah7max"]
+[gd_scene load_steps=27 format=3 uid="uid://bol26hah7max"]
 
 [ext_resource type="Script" uid="uid://buktnfaj8utl8" path="res://scripts/DisplayStyleManager.gd" id="1_2ea14"]
 [ext_resource type="PackedScene" uid="uid://c6stexslvt8e8" path="res://scenes/bg.tscn" id="1_mevxt"]
 [ext_resource type="Script" uid="uid://d0vi1v0by1yoc" path="res://scripts/InkStoryLoader.gd" id="2_0nq83"]
+[ext_resource type="Script" uid="uid://duoeekyxke4g7" path="res://asset/CharacterResource.gd" id="3_6qnwt"]
 [ext_resource type="Script" uid="uid://ddlutjnt3msa3" path="res://scripts/SNLDisplay.gd" id="4_ebrfb"]
+[ext_resource type="Resource" uid="uid://cnu1ertr85vjx" path="res://INK/pilot.tres" id="4_hbxmf"]
 [ext_resource type="Texture2D" uid="uid://cmo3pojewc4yk" path="res://asset/SystVisuals_Config&UI/nextpage.png" id="5_7sfpw"]
 [ext_resource type="Texture2D" uid="uid://c8tkn7atej4ik" path="res://asset/transparent.png" id="5_ebrfb"]
 [ext_resource type="Script" uid="uid://wxsuj4ltp86w" path="res://scripts/ADVDisplay.gd" id="5_w55wh"]
+[ext_resource type="Resource" uid="uid://dkec2lt72c0h2" path="res://INK/euphie.tres" id="5_y47fd"]
 [ext_resource type="Script" uid="uid://do6a1545hae36" path="res://scripts/TransitionManager.gd" id="6_exumd"]
+[ext_resource type="Resource" uid="uid://br8t1b46vlgwv" path="res://INK/klaus.tres" id="6_i7o70"]
 [ext_resource type="Texture2D" uid="uid://d4l32ffsys4lf" path="res://asset/SystVisuals_Config&UI/UI/stellar_ui_chat2big.png" id="8_oimod"]
 [ext_resource type="Texture2D" uid="uid://ct35rv4m574vu" path="res://asset/SystVisuals_Config&UI/UI/window6.png" id="9_4o8jx"]
 [ext_resource type="FontFile" uid="uid://cw6ls5ajhe1rt" path="res://asset/Syst_Fonts/OpenSans-ExtraBold.ttf" id="10_3gmos"]
@@ -49,6 +53,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_2ea14")
+character_resources_list = Array[ExtResource("3_6qnwt")]([ExtResource("4_hbxmf"), ExtResource("5_y47fd"), ExtResource("6_i7o70")])
 metadata/_edit_use_anchors_ = true
 
 [node name="InkStoryLoader" type="Node" parent="DisplayStyleManager"]
@@ -121,13 +126,15 @@ text_label = NodePath("DialogueTexture/DialogueLabel")
 continue_button = NodePath("../SNLDisplay/BtContinue")
 
 [node name="CharacterContainer" type="TextureRect" parent="DisplayStyleManager/ADVDisplay"]
-layout_mode = 0
-offset_left = 36.0
-offset_top = 413.0
-offset_right = 36.0
-offset_bottom = 639.0
-texture = ExtResource("8_oimod")
-expand_mode = 1
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -359.0
+offset_top = 29.0
+offset_right = -92.0
+offset_bottom = 352.0
+grow_horizontal = 2
 
 [node name="DialogueTexture" type="TextureRect" parent="DisplayStyleManager/ADVDisplay"]
 layout_mode = 0
@@ -146,7 +153,7 @@ offset_top = -7.8048706
 offset_right = 343.11652
 offset_bottom = 61.19513
 theme_override_fonts/normal_font = ExtResource("10_3gmos")
-theme_override_font_sizes/normal_font_size = 35
+theme_override_font_sizes/normal_font_size = 25
 fit_content = true
 
 [node name="DialogueLabel" type="RichTextLabel" parent="DisplayStyleManager/ADVDisplay/DialogueTexture"]
@@ -156,7 +163,7 @@ offset_top = 65.365845
 offset_right = 800.0
 offset_bottom = 185.36584
 theme_override_fonts/normal_font = ExtResource("11_n3ixh")
-theme_override_font_sizes/normal_font_size = 35
+theme_override_font_sizes/normal_font_size = 25
 
 [node name="CharacterPortrait" type="TextureRect" parent="DisplayStyleManager/ADVDisplay"]
 layout_mode = 0
