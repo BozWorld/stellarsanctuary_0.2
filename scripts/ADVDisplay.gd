@@ -38,6 +38,12 @@ func _ready() -> void:
 	if not character_container:
 		character_container = get_node_or_null("PanelContainer/HBoxContainer/CharacterContainer")
 
+	# S'assurer que le portrait passe toujours au-dessus des sprites
+	var portrait := $CharacterPortrait as TextureRect
+	if portrait:
+		portrait.z_index = 100
+		portrait.z_as_relative = false
+
 func _load_character_resources():
 	return 
 
@@ -74,14 +80,14 @@ func set_text_color(color_hex: String) -> void:
 	if name_box:
 		name_box.modulate = _current_speaker_color
 
-func show_character(character_name: String, sprite_name: String = "", char_position: Vector2 = Vector2.ZERO) -> void:
+func show_character(character_name: String, sprite_name: String = "", char_position: Variant = null) -> void:
 	if not character_container:
 		_debug("No character container found")
 		return
 	
 	var character: TextureRect
-	
-	if _characters.has(character_name):
+	var existed := _characters.has(character_name)
+	if existed:
 		character = _characters[character_name]
 	else:
 		character = TextureRect.new()
@@ -114,7 +120,10 @@ func show_character(character_name: String, sprite_name: String = "", char_posit
 	
 	if texture:
 		character.texture = texture
-		character.position = final_position
+		# Position: si le perso existe déjà et que la position n'est pas fournie, on conserve sa position actuelle.
+		if not existed or final_position != null:
+			# Résolution de la position: keywords (left/center/right), "x,y" ou Vector2/null
+			character.position = _resolve_position(final_position, texture)
 		character.visible = true
 		_debug("Character %s shown with sprite %s" % [character_name, sprite_name])
 	else:
@@ -127,19 +136,19 @@ func hide_character(character_name: String) -> void:
 		_debug("Character %s hidden" % character_name)
 
 
-func show_portrait(name: String, expression: String) -> void:
+func show_portrait(char_name: String, expression: String) -> void:
 	var dsm = get_tree().get_first_node_in_group("display_style_manager")
 	if dsm == null:
 		_debug("No DisplayStyleManager found for portrait")
 		return
 
-	var tex: Texture2D = dsm.get_character_portrait(name, expression)
+	var tex: Texture2D = dsm.get_character_portrait(char_name, expression)
 	if tex:
 		$CharacterPortrait.texture = tex
 		$CharacterPortrait.visible = true
-		_debug("Portrait %s:%s shown" % [	name, expression])
+		_debug("Portrait %s:%s shown" % [	char_name, expression])
 	else:
-		_debug("Portrait not found  %s %s" % [name, expression])
+		_debug("Portrait not found  %s %s" % [char_name, expression])
 
 func show_portrait_path(res_path: String) -> void:
 	var portrait := $CharacterPortrait as TextureRect
@@ -155,19 +164,19 @@ func hide_portrait():
 		portrait.visible = false
 		portrait.texture = null
 
-func get_character_portrait(name: String, expr: String) -> Texture2D:
-	var res = _lookup_character(name)
+func get_character_portrait(char_name: String, expr: String) -> Texture2D:
+	var res = _lookup_character(char_name)
 	if res and res.has_method("get_portrait"):
 		return res.call("get_portrait", expr)
 	return null
 
-func _lookup_character(name: String):
+func _lookup_character(char_name: String):
 	# Lookup a character resource by name from the local cache or via the DisplayStyleManager
-	if character_resource.has(name):
-		return character_resource[name]
+	if character_resource.has(char_name):
+		return character_resource[char_name]
 	var dsm = get_tree().get_first_node_in_group("display_style_manager")
 	if dsm and dsm.has_method("get_character_resource"):
-		return dsm.call("get_character_resource", name)
+		return dsm.call("get_character_resource", char_name)
 	return null
 
 
@@ -225,3 +234,53 @@ func _color_from_any(s: String) -> Color:
 		hex = "#" + hex
 	var c := Color(hex)
 	return c
+
+# Résolution des positions pour les sprites de personnages
+func _resolve_position(pos, texture: Texture2D) -> Vector2:
+	var container: Control = character_container if character_container else self
+	var cw: float = container.size.x
+	var ch: float = container.size.y
+	var ts: Vector2 = texture.get_size()
+
+	# Valeur par défaut: centré bas (comme la plupart des ADV)
+	var default_pos := Vector2(max((cw - ts.x) * 0.5, 0.0), max(ch - ts.y, 0.0))
+
+	if pos == null:
+		return default_pos
+
+	if typeof(pos) == TYPE_VECTOR2:
+		return pos
+
+	if typeof(pos) == TYPE_STRING:
+		var s := String(pos).strip_edges().to_lower()
+		# Forme "x,y"
+		if "," in s:
+			var parts := s.split(",")
+			if parts.size() >= 2:
+				var x := float(parts[0])
+				var y := float(parts[1])
+				return Vector2(x, y)
+		# Mots-clés simples
+		match s:
+			"left":
+				return Vector2(0.0, max(ch - ts.y, 0.0))
+			"center", "centre":
+				return default_pos
+			"right":
+				return Vector2(max(cw - ts.x, 0.0), max(ch - ts.y, 0.0))
+			"top-left":
+				return Vector2(0.0, 0.0)
+			"top", "top-center":
+				return Vector2(max((cw - ts.x) * 0.5, 0.0), 0.0)
+			"top-right":
+				return Vector2(max(cw - ts.x, 0.0), 0.0)
+			"bottom-left":
+				return Vector2(0.0, max(ch - ts.y, 0.0))
+			"bottom", "bottom-center":
+				return default_pos
+			"bottom-right":
+				return Vector2(max(cw - ts.x, 0.0), max(ch - ts.y, 0.0))
+			_:
+				return default_pos
+
+	return default_pos

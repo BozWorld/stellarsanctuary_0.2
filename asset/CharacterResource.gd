@@ -6,37 +6,41 @@ extends Resource
 @export var portrait: Array[CharacterSprite] = []
 
 func get_sprite(sprite_name: String) -> Texture2D:
-    if sprite_name == null or sprite_name.strip_edges() == "":
-        return sprite[0].texture if sprite.size() > 0 else null
-    # Match exact d'abord
-    for s in sprite:
-        if s.sprite_name == sprite_name:
-            return s.texture
-    # Puis match insensible à la casse
-    var target := sprite_name.to_lower()
-    for s in sprite:
-        if s.sprite_name.to_lower() == target:
-            return s.texture
-    # Fallback: premier sprite si disponible
-    return sprite[0].texture if sprite.size() > 0 else null
+    return _find_texture_in_list(sprite, sprite_name)
 
 func get_portrait(expr: String) -> Texture2D:
-    if expr == null or expr.strip_edges() == "":
-        return portrait[0].texture if portrait.size() > 0 else null
-    # Match exact d'abord
-    for p in portrait:
-        if p.sprite_name == expr:
-            return p.texture
-    # Puis match insensible à la casse
-    var target := expr.to_lower()
-    for p in portrait:
-        if p.sprite_name.to_lower() == target:
-            return p.texture
-    # Fallback: premier portrait si disponible
-    return portrait[0].texture if portrait.size() > 0 else null
+    return _find_texture_in_list(portrait, expr)
 
 func get_sprite_names() -> Array[String]:
     var names: Array[String] = []
-    for sprite in sprite:
-        names.append(sprite.sprite_name)
+    for spr in sprite:
+        names.append(spr.sprite_name)
     return names
+
+# Helper générique: recherche robuste dans une liste de CharacterSprite
+func _find_texture_in_list(list: Array[CharacterSprite], name: String) -> Texture2D:
+    if name == null or name.strip_edges() == "":
+        return list[0].texture if list.size() > 0 else null
+
+    # 1) Exact
+    for item in list:
+        if item.sprite_name == name:
+            return item.texture
+
+    var target := name.to_lower()
+
+    # 2) Insensible à la casse
+    for item in list:
+        if item.sprite_name.to_lower() == target:
+            return item.texture
+
+    # 3) Variante préfixée par le nom du personnage (ex: "euphie_normal_speak")
+    var prefix := (character_name if character_name != null else "").to_lower()
+    if prefix != "":
+        var prefixed := prefix + "_" + target
+        for item in list:
+            if item.sprite_name.to_lower() == prefixed:
+                return item.texture
+
+    # 4) Fallback: premier élément si disponible
+    return list[0].texture if list.size() > 0 else null

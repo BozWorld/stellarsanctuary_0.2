@@ -11,7 +11,6 @@
 #audio:playbgm:asset/Music/AIKATYPE_00.ogg:loop:fadein
 #wait:500
 #layout:SNL
-#window:1280:720:0:0:250:80:270:black:130
 #show_window
 
 -> space_monologue
@@ -50,7 +49,7 @@ And like people, stars shine bright before their death, as the remnants of our a
 
 And just like anyone else, I want people to see my life burning with passion and pride, before I become a corpse with nothing but my past to prove my existence. #new_page
 
-#bg:Asset/Visuals_Backgrounds/big_01_space_g2.png:crossfade:2000
+#bg:asset/Visuals_Backgrounds/big_01_space_g2.png:crossfade:2000
 
 After all, as a woman of science, I cannot believe in the afterlife. #segment_break
 
@@ -95,7 +94,7 @@ They're quite big and never require too much maintenance, so the staff is pretty
 Don't know why they decided to pick someone as inexperienced and young as I to be the chief of some base I've never set foot on, but I guess that's thanks to my over-the-top results. #new_page
 
 #audio:fadeoutbgm:2000
-#image:free:0:crossfade:1000
+#cg:hide:1000
 
 Suddenly, a synthetic voice jolts me out of my thoughts. #new_page
 
@@ -156,17 +155,15 @@ Outside the little round window next to me, I could see the giant logo of the st
 
 #layout:ADV
 #characterSprite:show:Pilot:neutral
-#chara:mod:Pilot:neutral_2
+#characterSprite:mod:Pilot:neutral_2
 
 Are you ready to get onboard? #speaker:Pilot #color:#ffb366 #new_page
 
-#chara:mod:Pilot:neutral
+#characterSprite:mod:Pilot:neutral
 #characterPortrait:show:Euphie:normal_shocked
 Ah! #speaker:Euphie #color:#ff8080 #new_page
 
-#ui:free:2
-#chara:mod:Pilot:neutral
-#ui:free:1
+#characterSprite:mod:Pilot:neutral
 #layout:SNL
 
 That guy surprised me. #segment_break
@@ -178,15 +175,13 @@ I put my bottle back in my bag and get up. #new_page
 I'd been sitting for so long, my legs felt weak. #new_page
 
 #layout:ADV
-#ui:show:UI_Elements/stellar_ui_chat2big.png:1:35:458:0:181:217
-#ui:show:EuphieSprites/normal_speak.png:2:35:458:0:181:217
+#characterPortrait:show:Euphie:normal_speak
 
 Y-Yes! #speaker:Euphie #color:#ff8080 #new_page
 
-#ui:free:2
-#characterSprite:show:Pilot:neutral
+#characterSprite:show:Pilot:neutral_2
 
-Then please let us lead the way. #segment_break
+Then please let us lead the way. #speaker:Pilot #color:#ffb366 #segment_break
 
 Through this door, you'll find the station's Gravity Change Chamber. #segment_break
 
@@ -195,12 +190,12 @@ It'll acclimate your body to the station's gravity. #speaker:Pilot #color:#ffb36
 Once the process is done, you shall be greeted by Klaus, the senior past chief of the station. #speaker:Pilot #color:#ffb366 #new_page
 
 #characterSprite:show:Pilot:neutral
-#ui:free:1
 #layout:SNL
 
 I already know this kind of protocol by heart, but I can't act like a bratty know-it-all, especially since everyone else in this damn sector seems to be men double my age. #new_page
 
-#chara:hide_all:500
+#characterSprite:hide:Pilot
+#characterPortrait:hide
 
 -> gravity_chamber
 
@@ -232,10 +227,10 @@ My body now feels much heavier than before, and the gravity feels like what you'
 
 The door to the station opens. #new_page
 
--> klaus_meeting
+-> Klaus_meeting
 
-=== klaus_meeting ===
-#characterSprite:show:Klaus:klaus
+=== Klaus_meeting ===
+#characterSprite:show:Klaus:Klaus
 #wait:1200
 
 Right behind it, a tall and fierce looking man is standing there, crossing his arms. #segment_break
@@ -243,16 +238,15 @@ Right behind it, a tall and fierce looking man is standing there, crossing his a
 I'm taken aback a little, since his gaze is so intimidating it feels like he's about to scold me. #new_page
 
 #layout:ADV
-#ui:show:UI_Elements/stellar_ui_chat2big.png:1:35:458:0:181:217
+#characterSprite:show:Klaus:Klaus
 
-I presume you are Euphémia? #speaker:Klaus #color:#  #new_page
+I presume you are Euphémia? #speaker:Klaus #new_page
 
-#ui:show:EuphieSprites/euphie_normal_neutral.png:2:35:458:0:181:217
+#characterPortrait:show:Euphie:normal_neutral
 
 C-Correct. #speaker:Euphie #color:#ff8080 #new_page
 
-#ui:free:2
-#chara:mod:Klaus:chara/2/klaus_smile.png:200
+#characterSprite:mod:Klaus:smile
 
 Welcome to SS-04. #segment_break
 
@@ -260,12 +254,11 @@ You can call me Klaus. #segment_break
 
 Unless you've forgotten something on the ship, if you would get onboard... #speaker:Klaus #color:#cc66ff #new_page
 
-#ui:show:EuphieSprites/euphie_normal_speak.png:2:35:458:0:181:217
+#characterPortrait:show:Euphie:normal_speak
 
 Oh, yes, of course. #speaker:Euphie #color:#ff8080 #new_page
 
-#ui:free:2
-#ui:free:1
+
 #bg:asset/Visuals_Backgrounds/bg02_corridor_B.png:crossfade:1000
 
 -> corridor_tour
@@ -273,8 +266,7 @@ Oh, yes, of course. #speaker:Euphie #color:#ff8080 #new_page
 === corridor_tour ===
 
 #layout:ADV
-#ui:show:UI_Elements/stellar_ui_chat2big.png:1:35:458:0:181:217
-#chara:mod:Klaus:chara/2/klaus.png:200
+#characterSprite:mod:Klaus:smile
 
 I'll be your guide around the station until you feel like you've understood the layout of this place. #new_page
 
@@ -282,84 +274,71 @@ It might seem big and intimidating at first, but it's much easier to navigate th
 
 Even I have not been to half of the rooms here. #speaker:Klaus #color:#cc66ff #new_page
 
-#ui:free:1
+
 #layout:SNL
 
 His words are reassuring, and I start to wonder whether his fierce stance and expression was just a way of appearing more imposing and leader-like or not. #new_page
 
 #layout:ADV
-#ui:show:UI_Elements/stellar_ui_chat2big.png:1:35:458:0:181:217
-#ui:show:EuphieSprites/euphie_thinking_normal.png:2:35:458:0:181:217
-
+#characterPortrait:show:euphie:thinking_normal
 Isn't that... #segment_break
 
 Kind of important? #speaker:Euphie #color:#ff8080 #new_page
 
-#ui:free:2
-#chara:mod:Klaus:chara/2/klaus_confused.png:200
-
+#characterPortrait:show:Klaus:confused
 What do you mean? #speaker:Klaus #color:#cc66ff #new_page
 
-#ui:show:EuphieSprites/thinking_normal.png:2:35:458:0:181:217
-
+#characterPortrait:show:euphie:thinking_normal
 Knowing about every single room the station has. #segment_break
 
 If you run into any kind of problems... #speaker:Euphie #color:#ff8080 #new_page
 
-#ui:free:2
-#ui:free:1
 #layout:SNL
 
 I asked bluntly, without realizing how condescending that might sound, especially seconds after coming onboard. #new_page
 
 #layout:ADV
-#ui:show:UI_Elements/stellar_ui_chat2big.png:1:35:458:0:181:217
-#chara:mod:Klaus:chara/2/klaus_closed.png:200
-
+#characterSprite:mod:Klaus:closed
 Eh, you've got a point here. #segment_break
 
-#chara:mod:Klaus:chara/2/klaus_smile.png:200
-
+#characterSprite:mod:Klaus:smile
 But don't worry, I just said that I personally do not know about half of them. #new_page
 
 We've got a certain someone who knows absolutely everything about them. #segment_break
 
 Moreover, most are just spare or storage rooms, so nothing too important. #speaker:Klaus #color:#cc66ff #new_page
 
-#ui:show:EuphieSprites/euphie_thinking_normal.png:2:35:458:0:181:217
+#characterPortrait:show:Euphie:thinking_normal
 
 How are there are so many unimportant rooms? #speaker:Euphie #color:#ff8080 #new_page
 
-#ui:free:2
-#chara:mod:Klaus:chara/2/klaus.png:200
+#characterSprite:mod:Klaus:Klaus
 
 This station used to be a spaceship. #speaker:Klaus #color:#cc66ff #new_page
 
-#ui:show:EuphieSprites/euphie_normal_surprised.png:2:35:458:0:181:217
+#characterPortrait:show:Euphie:normal_surprised
 
 Now that's something I did not know. #speaker:Euphie #color:#ff8080 #new_page
 
-#ui:free:2
-#chara:mod:Klaus:chara/2/klaus_thinking.png:200
+#characterSprite:mod:Klaus:thinking
 
 I can't remember too well, but since it became obsolete for Earth-to-space transport, it was simply reassigned as a basic orbital station, and renamed accordingly. #speaker:Klaus #color:#cc66ff #new_page
 
-#ui:show:EuphieSprites/euphie_normal_speak.png:2:35:458:0:181:217
+#characterPortrait:show:Euphie:normal_speak
 
 I guess that's why it's so big. #speaker:Euphie #color:#ff8080 #new_page
 
-#ui:free:2
-#chara:mod:Klaus:chara/2/klaus.png:200
+#characterSprite:mod:Klaus:Klaus
 
 Correct. #segment_break
 
 And also the reason why you don't have to worry about the general structure of the spaceship. #new_page
 
-#chara:mod:Klaus:chara/2/klaus_thinking2.png:200
+#characterSprite:mod:Klaus:thinking2
 
 Usually, the unimportant rooms are only accessible to the engineers anyway, to avoid getting people lost in this titanic place. #new_page
 
-#chara:mod:Klaus:chara/2/klaus.png:200
+#characterSprite:mod:Klaus:Klaus
 
 But enough about that. #segment_break
 
@@ -369,15 +348,13 @@ Let's start with the dormitory, so you can at least lay down your luggage. #segm
 
 Those seem quite heavy. #speaker:Klaus #color:#cc66ff #new_page
 
-#ui:show:EuphieSprites/euphie_normal_smile.png:2:35:458:0:181:217
-
+#characterPortrait:show:Euphie:normal_smile
 Yeah... #segment_break
 
 Thanks. #speaker:Euphie #color:#ff8080 #new_page
 
-#ui:free:2
-#ui:free:1
-#chara:hide_all:500
+#characterSprite:hide:Klaus
+#characterPortrait:hide
 #layout:SNL
 
 I don't know why I brought so much. #segment_break
@@ -393,37 +370,30 @@ I follow Klaus inside the great corridor, suddenly realizing that my luggage rea
 Surely because of both the air pressure change and my fatigue. #new_page
 
 #layout:ADV
-#chara:show:Klaus:chara/2/klaus_confused.png:1000:495:720:410:0
-#ui:show:UI_Elements/stellar_ui_chat2big.png:1:35:458:0:181:217
+#characterSprite:show:Klaus:confused
 
 Aren't those too heavy? #segment_break
 
 Do you want me to take one or two of those bags? #speaker:Klaus #color:#cc66ff #new_page
 
-#ui:show:EuphieSprites/euphie_thinking_embarassed.png:2:35:458:0:181:217
+#characterPortrait:show:Euphie:thinking_embarassed
 
 N-No! #segment_break
 
 I'm fine, don't worry about it. #speaker:Euphie #color:#ff8080 #new_page
-
-#ui:free:2
-#ui:free:1
 #layout:SNL
 
 Truth be told, I should have accepted. #new_page
 
 #layout:ADV
-#ui:show:UI_Elements/stellar_ui_chat2big.png:1:35:458:0:181:217
-#chara:mod:Klaus:chara/2/klaus_closed.png:200
+#characterSprite:mod:Klaus:closed
 
 Good. Because there's around four more minutes of walking. #speaker:Klaus #color:#cc66ff #new_page
 
-#ui:show:EuphieSprites/euphie_normal_shocked_teeth.png:2:35:458:0:181:217
+#characterPortrait:show:Euphie:normal_shocked_teeth
 
 Wh-! #speaker:Euphie #color:#ff8080 #new_page
 
-#ui:free:2
-#ui:free:1
 #layout:SNL
 
 F-Four?! #segment_break
@@ -431,14 +401,12 @@ F-Four?! #segment_break
 Now I just feel like an idiot. #new_page
 
 #layout:ADV
-#ui:show:UI_Elements/stellar_ui_chat2big.png:1:35:458:0:181:217
-#chara:mod:Klaus:chara/2/klaus_smile.png:200
+#characterSprite:mod:Klaus:smile
 
 I'm just kidding. #segment_break
 
 The station is divided into multiple floors, and you access them through the central elevators just there. #speaker:Klaus #color:#cc66ff #new_page
 
-#ui:free:1
 #layout:SNL
 
 -> elevator_section
@@ -452,8 +420,7 @@ Klaus came to a stop in front of the elevators. #new_page
 #audio:playse:asset/Sound/Sound_SFX/beep1.ogg
 
 #layout:ADV
-#ui:show:UI_Elements/stellar_ui_chat2big.png:1:35:458:0:181:217
-#chara:mod:Klaus:chara/2/klaus.png:200
+#characterSprite:mod:Klaus:Klaus
 
 For practical reasons, there are two different ones. #segment_break
 
@@ -463,7 +430,6 @@ They're just as easy to use as any kind of elevator. #segment_break
 
 Now, if you would get inside so we can continue our tour. #speaker:Klaus #color:#cc66ff #new_page
 
-#ui:free:1
 #bg:asset/Visuals_Backgrounds/bg04_elevators_inside.png:crossfade:1000
 
 #audio:playse:asset/Sound/Sound_SFX/footsteps_light.ogg
@@ -479,8 +445,7 @@ The gate closes and the elevator starts to move slowly. #segment_break
 To break the silence, Klaus continues his explanations. #new_page
 
 #layout:ADV
-#ui:show:UI_Elements/stellar_ui_chat2big.png:1:35:458:0:181:217
-#chara:mod:Klaus:chara/2/klaus_closed.png:200
+#characterSprite:mod:Klaus:closed
 
 At the very bottom lie the escape pods. #segment_break
 
@@ -494,16 +459,14 @@ So Joshua, and Alexei. #segment_break
 
 Floor -1 has nothing but spare storage rooms, accessible only to Joshua. #new_page
 
-#chara:mod:Klaus:chara/2/klaus.png:200
+#characterSprite:mod:Klaus:normal
 
 Basically, anything below the central floor is of no importance to you, so don't worry too much. #speaker:Klaus #color:#cc66ff #new_page
 
-#ui:show:EuphieSprites/euphie_normal_neutral.png:2:35:458:0:181:217
+#characterPortrait:show:Euphie:normal_neutral
 
 Easy enough. #speaker:Euphie #color:#ff8080 #new_page
 
-#ui:free:2
-#ui:free:1
 #layout:SNL
 
 #audio:fadeoutse:400:BGS/elevator_up.ogg
@@ -516,14 +479,12 @@ A soft ring indicates we've arrived on floor one. #segment_break
 The doors open once again. #new_page
 
 #layout:ADV
-#ui:show:UI_Elements/stellar_ui_chat2big.png:1:35:458:0:181:217
-
 And we've arrived on the first floor. #speaker:Klaus #color:#cc66ff #new_page
 
-#ui:free:1
 #layout:SNL
 
-#audio:fadeout:1000
+#audio:fadeoutbgm:1000
 #wait:1100
 
 -> END
+#audio:playse:asset/Sound/Sound_SFX/chapter.ogg:70

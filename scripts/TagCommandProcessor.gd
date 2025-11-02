@@ -179,7 +179,8 @@ func _process_character_sprite_tag(parsed: Dictionary) -> void:
 			var character_name = parsed.get("name", "")
 			var sprite_name = parsed.get("sprite", "")
 			# Toujours déléguer à ADVDisplay: il gère le fallback via res:// si la resource n'existe pas
-			dsm.adv_display.show_character(character_name, sprite_name)
+			var pos = parsed.get("position", "center")
+			dsm.adv_display.show_character(character_name, sprite_name, pos)
 			_debug("Character sprite requested: %s:%s" % [character_name, sprite_name])
 		
 		"hide":
@@ -191,7 +192,8 @@ func _process_character_sprite_tag(parsed: Dictionary) -> void:
 			# Change sprite d'un personnage déjà affiché
 			var character_name = parsed.get("name", "")
 			var sprite_name = parsed.get("sprite", "")
-			dsm.adv_display.show_character(character_name, sprite_name)
+			var pos2 = parsed.get("position", null)
+			dsm.adv_display.show_character(character_name, sprite_name, pos2)
 			_debug("Character sprite modified: %s:%s" % [character_name, sprite_name])
 
 func _process_character_portrait_tag(parsed: Dictionary) -> void:
@@ -201,11 +203,11 @@ func _process_character_portrait_tag(parsed: Dictionary) -> void:
 
 	match parsed.action:
 		"show":
-			var name = parsed.get("name", "")
+			var char_name = parsed.get("name", "")
 			var expr = parsed.get("expression", "neutral")
 			# Mode par défaut: symbolique via resources
-			dsm.adv_display.show_portrait(name, expr)
-			_debug("Character portrait (resource) requested: %s:%s" % [name, expr])
+			dsm.adv_display.show_portrait(char_name, expr)
+			_debug("Character portrait (resource) requested: %s:%s" % [char_name, expr])
 
 		"hide":
 			dsm.adv_display.hide_portrait()

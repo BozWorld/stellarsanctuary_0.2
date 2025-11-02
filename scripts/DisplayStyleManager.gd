@@ -236,5 +236,9 @@ func get_character_sprite(name: String, expr: String) -> Texture2D:
 func get_character_portrait(name: String, expr: String) -> Texture2D:
 	var res = _lookup_character(name)
 	if res:
-		return res.get_portrait(expr)
+		var tex := res.get_portrait(expr)
+		if tex:
+			return tex
+		# Fallback: si aucun portrait n'est défini, tenter via les sprites
+		return res.get_sprite(expr)
 	return null
